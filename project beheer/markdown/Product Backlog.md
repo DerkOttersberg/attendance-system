@@ -18,25 +18,24 @@
 | 2 | 1 | Encasing | Physical encasing for the product | Must | 5 | Not Started | 2 |
 | 3 | 2 | RFID Check in | Clock in with RFID card for automatic attendance | Must | 3 | Not Started | 1 |
 | 4 | 2 | RFID Check out | Clock out with same RFID card | Must | 1 | Not Started | 1 |
-| 5 | 2 | Touchscreen Signature | Sign in on touchscreen for legal confirmation | Must | 5 | Not Started | 2 |
+| 5 | 2 | Touchscreen Signature | Sign in on touchscreen for legal confirmation | Must | 8 | Not Started | 2 |
 | 6 | 3 | Points Awarding | Automatic points assignment to existing website | Must | 4 | Not Started | 3 |
 | 7 | 3 | Dayparts Calculation | Group attendance into morning/afternoon dayparts | Must | 3 | Not Started | 3 |
 | 8 | 5 | Attendance Overview | Export attendance records with signatures to PDF | Must | 8 | Not Started | 4 |
 | 9 | 6 | Error Feedback | Visual (LED) and audio (buzzer) feedback for failures | Must | 4 | Not Started | 2 |
 | 10 | 6 | System Reset | Reset button for device reboot without unplugging | Must | 2 | Not Started | 2 |
-| 11 | 7 | Hardware Refinement | Custom PCB design for compact, reliable system | Should | 15 | Not Started | 5 |
+| 11 | 7 | Hardware Refinement | Custom PCB design for compact, reliable system | Could | 15 | Not Started | 5 |
 | 12 | 4 | Network Communication | Reliable server communication for time entries | Must | 6 | Not Started | 2 |
 | 13 | 4 | Offline Mode Handling | Clock in/out when network unavailable | Must | 8 | Not Started | 3 |
 | 14 | 2 | User Status Display | Show current clock status and user information | Should | 4 | Not Started | 3 |
 | 15 | 2 | Multi-language Support | Interface in preferred language (Dutch/English) | Could | 3 | Not Started | 4 |
-| 16 | 6 | Accessibility Features | High contrast, audio prompts for disabled users | Should | 5 | Not Started | 4 |
-| 17 | 4 | Server API Development | Backend endpoints for device communication | Must | 8 | Not Started | 2 |
-| 18 | 3 | Database Schema | Design and implement time tracking database | Must | 5 | Not Started | 1 |
-| 19 | 5 | Admin Web Interface | Web dashboard for attendance management | Must | 10 | Not Started | 4 |
-| 20 | 6 | Security Implementation | Authentication, encryption, secure communication | Must | 6 | Not Started | 3 |
-| 21 | 6 | Device Configuration | Remote configuration and settings management | Should | 5 | Not Started | 4 |
-| 22 | 6 | System Monitoring | Health monitoring and alerts for device issues | Should | 4 | Not Started | 5 |
-| 23 | 7 | Backup & Recovery | Data backup and disaster recovery procedures | Should | 6 | Not Started | 5 |
+| 16 | 4 | Server API Development | Backend endpoints for device communication | Must | 8 | Not Started | 2 |
+| 17 | 3 | Database Schema | Design and implement time tracking database | Must | 5 | Not Started | 1 |
+| 18 | 5 | Admin Web Interface | Web dashboard for attendance management | Must | 10 | Not Started | 4 |
+| 19 | 6 | Security Implementation | Authentication, encryption, secure communication | Must | 6 | Not Started | 3 |
+| 20 | 6 | Device Configuration | Remote configuration and settings management | Should | 5 | Not Started | 4 |
+| 21 | 6 | System Monitoring | Health monitoring and alerts for device issues | Should | 4 | Not Started | 5 |
+| 22 | 7 | Backup & Recovery | Data backup and disaster recovery procedures | Should | 6 | Not Started | 5 |
 
 ## Table 3: Tasks (Breakdown of User Stories)
 | task_id | story_id | task_description | estimated_hours | status | assignee | dependencies |
@@ -57,8 +56,12 @@
 | 14 | 3 | Implement time locking mechanism | 4 | Not Started | Developer | 13 |
 | 15 | 4 | Implement RFID checkout communication | 6 | Not Started | Developer | 12 |
 | 16 | 4 | Set end time functionality | 4 | Not Started | Developer | 15 |
-| 17 | 5 | Setup signature database | 8 | Not Started | Developer | 18 |
-| 18 | 5 | Implement signature storage | 8 | Not Started | Developer | 17 |
+| 17 | 5 | Setup touchscreen hardware and wiring | 8 | Not Started | Developer | 3 |
+| 18 | 5 | Research and install Linux touchscreen drivers | 12 | Not Started | Developer | 17 |
+| 19 | 5 | Configure touchscreen calibration | 4 | Not Started | Developer | 18 |
+| 20 | 5 | Implement touchscreen input handling | 8 | Not Started | Developer | 19 |
+| 21 | 5 | Setup signature database | 8 | Not Started | Developer | 52 |
+| 22 | 5 | Implement signature storage | 8 | Not Started | Developer | 21 |
 | 19 | 6 | Connect to existing website database | 12 | Not Started | Developer | 18 |
 | 20 | 6 | Implement points assignment logic | 8 | Not Started | Developer | 19 |
 | 21 | 6 | Create live data display for website | 10 | Not Started | Developer | 20 |
@@ -103,8 +106,11 @@
 | 4 | 4 | Same RFID card triggers clock-out when user is clocked in | Manual Test |
 | 5 | 4 | End time is correctly set and stored | Unit Test |
 | 6 | 5 | Touchscreen accepts signature input | Manual Test |
-| 7 | 5 | Signatures are stored in database | Integration Test |
-| 8 | 5 | Signature data is retrievable and displayable | Unit Test |
+| 7 | 5 | Touchscreen drivers are properly installed in Linux | Manual Test |
+| 8 | 5 | Touchscreen calibration is accurate | Manual Test |
+| 9 | 5 | Touch coordinates are correctly mapped | Unit Test |
+| 10 | 5 | Signatures are stored in database | Integration Test |
+| 11 | 5 | Signature data is retrievable and displayable | Unit Test |
 | 9 | 9 | LED lights up when RFID card is detected | Manual Test |
 | 10 | 9 | Buzzer sounds on successful clock-in | Manual Test |
 | 11 | 9 | Different feedback for successful vs failed operations | Manual Test |
@@ -115,36 +121,29 @@
 | 16 | 13 | Offline entries sync when connection restored | Integration Test |
 | 17 | 13 | User is notified of offline mode | Manual Test |
 
-## Table 5: Sprint Planning
-| sprint_id | sprint_name | start_date | end_date | story_ids | total_points |
-|-----------|-------------|------------|----------|-----------|--------------|
-| 1 | Hardware Foundation | 2024-01-01 | 2024-01-14 | 1, 3, 4, 18 | 14 |
-| 2 | Core Functionality | 2024-01-15 | 2024-01-28 | 2, 5, 9, 10, 12, 17 | 29 |
-| 3 | Data Processing | 2024-01-29 | 2024-02-11 | 6, 7, 13, 14, 20 | 28 |
-| 4 | Admin Features | 2024-02-12 | 2024-02-25 | 8, 15, 16, 19, 21 | 30 |
-| 5 | Polish & Refinement | 2024-02-26 | 2024-03-11 | 11, 22, 23 | 25 |
-
-## Table 6: Dependencies
+## Table 5: Dependencies
 | dependency_id | story_id | depends_on_story_id | dependency_type | notes |
 |---------------|----------|---------------------|-----------------|-------|
-| 1 | 5 | 18 | Technical | Signature storage requires database |
-| 2 | 6 | 18 | Technical | Points system needs database schema |
-| 3 | 7 | 18 | Technical | Dayparts calculation requires database |
+| 1 | 5 | 17 | Technical | Signature storage requires database |
+| 2 | 6 | 17 | Technical | Points system needs database schema |
+| 3 | 7 | 17 | Technical | Dayparts calculation requires database |
 | 4 | 8 | 7 | Functional | PDF export needs dayparts data |
 | 5 | 8 | 5 | Functional | PDF export needs signatures |
 | 6 | 12 | 1 | Technical | Network requires hardware foundation |
 | 7 | 13 | 12 | Technical | Offline mode builds on network functionality |
-| 8 | 17 | 18 | Technical | API needs database structure |
-| 9 | 19 | 17 | Technical | Admin interface needs API |
-| 10 | 20 | 12 | Technical | Security requires network communication |
+| 8 | 16 | 17 | Technical | API needs database structure |
+| 9 | 18 | 16 | Technical | Admin interface needs API |
+| 10 | 19 | 12 | Technical | Security requires network communication |
+| 11 | 5 | 1 | Technical | Touchscreen needs hardware foundation |
 
-## Table 7: Risk Assessment
+## Table 6: Risk Assessment
 | risk_id | story_id | risk_description | probability | impact | mitigation_strategy |
 |---------|----------|------------------|-------------|--------|-------------------|
 | 1 | 1 | Microcontroller shortage or compatibility issues | Medium | High | Research multiple options, order early |
 | 2 | 12 | WiFi connectivity reliability in industrial environment | High | Medium | Implement robust retry logic and offline mode |
 | 3 | 5 | Touchscreen signature quality for legal requirements | Medium | High | Test with legal team, implement validation |
-| 4 | 11 | Custom PCB manufacturing delays | Medium | Medium | Plan for longer lead times, have backup plan |
-| 5 | 6 | Integration with existing website database | High | Medium | Early prototyping and testing with existing system |
-| 6 | 20 | Security vulnerabilities in device communication | Low | High | Security audit and penetration testing |
-| 7 | 2 | Encasing design may not fit all components | Medium | Medium | Create detailed measurements early, prototype |
+| 4 | 5 | Linux touchscreen drivers compatibility issues | Medium | Medium | Research multiple touchscreen options, test drivers early |
+| 5 | 11 | Custom PCB manufacturing delays | Medium | Medium | Plan for longer lead times, have backup plan |
+| 6 | 6 | Integration with existing website database | High | Medium | Early prototyping and testing with existing system |
+| 7 | 19 | Security vulnerabilities in device communication | Low | High | Security audit and penetration testing |
+| 8 | 2 | Encasing design may not fit all components | Medium | Medium | Create detailed measurements early, prototype |
