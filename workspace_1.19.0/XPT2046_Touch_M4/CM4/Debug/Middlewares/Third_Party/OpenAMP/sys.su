@@ -1,0 +1,8 @@
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/generic/template/sys.c:17:6:sys_irq_restore_enable	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/generic/template/sys.c:23:14:sys_irq_save_disable	4	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/generic/template/sys.c:29:6:sys_irq_enable	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/generic/template/sys.c:36:6:sys_irq_disable	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/generic/template/sys.c:43:6:metal_machine_cache_flush	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/generic/template/sys.c:51:6:metal_machine_cache_invalidate	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/generic/template/sys.c:59:6:metal_generic_default_poll	4	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/generic/template/sys.c:64:7:metal_machine_io_mem_map	24	static

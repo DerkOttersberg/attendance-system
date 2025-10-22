@@ -1,0 +1,5 @@
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/log.c:13:6:metal_default_log_handler	1
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/log.c:44:6:metal_set_log_handler	1
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/log.c:49:19:metal_get_log_handler	1
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/log.c:54:6:metal_set_log_level	1
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/log.c:59:22:metal_get_log_level	1

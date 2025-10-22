@@ -1,0 +1,12 @@
+#ifndef QPRINT_H
+#define QPRINT_H
+
+#include "virt_uart.h"
+
+// Initialize the print system with the UART handle
+void qint_init(VIRT_UART_HandleTypeDef *huart);
+
+// Print function (like printf)
+void qprint(const char* format, ...);
+
+#endif /* DERKPRINT_H */

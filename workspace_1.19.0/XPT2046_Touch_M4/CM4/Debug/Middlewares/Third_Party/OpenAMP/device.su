@@ -1,0 +1,17 @@
+../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/list.h:41:20:metal_list_init	16	static
+../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/list.h:47:20:metal_list_add_before	16	static
+../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/list.h:71:20:metal_list_add_tail	16	static
+../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/list.h:82:20:metal_list_del	16	static
+../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/system/generic/cache.h:26:20:__metal_cache_flush	16	static
+../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/system/generic/cache.h:31:20:__metal_cache_invalidate	16	static
+../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/cache.h:37:20:metal_cache_flush	16	static
+../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/cache.h:50:20:metal_cache_invalidate	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:18:5:metal_bus_register	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:30:5:metal_bus_unregister	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:39:5:metal_bus_find	24	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:54:5:metal_device_open	32	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:79:6:metal_device_close	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:86:5:metal_register_generic_device	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:98:5:metal_generic_dev_open	32	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:117:5:metal_generic_dev_dma_map	32	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/XPT2046_Touch_M4/Middlewares/Third_Party/OpenAMP/libmetal/lib/device.c:140:6:metal_generic_dev_dma_unmap	32	static

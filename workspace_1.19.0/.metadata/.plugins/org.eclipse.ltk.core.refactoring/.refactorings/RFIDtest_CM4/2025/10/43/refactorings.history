@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;RFIDtest_CM4/Core/Src/qprint.c&apos; to &apos;qprint.h&apos;" description="Rename resource &apos;qprint.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Core/Src/qprint.c" name="qprint.h" stamp="1761135446643" updateReferences="true"/>
+</session>
