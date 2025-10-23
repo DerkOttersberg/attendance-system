@@ -1,0 +1,5 @@
+../OPENAMP/mbox_ipcc.c:74:5:MAILBOX_Init	3
+../OPENAMP/mbox_ipcc.c:104:5:MAILBOX_Poll	3
+../OPENAMP/mbox_ipcc.c:150:5:MAILBOX_Notify	5
+../OPENAMP/mbox_ipcc.c:196:6:IPCC_channel1_callback	1
+../OPENAMP/mbox_ipcc.c:219:6:IPCC_channel2_callback	1

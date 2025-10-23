@@ -1,0 +1,11 @@
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_hsem.c:151:20:HAL_HSEM_Take	2
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_hsem.c:188:19:HAL_HSEM_FastTake	2
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_hsem.c:217:10:HAL_HSEM_IsSemTaken	2
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_hsem.c:229:7:HAL_HSEM_Release	1
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_hsem.c:246:6:HAL_HSEM_ReleaseAll	1
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_hsem.c:278:7:HAL_HSEM_SetClearKey	1
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_hsem.c:290:10:HAL_HSEM_GetClearKey	1
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_hsem.c:317:6:HAL_HSEM_ActivateNotification	1
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_hsem.c:341:6:HAL_HSEM_DeactivateNotification	1
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_hsem.c:364:6:HAL_HSEM_IRQHandler	1
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_hsem.c:410:13:HAL_HSEM_FreeCallback	1
