@@ -161,96 +161,18 @@ int main(void)
         }
 
         // Auto-scan mode (can be disabled via command)
-        /*if (autoScanEnabled && (HAL_GetTick() - lastAutoScan > 100)) {
+        if (autoScanEnabled && (HAL_GetTick() - lastAutoScan > 100)) {
             lastAutoScan = HAL_GetTick();
 
-            uint8_t tagType[2];
-            MFRC522_Status_t status = MFRC522_Request(PICC_CMD_REQA, tagType);
-
+            //uint8_t tagType[2];
+            //MFRC522_Status_t status = MFRC522_Request(PICC_CMD_REQA, tagType);
+            ExecuteScanOnce();
+            /*
             if (status == MFRC522_OK) {
                 ExecuteScanOnce();
-            }
-        }*/
-
-        uint8_t tagType[2];
-        MFRC522_Status_t status = MFRC522_Request(PICC_CMD_REQA, tagType);
-
-        if (status == MFRC522_OK) {
-            qprint("\r\n=== Card Detected ===\r\n");
-
-            // Anti-collision detection, get card UID
-            status = MFRC522_Anticoll(&uid);
-
-            if (status == MFRC522_OK) {
-                qprint("Card UID: ");
-                for (uint8_t i = 0; i < uid.size; i++) {
-                    qprint("%02X ", uid.uidByte[i]);
-                }
-                qprint("\r\n");
-
-                // Select the card
-                status = MFRC522_SelectTag(&uid);
-
-                if (status == MFRC522_OK) {
-                    PICC_Type_t cardType = MFRC522_GetType(uid.sak);
-                    qprint("Card Type: %s\r\n", MFRC522_GetTypeName(cardType));
-                    qprint("SAK: 0x%02X\r\n", uid.sak);
-
-                    // Example: Read block 4 (first data block of sector 1)
-                    uint8_t blockAddr = 4;
-
-                    // Authenticate with Key A
-                    status = MFRC522_Auth(PICC_CMD_MF_AUTH_KEY_A, blockAddr, keyA, &uid);
-
-                    if (status == MFRC522_OK) {
-                        qprint("Authentication successful!\r\n");
-
-                        // Read the block
-                        status = MFRC522_Read(blockAddr, readBuffer);
-
-                        if (status == MFRC522_OK) {
-                            qprint("Block %d data: ", blockAddr);
-                            for (uint8_t i = 0; i < 16; i++) {
-                                qprint("%02X ", readBuffer[i]);
-                            }
-                            qprint("\r\n");
-
-                            // Print as ASCII (if printable)
-                            qprint("ASCII: ");
-                            for (uint8_t i = 0; i < 16; i++) {
-                                if (readBuffer[i] >= 0x20 && readBuffer[i] <= 0x7E) {
-                                    qprint("%c", readBuffer[i]);
-                                } else {
-                                    qprint(".");
-                                }
-                            }
-                            qprint("\r\n");
-
-                        } else {
-                            qprint("Failed to read block %d\r\n", blockAddr);
-                        }
-
-                    } else {
-                        qprint("Authentication failed!\r\n");
-                    }
-                }
-            }
-
-            // CRITICAL: Halt the card and stop crypto
-            MFRC522_Halt();
-
-            // Clear the MFCrypto1On bit to stop encryption
-            MFRC522_ClearBitMask(MFRC522_REG_STATUS_2, 0x08);
-
-            qprint("=== End ===\r\n\r\n");
-
-            // Wait a bit to prevent multiple rapid reads of the same card
-            HAL_Delay(500);
-
-        } else {
-            // No card detected, small delay before next attempt
-            HAL_Delay(50);
+            }*/
         }
+
 
         //HAL_Delay(10);
     }
@@ -353,34 +275,82 @@ void ExecuteScanOnce(void)
     uint8_t tagType[2];
     MFRC522_Status_t status = MFRC522_Request(PICC_CMD_REQA, tagType);
 
-    if (status != MFRC522_OK) {
-        qprint("No card detected\r\n");
-        return;
-    }
-
-    qprint("\r\n=== Card Detected ===\r\n");
-
-    status = MFRC522_Anticoll(&uid);
-    if (status != MFRC522_OK) {
-        qprint("ERROR: Anticollision failed\r\n");
-        return;
-    }
-
-    qprint("UID: ");
-    for (uint8_t i = 0; i < uid.size; i++) {
-        qprint("%02X ", uid.uidByte[i]);
-    }
-    qprint("\r\n");
-
-    status = MFRC522_SelectTag(&uid);
     if (status == MFRC522_OK) {
-        PICC_Type_t cardType = MFRC522_GetType(uid.sak);
-        qprint("Type: %s\r\n", MFRC522_GetTypeName(cardType));
-        qprint("SAK: 0x%02X\r\n", uid.sak);
-    }
+        qprint("\r\n=== Card Detected ===\r\n");
 
-    MFRC522_Halt();
-    qprint("=== End ===\r\n\r\n");
+        // Anti-collision detection, get card UID
+        status = MFRC522_Anticoll(&uid);
+
+        if (status == MFRC522_OK) {
+            qprint("Card UID: ");
+            for (uint8_t i = 0; i < uid.size; i++) {
+                qprint("%02X ", uid.uidByte[i]);
+            }
+            qprint("\r\n");
+
+            // Select the card
+            status = MFRC522_SelectTag(&uid);
+
+            if (status == MFRC522_OK) {
+                PICC_Type_t cardType = MFRC522_GetType(uid.sak);
+                qprint("Card Type: %s\r\n", MFRC522_GetTypeName(cardType));
+                qprint("SAK: 0x%02X\r\n", uid.sak);
+
+                // Example: Read block 4 (first data block of sector 1)
+                uint8_t blockAddr = 4;
+
+                // Authenticate with Key A
+                status = MFRC522_Auth(PICC_CMD_MF_AUTH_KEY_A, blockAddr, keyA, &uid);
+
+                if (status == MFRC522_OK) {
+                    qprint("Authentication successful!\r\n");
+
+                    // Read the block
+                    status = MFRC522_Read(blockAddr, readBuffer);
+
+                    if (status == MFRC522_OK) {
+                        qprint("Block %d data: ", blockAddr);
+                        for (uint8_t i = 0; i < 16; i++) {
+                            qprint("%02X ", readBuffer[i]);
+                        }
+                        qprint("\r\n");
+
+                        // Print as ASCII (if printable)
+                        qprint("ASCII: ");
+                        for (uint8_t i = 0; i < 16; i++) {
+                            if (readBuffer[i] >= 0x20 && readBuffer[i] <= 0x7E) {
+                                qprint("%c", readBuffer[i]);
+                            } else {
+                                qprint(".");
+                            }
+                        }
+                        qprint("\r\n");
+
+                    } else {
+                        qprint("Failed to read block %d\r\n", blockAddr);
+                    }
+
+                } else {
+                    qprint("Authentication failed!\r\n");
+                }
+            }
+        }
+
+        // CRITICAL: Halt the card and stop crypto
+        MFRC522_Halt();
+
+        // Clear the MFCrypto1On bit to stop encryption
+        MFRC522_ClearBitMask(MFRC522_REG_STATUS_2, 0x08);
+
+        qprint("=== End ===\r\n\r\n");
+
+        // Wait a bit to prevent multiple rapid reads of the same card
+        HAL_Delay(500);
+
+    } else {
+        // No card detected, small delay before next attempt
+        HAL_Delay(50);
+    }
 }
 
 /**
