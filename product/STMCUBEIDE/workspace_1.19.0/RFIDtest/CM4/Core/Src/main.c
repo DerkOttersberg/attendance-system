@@ -10,6 +10,7 @@
 #include "virt_uart.h"
 #include <stdio.h>
 #include <stdarg.h>
+#include "mfrc522.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -32,8 +33,12 @@ SPI_HandleTypeDef hspi5;
 
 /* USER CODE BEGIN PV */
 VIRT_UART_HandleTypeDef huart0;
+MFRC522_Config_t mfrc522;
+Uid_t uid;
+uint8_t keyA[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-
+// Buffer for reading data
+uint8_t readBuffer[18];
 
 /* USER CODE END PV */
 
@@ -102,6 +107,20 @@ int main(void)
   MX_DMA_Init();
   MX_SPI5_Init();
   /* USER CODE BEGIN 2 */
+  // Initialize MFRC522
+  mfrc522.hspi = &hspi5;  // Make sure this matches your SPI instance
+  mfrc522.CS_GPIO_Port = GPIOD;  // Adjust to your CS pin port
+  mfrc522.CS_Pin = GPIO_PIN_14;   // Adjust to your CS pin number
+  mfrc522.RST_GPIO_Port = GPIOD;  // Adjust to your RST pin port
+  mfrc522.RST_Pin = GPIO_PIN_15;  // Adjust to your RST pin number
+
+  MFRC522_Init(&mfrc522);
+
+  // Check if MFRC522 is connected
+
+
+
+
 
   VIRT_UART_Init(&huart0);
   if(VIRT_UART_RegisterCallback(&huart0, VIRT_UART_RXCPLT_CB_ID, VIRT_UART_RxCpltCallback) != VIRT_UART_OK) {
@@ -117,19 +136,94 @@ int main(void)
 
 
   /* USER CODE BEGIN WHILE */
+  //uint8_t version = 0;
   while (1)
   {
+      /* USER CODE END WHILE */
 
+      /* USER CODE BEGIN 3 */
 
-      qprint("Counter: %lu\r\n", HAL_GetTick());
-      HAL_Delay(300); // avoid flooding the UART
+      // Look for new cards
+      uint8_t tagType[2];
+      MFRC522_Status_t status = MFRC522_Request(PICC_CMD_REQA, tagType);
 
+      if (status == MFRC522_OK) {
+          qprint("\r\n=== Card Detected ===\r\n");
 
+          // Anti-collision detection, get card UID
+          status = MFRC522_Anticoll(&uid);
 
+          if (status == MFRC522_OK) {
+              qprint("Card UID: ");
+              for (uint8_t i = 0; i < uid.size; i++) {
+                  qprint("%02X ", uid.uidByte[i]);
+              }
+              qprint("\r\n");
+
+              // Select the card
+              status = MFRC522_SelectTag(&uid);
+
+              if (status == MFRC522_OK) {
+                  PICC_Type_t cardType = MFRC522_GetType(uid.sak);
+                  qprint("Card Type: %s\r\n", MFRC522_GetTypeName(cardType));
+                  qprint("SAK: 0x%02X\r\n", uid.sak);
+
+                  // Example: Read block 4 (first data block of sector 1)
+                  uint8_t blockAddr = 4;
+
+                  // Authenticate with Key A
+                  status = MFRC522_Auth(PICC_CMD_MF_AUTH_KEY_A, blockAddr, keyA, &uid);
+
+                  if (status == MFRC522_OK) {
+                      qprint("Authentication successful!\r\n");
+
+                      // Read the block
+                      status = MFRC522_Read(blockAddr, readBuffer);
+
+                      if (status == MFRC522_OK) {
+                          qprint("Block %d data: ", blockAddr);
+                          for (uint8_t i = 0; i < 16; i++) {
+                              qprint("%02X ", readBuffer[i]);
+                          }
+                          qprint("\r\n");
+
+                          // Print as ASCII (if printable)
+                          qprint("ASCII: ");
+                          for (uint8_t i = 0; i < 16; i++) {
+                              if (readBuffer[i] >= 0x20 && readBuffer[i] <= 0x7E) {
+                                  qprint("%c", readBuffer[i]);
+                              } else {
+                                  qprint(".");
+                              }
+                          }
+                          qprint("\r\n");
+
+                      } else {
+                          qprint("Failed to read block %d\r\n", blockAddr);
+                      }
+
+                  } else {
+                      qprint("Authentication failed!\r\n");
+                  }
+              }
+          }
+
+          // CRITICAL: Halt the card and stop crypto
+          MFRC522_Halt();
+
+          // Clear the MFCrypto1On bit to stop encryption
+          MFRC522_ClearBitMask(MFRC522_REG_STATUS_2, 0x08);
+
+          qprint("=== End ===\r\n\r\n");
+
+          // Wait a bit to prevent multiple rapid reads of the same card
+          HAL_Delay(500);
+
+      } else {
+          // No card detected, small delay before next attempt
+          HAL_Delay(50);
+      }
   }
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
   /* USER CODE END 3 */
 }
 
@@ -323,15 +417,27 @@ static void MX_DMA_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
   /* USER CODE BEGIN MX_GPIO_Init_1 */
 
   /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOD, RFID_RST_Pin|RFID_CS_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pins : RFID_RST_Pin RFID_CS_Pin */
+  GPIO_InitStruct.Pin = RFID_RST_Pin|RFID_CS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 

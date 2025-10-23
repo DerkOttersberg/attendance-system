@@ -58,7 +58,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/remoteproc.h \
  C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/remoteproc_virtio.h \
  ../OPENAMP/openamp_conf.h ../OPENAMP/mbox_ipcc.h \
- C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h
+ C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h \
+ ../Core/Inc/mfrc522.h ../Core/Inc/main.h
 ../Core/Inc/main.h:
 C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Drivers/STM32MP1xx_HAL_Driver/Inc/stm32mp1xx_hal.h:
 ../Core/Inc/stm32mp1xx_hal_conf.h:
@@ -121,3 +122,5 @@ C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Pa
 ../OPENAMP/openamp_conf.h:
 ../OPENAMP/mbox_ipcc.h:
 C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.h:
+../Core/Inc/mfrc522.h:
+../Core/Inc/main.h:
