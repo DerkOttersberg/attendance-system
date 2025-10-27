@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: rfid_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: rfid_attendance
+      MYSQL_USER: rfid_user
+      MYSQL_PASSWORD: rfid_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - rfid_network
+
+  api:
+    build: ./api
+    container_name: rfid_api
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: mysql
+      DB_USER: rfid_user
+      DB_PASSWORD: rfid_pass
+      DB_NAME: rfid_attendance
+    depends_on:
+      - mysql
+    networks:
+      - rfid_network
+    volumes:
+      - ./api:/app
+
+volumes:
+  mysql_data:
+
+networks:
+  rfid_network:
+    driver: bridge
