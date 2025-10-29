@@ -1,4 +1,4 @@
-# Save this as simple_kivy_test.py
+# kivy test enkel GUI
 import kivy
 from kivy.app import App
 from kivy.uix.label import Label

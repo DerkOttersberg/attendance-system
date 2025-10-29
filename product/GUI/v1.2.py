@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# voor de gui en de api calls
+# GUI RFID card en verbinding met database
 """
 RFID Attendance System with Kivy GUI
 Integrates RFID reading with visual feedback

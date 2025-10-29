@@ -1,4 +1,7 @@
+# Enkel de database verbinding
+
 #!/usr/bin/env python3
+
 """
 RFID Service for STM32MP1 A7 Core
 Communicates with M4 core via /dev/ttyRPMSG0
