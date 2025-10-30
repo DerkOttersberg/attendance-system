@@ -1,0 +1,14 @@
+../Core/Src/main.c:103:5:main	16	static
+../Core/Src/main.c:215:6:SystemClock_Config	336	static
+../Core/Src/main.c:300:6:PeriphCommonClock_Config	352	static
+../Core/Src/main.c:319:13:MX_IPCC_Init	8	static
+../Core/Src/main.c:345:13:MX_SPI5_Init	8	static
+../Core/Src/main.c:391:13:MX_DMA_Init	4	static
+../Core/Src/main.c:405:13:MX_GPIO_Init	4	static
+../Core/Src/main.c:423:6:VIRT_UART_RxCpltCallback	24	static
+../Core/Src/main.c:448:6:ProcessCommand	32	static
+../Core/Src/main.c:508:6:ExecuteScanOnce	16	static
+../Core/Src/main.c:594:6:ExecuteReadBlock	24	static
+../Core/Src/main.c:652:6:ExecuteWriteBlock	24	static
+../Core/Src/main.c:706:6:qprint	272	static
+../Core/Src/main.c:724:6:Error_Handler	4	static,ignoring_inline_asm

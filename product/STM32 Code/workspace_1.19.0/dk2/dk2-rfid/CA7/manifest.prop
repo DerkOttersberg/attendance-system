@@ -1,0 +1,5 @@
+MANIFEST_VERSION = openstlinux-6.6-yocto-scarthgap-mpu-v25.06.11
+KERNEL_DT = ./DeviceTree/dk2-rfid/kernel
+OPTEE_DT = ./DeviceTree/dk2-rfid/optee-os
+UBOOT_DT = ./DeviceTree/dk2-rfid/u-boot
+TFA_DT = ./DeviceTree/dk2-rfid/tf-a

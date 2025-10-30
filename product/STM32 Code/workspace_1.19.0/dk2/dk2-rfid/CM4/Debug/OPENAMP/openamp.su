@@ -1,0 +1,8 @@
+../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/rpmsg.h:517:28:is_rpmsg_ept_ready	16	static
+../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/device.h:147:1:metal_device_io_region	16	static
+../OPENAMP/openamp.c:73:12:OPENAMP_shmem_init	64	static
+../OPENAMP/openamp.c:141:5:MX_OPENAMP_Init	56	static
+../OPENAMP/openamp.c:211:6:OPENAMP_DeInit	8	static
+../OPENAMP/openamp.c:227:5:OPENAMP_create_endpoint	48	static
+../OPENAMP/openamp.c:245:6:OPENAMP_check_for_message	8	static
+../OPENAMP/openamp.c:253:6:OPENAMP_Wait_EndPointready	16	static

@@ -1,0 +1,5 @@
+../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/io.h:132:1:metal_io_virt	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/libmetal/lib/io.c:12:6:metal_io_init	64	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/libmetal/lib/io.c:35:5:metal_io_block_read	56	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/libmetal/lib/io.c:72:5:metal_io_block_write	56	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/libmetal/lib/io.c:109:5:metal_io_block_set	56	static
