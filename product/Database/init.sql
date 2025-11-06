@@ -45,7 +45,7 @@ CREATE TABLE scan_log (
 -- Sample data
 INSERT INTO users (rfid_uid, name, email, department) VALUES
 ('04A1B2C3', 'John Doe', 'john.doe@company.com', 'Engineering'),
-('05D4E5F6', 'Jane Smith', 'jane.smith@company.com', 'Marketing'),
+('11F3EF12', 'Jane Smith', 'jane.smith@company.com', 'Marketing'),
 ('53C991A6', 'Bob Wilson', 'bob.wilson@company.com', 'Engineering');
 
 -- View for current status
