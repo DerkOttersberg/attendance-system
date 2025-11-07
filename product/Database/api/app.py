@@ -4,9 +4,20 @@ from mysql.connector import Error
 import os
 from datetime import datetime, date
 import logging
+import sys
+import traceback
+
 
 app = Flask(__name__)
-logging.basicConfig(level=logging.INFO)
+
+# Force logging to stream handler
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s:%(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stdout)
+    ]
+)
 
 # Database configuration
 DB_CONFIG = {
@@ -33,7 +44,7 @@ def health_check():
 @app.route('/api/scan', methods=['POST'])
 def handle_scan():
     """
-    Main endpoint for RFID scan
+    Main endpoint for RFID scan - determines action but doesn't clock in
     Expected JSON: {"rfid_uid": "04A1B2C3"}
     """
     data = request.get_json()
@@ -74,17 +85,12 @@ def handle_scan():
         attendance = cursor.fetchone()
         
         if not attendance or attendance['status'] == 'clocked_out':
-            # Clock IN
-            cursor.execute("""
-                INSERT INTO attendance (user_id, clock_in, date, status)
-                VALUES (%s, NOW(), %s, 'clocked_in')
-            """, (user['id'], today))
-            
+            # CLOCK IN - Don't create record yet, wait for signature
             action = 'clock_in'
-            message = f"Welcome {user['name']}! Clocked in successfully."
+            message = f"Welcome {user['name']}! Please sign to clock in."
             
         else:
-            # Clock OUT
+            # CLOCK OUT - Process immediately
             cursor.execute("""
                 UPDATE attendance 
                 SET clock_out = NOW(), 
@@ -92,13 +98,6 @@ def handle_scan():
                     work_duration = TIMESTAMPDIFF(MINUTE, clock_in, NOW())
                 WHERE id = %s
             """, (attendance['id'],))
-            
-            # Calculate work duration
-            duration_minutes = cursor.execute("""
-                SELECT TIMESTAMPDIFF(MINUTE, clock_in, clock_out) as duration
-                FROM attendance WHERE id = %s
-            """, (attendance['id'],))
-            cursor.fetchone()
             
             action = 'clock_out'
             message = f"Goodbye {user['name']}! Clocked out successfully."
@@ -170,6 +169,114 @@ def list_users():
         cursor.execute("SELECT id, rfid_uid, name, email, department, active FROM users")
         users = cursor.fetchall()
         return jsonify(users)
+        
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/api/clock_in_with_signature', methods=['POST'])
+def clock_in_with_signature():
+    """
+    Clock in with signature
+    Expected JSON: {"rfid_uid": "04A1B2C3", "signature": "<svg>...</svg>"}
+    """
+    try:
+        data = request.get_json()
+        
+        if not data:
+            logging.error("No JSON data received")
+            return jsonify({'error': 'No JSON data received'}), 400
+            
+        logging.info(f"Received data keys: {data.keys()}")
+        
+        if 'rfid_uid' not in data or 'signature' not in data:
+            logging.error(f"Missing required fields. Received: {list(data.keys())}")
+            return jsonify({'error': 'Missing rfid_uid or signature'}), 400
+        
+        rfid_uid = data['rfid_uid'].strip().upper()
+        signature_data = data['signature']
+        
+        logging.info(f"Processing clock-in for RFID: {rfid_uid}")
+        logging.info(f"Signature data length: {len(signature_data)} chars")
+        logging.info(f"Signature preview: {signature_data[:100]}...")
+        
+    except Exception as e:
+        logging.error(f"Failed to parse request: {e}")
+        logging.error(f"Traceback: {traceback.format_exc()}")
+        return jsonify({'error': f'Failed to parse request: {str(e)}'}), 400
+    
+    conn = get_db_connection()
+    if not conn:
+        logging.error("Database connection failed")
+        return jsonify({'error': 'Database connection failed'}), 500
+    
+    try:
+        cursor = conn.cursor(dictionary=True)
+        
+        # Check if user exists
+        cursor.execute("SELECT * FROM users WHERE rfid_uid = %s AND active = TRUE", (rfid_uid,))
+        user = cursor.fetchone()
+        
+        if not user:
+            logging.warning(f"User not found for RFID: {rfid_uid}")
+            return jsonify({
+                'success': False,
+                'message': 'User not found'
+            }), 404
+        
+        logging.info(f"Found user: {user['name']} (ID: {user['id']})")
+        
+        # Check if already clocked in today
+        today = date.today()
+        cursor.execute("""
+            SELECT * FROM attendance 
+            WHERE user_id = %s AND date = %s AND status = 'clocked_in'
+        """, (user['id'], today))
+        
+        existing_record = cursor.fetchone()
+        if existing_record:
+            logging.warning(f"User {user['name']} already clocked in today")
+            return jsonify({
+                'success': False,
+                'message': 'Already clocked in today'
+            }), 400
+        
+        # Insert attendance record with signature
+        logging.info(f"Inserting attendance record for user {user['name']}")
+        cursor.execute("""
+            INSERT INTO attendance (user_id, clock_in, date, status, signature_data)
+            VALUES (%s, NOW(), %s, 'clocked_in', %s)
+        """, (user['id'], today, signature_data))
+        
+        # Log the scan
+        log_scan(cursor, rfid_uid, 'clock_in_with_signature', True, f"Clocked in with signature")
+        
+        conn.commit()
+        logging.info(f"Successfully clocked in user {user['name']}")
+        
+        return jsonify({
+            'success': True,
+            'message': f'Welcome {user["name"]}! Clocked in successfully.',
+            'user': {
+                'name': user['name'],
+                'department': user['department']
+            },
+            'timestamp': datetime.now().isoformat()
+        })
+        
+    except Error as e:
+        logging.error(f"Database error in clock_in_with_signature: {e}")
+        logging.error(f"Error code: {e.errno}")
+        logging.error(f"SQL State: {e.sqlstate if hasattr(e, 'sqlstate') else 'N/A'}")
+        logging.error(f"Traceback: {traceback.format_exc()}")
+        conn.rollback()
+        return jsonify({'error': f'Database operation failed: {str(e)}'}), 500
+        
+    except Exception as e:
+        logging.error(f"Unexpected error in clock_in_with_signature: {e}")
+        logging.error(f"Traceback: {traceback.format_exc()}")
+        conn.rollback()
+        return jsonify({'error': f'Unexpected error: {str(e)}'}), 500
         
     finally:
         cursor.close()
