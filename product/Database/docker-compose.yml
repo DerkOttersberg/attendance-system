@@ -36,6 +36,17 @@ services:
     volumes:
       - ./api:/app
 
+  web:
+    image: nginx:alpine
+    container_name: rfid_web
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./web:/usr/share/nginx/html:ro
+    networks:
+      - rfid_network
+
 volumes:
   mysql_data:
 

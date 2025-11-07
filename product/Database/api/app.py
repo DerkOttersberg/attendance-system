@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import mysql.connector
 from mysql.connector import Error
 import os
@@ -9,6 +10,7 @@ import traceback
 
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for web dashboard
 
 # Force logging to stream handler
 logging.basicConfig(
@@ -198,7 +200,6 @@ def clock_in_with_signature():
         
         logging.info(f"Processing clock-in for RFID: {rfid_uid}")
         logging.info(f"Signature data length: {len(signature_data)} chars")
-        logging.info(f"Signature preview: {signature_data[:100]}...")
         
     except Exception as e:
         logging.error(f"Failed to parse request: {e}")
@@ -349,6 +350,49 @@ def today_attendance():
         
         # Convert datetime objects to strings
         for record in records:
+            if record['clock_in']:
+                record['clock_in'] = record['clock_in'].isoformat()
+            if record['clock_out']:
+                record['clock_out'] = record['clock_out'].isoformat()
+        
+        return jsonify(records)
+        
+    finally:
+        cursor.close()
+        conn.close()
+
+@app.route('/api/attendance/all', methods=['GET'])
+def all_attendance():
+    """Get all attendance records with signatures"""
+    conn = get_db_connection()
+    if not conn:
+        return jsonify({'error': 'Database connection failed'}), 500
+    
+    try:
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT 
+                a.id,
+                a.date,
+                u.name,
+                u.department,
+                a.clock_in,
+                a.clock_out,
+                a.status,
+                a.work_duration,
+                a.signature_data
+            FROM attendance a
+            JOIN users u ON a.user_id = u.id
+            ORDER BY a.date DESC, a.clock_in DESC
+            LIMIT 100
+        """)
+        
+        records = cursor.fetchall()
+        
+        # Convert datetime objects to strings
+        for record in records:
+            if record['date']:
+                record['date'] = record['date'].isoformat()
             if record['clock_in']:
                 record['clock_in'] = record['clock_in'].isoformat()
             if record['clock_out']:
