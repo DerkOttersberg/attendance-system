@@ -11,31 +11,34 @@
 | 6 | Quality & Reliability | Error handling, testing, validation | Should | Not Started |
 | 7 | Enhancement Features | Additional functionality and improvements | Could | Not Started |
 
-## Table 2: User Stories
+## 📝 Table 2: User Stories 
 | story_id | epic_id | title | description | priority | story_points | status | sprint |
-|----------|---------|-------|-------------|----------|--------------|--------|--------|
+|:---------|:--------|:--------------------------|:---------------------------------------------------------------------------------------|:----------|:--------------|:--------|:--------|
 | 1 | 1 | The Hub | System consisting of main hub, sensors, display | Must | 5 | In Progress | 1 |
 | 2 | 1 | Encasing | Physical encasing for the product | Must | 5 | Not Started | 2 |
-| 3 | 2 | RFID Check in | Clock in with RFID card for automatic attendance | Must | 3 | Not Started | 1 |
-| 4 | 2 | RFID Check out | Clock out with same RFID card | Must | 1 | Not Started | 1 |
-| 5 | 2 | Touchscreen Signature | Sign in on touchscreen for legal confirmation | Must | 8 | Not Started | 2 |
+| 3 | 2 | RFID Check in | Clock in with RFID card for automatic attendance | Must | 3 | DONE | 1 |
+| 4 | 2 | RFID Check out | Clock out with same RFID card | Must | 1 | DONE | 1 |
+| 5 | 2 | Touchscreen Signature | Sign in on touchscreen for legal confirmation | Must | 8 | DONE | 2 |
 | 6 | 3 | Points Awarding | Automatic points assignment to existing website | Must | 4 | Not Started | 3 |
 | 7 | 3 | Dayparts Calculation | Group attendance into morning/afternoon dayparts | Must | 3 | Not Started | 3 |
-| 8 | 5 | Attendance Overview | Export attendance records with signatures to PDF | Must | 8 | Not Started | 4 |
+| 8 | 5 | Attendance Overview | Export attendance records with signatures to PDF | Must | 8 | DONE | 4 |
 | 9 | 6 | Error Feedback | Visual (LED) and audio (buzzer) feedback for failures | Must | 4 | Not Started | 2 |
 | 10 | 6 | System Reset | Reset button for device reboot without unplugging | Must | 2 | Not Started | 2 |
 | 11 | 7 | Hardware Refinement | Custom PCB design for compact, reliable system | Could | 15 | Not Started | 5 |
-| 12 | 4 | Network Communication | Reliable server communication for time entries | Must | 6 | Not Started | 2 |
+| 12 | 4 | Network Communication | Reliable server communication for time entries | Must | 6 | DONE | 2 |
 | 13 | 4 | Offline Mode Handling | Clock in/out when network unavailable | Must | 8 | Not Started | 3 |
 | 14 | 2 | User Status Display | Show current clock status and user information | Should | 4 | Not Started | 3 |
 | 15 | 2 | Multi-language Support | Interface in preferred language (Dutch/English) | Could | 3 | Not Started | 4 |
-| 16 | 4 | Server API Development | Backend endpoints for device communication | Must | 8 | Not Started | 2 |
-| 17 | 3 | Database Schema | Design and implement time tracking database | Must | 5 | Not Started | 1 |
-| 18 | 5 | Admin Web Interface | Web dashboard for attendance management | Must | 10 | Not Started | 4 |
+| 16 | 4 | Server API Development | Backend endpoints for device communication | Must | 8 | DONE | 2 |
+| 17 | 3 | Database Schema | Design and implement time tracking database | Must | 5 | DONE | 1 |
+| 18 | 5 | Admin Web Interface | Web dashboard for attendance management | Must | 10 | DONE | 4 |
 | 19 | 6 | Security Implementation | Authentication, encryption, secure communication | Must | 6 | Not Started | 3 |
 | 20 | 6 | Device Configuration | Remote configuration and settings management | Should | 5 | Not Started | 4 |
 | 21 | 6 | System Monitoring | Health monitoring and alerts for device issues | Should | 4 | Not Started | 5 |
 | 22 | 7 | Backup & Recovery | Data backup and disaster recovery procedures | Should | 6 | Not Started | 5 |
+| 23 | 2 | Visual Feedback (Success) | Display a **large, personalized success message** (e.g., "Welcome, \[User Name]! Clocked In.") after successful check-in/out. | Must | 2 | Not Started | 1 |
+| 25 | 2 | User Look-up Interface | As a user without an RFID card, I want a **manual touch interface** to find and check in/out using my employee ID/name. | Should | 5 | Not Started | 3 |
+| 26 | 4 | Automatic Reconnect | The device must **automatically re-establish connection** with the server/database after a network failure is resolved, resuming normal operation. | Must | 3 | Not Started | 2 |Recovery | Data backup and disaster recovery procedures | Should | 6 | DONE | 5 |
 
 ## Table 3: Tasks (Breakdown of User Stories)
 | task_id | story_id | task_description | estimated_hours | status | assignee | dependencies |
