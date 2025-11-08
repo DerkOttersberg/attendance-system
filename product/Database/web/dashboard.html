@@ -128,6 +128,90 @@
             color: #1e293b;
         }
 
+        .filters {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #475569;
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            background: white;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -179,33 +263,33 @@
             color: #1e40af;
         }
 
- .signature-preview {
-    width: 150px;
-    height: 60px;
-    border: 1px solid #e2e8f0;
-    border-radius: 4px;
-    padding: 4px;
-    background: white;
-    cursor: pointer;
-    transition: transform 0.2s;
-    display: block;
-}
+        .signature-preview {
+            width: 150px;
+            height: 60px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 4px;
+            background: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: block;
+        }
 
-.signature-preview svg {
-    width: 100%;
-    height: 100%;
-}
+        .signature-preview svg {
+            width: 100%;
+            height: 100%;
+        }
 
-.signature-preview:hover {
-    transform: scale(1.05);
-}
+        .signature-preview:hover {
+            transform: scale(1.05);
+        }
 
-.modal-content svg {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-}
+        .modal-content svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
 
         .modal {
             display: none;
@@ -289,6 +373,20 @@
             padding: 3rem;
             color: #64748b;
         }
+
+        .results-summary {
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-summary strong {
+            color: #667eea;
+        }
     </style>
 </head>
 <body>
@@ -320,8 +418,33 @@
         </div>
 
         <div id="all" class="tab-content">
+            <div class="filters">
+                <h3 style="margin-bottom: 1rem; color: #1e293b;">Filter Attendance Records</h3>
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>User</label>
+                        <select id="filterUser">
+                            <option value="">All Users</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Start Date</label>
+                        <input type="date" id="filterStartDate">
+                    </div>
+                    <div class="filter-group">
+                        <label>End Date</label>
+                        <input type="date" id="filterEndDate">
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn btn-primary" onclick="applyFilters()">🔍 Filter</button>
+                        <button class="btn btn-secondary" onclick="clearFilters()">✕ Clear</button>
+                        <button class="btn btn-success" onclick="exportToPDF()">📄 Export PDF</button>
+                    </div>
+                </div>
+            </div>
             <div class="card">
                 <h2>All Attendance Records</h2>
+                <div id="filterResults"></div>
                 <div id="allContent"></div>
             </div>
         </div>
@@ -341,9 +464,14 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
     <script>
         const API_BASE = 'http://192.168.11.242:5000';
         let allAttendanceData = [];
+        let filteredAttendanceData = [];
+        let allUsers = [];
 
         function switchTab(tabName) {
             document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
@@ -474,6 +602,50 @@
             }
         }
 
+        function renderAttendanceTable(data, containerId) {
+            const content = document.getElementById(containerId);
+            
+            if (data.length === 0) {
+                content.innerHTML = '<div class="no-data">No attendance records found</div>';
+                return;
+            }
+
+            content.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Clock In</th>
+                            <th>Clock Out</th>
+                            <th>Duration</th>
+                            <th>Signature</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.map(record => `
+                            <tr>
+                                <td>${new Date(record.date).toLocaleDateString()}</td>
+                                <td><strong>${record.name}</strong></td>
+                                <td>${record.department || '-'}</td>
+                                <td>${formatDateTime(record.clock_in)}</td>
+                                <td>${formatDateTime(record.clock_out)}</td>
+                                <td>${formatDuration(record.work_duration)}</td>
+                                <td>
+                                    ${record.signature_data ? 
+                                        `<div class="signature-preview" onclick='showSignature(\`${record.signature_data.replace(/`/g, '\\`')}\`, "${record.name}")'>
+                                            ${record.signature_data.replace(/<svg/, '<svg viewBox="0 0 550 270" preserveAspectRatio="xMidYMid meet"')}
+                                        </div>` 
+                                        : '-'}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
         async function loadAllAttendance() {
             const content = document.getElementById('allContent');
             content.innerHTML = '<div class="loading">Loading all attendance records...</div>';
@@ -481,46 +653,10 @@
             try {
                 const response = await fetch(`${API_BASE}/api/attendance/all`);
                 allAttendanceData = await response.json();
-
-                if (allAttendanceData.length === 0) {
-                    content.innerHTML = '<div class="no-data">No attendance records found</div>';
-                    return;
-                }
-
-                content.innerHTML = `
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Name</th>
-                                <th>Department</th>
-                                <th>Clock In</th>
-                                <th>Clock Out</th>
-                                <th>Duration</th>
-                                <th>Signature</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${allAttendanceData.map(record => `
-                                <tr>
-                                    <td>${new Date(record.date).toLocaleDateString()}</td>
-                                    <td><strong>${record.name}</strong></td>
-                                    <td>${record.department || '-'}</td>
-                                    <td>${formatDateTime(record.clock_in)}</td>
-                                    <td>${formatDateTime(record.clock_out)}</td>
-                                    <td>${formatDuration(record.work_duration)}</td>
-                                    <td>
-                                        ${record.signature_data ? 
-    `<div class="signature-preview" onclick='showSignature(\`${record.signature_data.replace(/`/g, '\\`')}\`, "${record.name}")'>
-        ${record.signature_data.replace(/<svg/, '<svg viewBox="0 0 550 270" preserveAspectRatio="xMidYMid meet"')}
-    </div>` 
-    : '-'}
-                                    </td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                `;
+                filteredAttendanceData = allAttendanceData;
+                
+                document.getElementById('filterResults').innerHTML = '';
+                renderAttendanceTable(allAttendanceData, 'allContent');
             } catch (error) {
                 console.error('Error loading all attendance:', error);
                 content.innerHTML = '<div class="error">Failed to load attendance data</div>';
@@ -533,9 +669,14 @@
 
             try {
                 const response = await fetch(`${API_BASE}/api/users`);
-                const users = await response.json();
+                allUsers = await response.json();
 
-                if (users.length === 0) {
+                // Populate user filter dropdown
+                const userSelect = document.getElementById('filterUser');
+                userSelect.innerHTML = '<option value="">All Users</option>' + 
+                    allUsers.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+
+                if (allUsers.length === 0) {
                     content.innerHTML = '<div class="no-data">No users found</div>';
                     return;
                 }
@@ -553,7 +694,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            ${users.map(user => `
+                            ${allUsers.map(user => `
                                 <tr>
                                     <td>${user.id}</td>
                                     <td><code>${user.rfid_uid}</code></td>
@@ -572,11 +713,158 @@
             }
         }
 
+        async function applyFilters() {
+            const userId = document.getElementById('filterUser').value;
+            const startDate = document.getElementById('filterStartDate').value;
+            const endDate = document.getElementById('filterEndDate').value;
+
+            const params = new URLSearchParams();
+            if (userId) params.append('user_id', userId);
+            if (startDate) params.append('start_date', startDate);
+            if (endDate) params.append('end_date', endDate);
+
+            const content = document.getElementById('allContent');
+            content.innerHTML = '<div class="loading">Filtering...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/attendance/filter?${params}`);
+                filteredAttendanceData = await response.json();
+
+                const userName = userId ? allUsers.find(u => u.id == userId)?.name : 'All Users';
+                const dateRange = startDate || endDate ? 
+                    `${startDate || 'Beginning'} to ${endDate || 'Today'}` : 'All Time';
+
+                document.getElementById('filterResults').innerHTML = `
+                    <div class="results-summary">
+                        <div>
+                            Showing <strong>${filteredAttendanceData.length}</strong> records for 
+                            <strong>${userName}</strong> (${dateRange})
+                        </div>
+                    </div>
+                `;
+
+                renderAttendanceTable(filteredAttendanceData, 'allContent');
+            } catch (error) {
+                console.error('Error filtering attendance:', error);
+                content.innerHTML = '<div class="error">Failed to filter attendance data</div>';
+            }
+        }
+
+        function clearFilters() {
+            document.getElementById('filterUser').value = '';
+            document.getElementById('filterStartDate').value = '';
+            document.getElementById('filterEndDate').value = '';
+            document.getElementById('filterResults').innerHTML = '';
+            filteredAttendanceData = allAttendanceData;
+            renderAttendanceTable(allAttendanceData, 'allContent');
+        }
+
+        async function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const userId = document.getElementById('filterUser').value;
+            const startDate = document.getElementById('filterStartDate').value;
+            const endDate = document.getElementById('filterEndDate').value;
+
+            const userName = userId ? allUsers.find(u => u.id == userId)?.name : 'All Users';
+            const dateRange = startDate || endDate ? 
+                `${startDate || 'Beginning'} to ${endDate || 'Today'}` : 'All Time';
+
+            // Title
+            doc.setFontSize(18);
+            doc.text('Attendance Report', 14, 20);
+            
+            doc.setFontSize(12);
+            doc.text(`User: ${userName}`, 14, 30);
+            doc.text(`Period: ${dateRange}`, 14, 37);
+            doc.text(`Total Records: ${filteredAttendanceData.length}`, 14, 44);
+
+            let yPos = 55;
+            doc.setFontSize(10);
+
+            // Calculate total hours
+            let totalMinutes = 0;
+            filteredAttendanceData.forEach(r => {
+                if (r.work_duration) totalMinutes += r.work_duration;
+            });
+            const totalHours = Math.floor(totalMinutes / 60);
+            const totalMins = totalMinutes % 60;
+            
+            doc.text(`Total Hours Worked: ${totalHours}h ${totalMins}m`, 14, yPos);
+            yPos += 10;
+
+            // Records
+            for (let i = 0; i < filteredAttendanceData.length; i++) {
+                const record = filteredAttendanceData[i];
+                
+                if (yPos > 270) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+
+                doc.setFontSize(11);
+                doc.setFont(undefined, 'bold');
+                doc.text(`${new Date(record.date).toLocaleDateString()} - ${record.name}`, 14, yPos);
+                yPos += 6;
+
+                doc.setFont(undefined, 'normal');
+                doc.setFontSize(9);
+                doc.text(`Clock In: ${formatDateTime(record.clock_in)}`, 14, yPos);
+                doc.text(`Clock Out: ${formatDateTime(record.clock_out)}`, 80, yPos);
+                doc.text(`Duration: ${formatDuration(record.work_duration)}`, 150, yPos);
+                yPos += 6;
+
+                // Add signature if exists
+                if (record.signature_data) {
+                    doc.text('Signature:', 14, yPos);
+                    yPos += 5;
+                    
+                    // Create temporary div for signature
+                    const tempDiv = document.createElement('div');
+                    tempDiv.style.width = '180px';
+                    tempDiv.style.height = '70px';
+                    tempDiv.style.position = 'absolute';
+                    tempDiv.style.left = '-9999px';
+                    tempDiv.style.display = 'flex';
+                    tempDiv.style.alignItems = 'center';
+                    tempDiv.style.justifyContent = 'center';
+                    tempDiv.innerHTML = record.signature_data
+    .replace(/<svg/, '<svg viewBox="0 0 550 270" preserveAspectRatio="xMidYMid meet"')
+    .replace(/width="550"/, 'width="100%"')
+    .replace(/height="270"/, 'height="100%"');
+                    document.body.appendChild(tempDiv);
+
+                    try {
+                        const canvas = await html2canvas(tempDiv, { backgroundColor: '#ffffff' });
+                        const imgData = canvas.toDataURL('image/png');
+                        doc.addImage(imgData, 'PNG', 14, yPos, 50, 20);
+                        yPos += 25;
+                    } catch (e) {
+                        console.error('Error rendering signature:', e);
+                        yPos += 5;
+                    }
+                    
+                    document.body.removeChild(tempDiv);
+                } else {
+                    yPos += 5;
+                    }
+
+                doc.setDrawColor(200, 200, 200);
+                doc.line(14, yPos, 196, yPos);
+                yPos += 8;
+            }
+
+            // Save PDF
+            const filename = `Attendance_${userName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+            doc.save(filename);
+        }
+
         async function loadAllData() {
             await loadStats();
             await loadTodayAttendance();
-            await loadAllAttendance();
             await loadUsers();
+            await loadAllAttendance();
         }
 
         // Load data on page load

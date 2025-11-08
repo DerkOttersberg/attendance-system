@@ -45,9 +45,39 @@ CREATE TABLE IF NOT EXISTS scan_log (
 
 -- Sample data (only insert if not exists)
 INSERT IGNORE INTO users (rfid_uid, name, email, department) VALUES
-('04A1B2C3', 'John Doe', 'john.doe@company.com', 'Engineering'),
+('8144EE19', 'Jamey Lee Stone', 'john.doe@company.com', 'Hot princess'),
 ('11F3EF12', 'Derk Ottersberg', 'jane.smith@company.com', 'Marketing'),
-('53C991A6', 'Bob Wilson', 'bob.wilson@company.com', 'Engineering');
+('53C991A6', 'Bob Wilson', 'bob.wilson@company.com', 'Engineering'),
+('12A7F9B1', 'Silas', 'silas@company.com', 'Engineering'),
+('14C2E8F5', 'Vincent', 'vincent@company.com', 'Engineering'),
+('15B6A1E3', 'Tobias', 'tobias@company.com', 'IT'),
+('16D9E2C7', 'Karkau', 'karkau@company.com', 'IT'),
+('17F4B3A2', 'Bryan', 'bryan@company.com', 'Sales'),
+('18E1C4D9', 'Bas', 'bas@company.com', 'Finance'),
+('19A5E6F8', 'Lisa', 'lisa@company.com', 'HR'),
+('20C7B2D1', 'Melvin', 'melvin@company.com', 'Engineering'),
+('21D8E3F9', 'Michael', 'michael@company.com', 'IT'),
+('22A9C4B5', 'Niek', 'niek@company.com', 'Engineering'),
+('23B7E5D3', 'Patrick', 'patrick@company.com', 'Marketing'),
+('24F2A8E6', 'Martin', 'martin@company.com', 'Operations'),
+('25E6D7B1', 'Bryan Brugman', 'bryan.brugman@company.com', 'Sales'),
+('26A4C9E3', 'Patrick Houtsma', 'patrick.houtsma@company.com', 'Engineering'),
+('27B5F8A2', 'Sebastien', 'sebastien@company.com', 'Design'),
+('28D3C6E9', 'Elwin L', 'elwin.l@company.com', 'IT'),
+('29E9F7C4', 'Melvin Z', 'melvin.z@company.com', 'Engineering'),
+('30C1A2B5', 'Gerrit', 'gerrit@company.com', 'Engineering'),
+('31F8E2D7', 'George', 'george@company.com', 'Engineering'),
+('32D6A5F3', 'Marijn', 'marijn@company.com', 'Marketing'),
+('33A7C8E2', 'Nikki', 'nikki@company.com', 'HR'),
+('34B9D5F1', 'Roel', 'roel@company.com', 'Engineering'),
+('35E2C4A8', 'Rowin', 'rowin@company.com', 'IT'),
+('36F7D9E5', 'Jaimy', 'jaimy@company.com', 'Engineering'),
+('37A1B6C9', 'Niels', 'niels@company.com', 'Finance'),
+('38E5D2F3', 'Alwin', 'alwin@company.com', 'IT'),
+('39B8C7D4', 'Jordy Jongmans', 'jordy.jongmans@company.com', 'Engineering'),
+('40C9A5E1', 'Yorick', 'yorick@company.com', 'Marketing'),
+('41D2B8F6', 'Jelle', 'jelle@company.com', 'Engineering');
+
 
 -- View for current status
 CREATE OR REPLACE VIEW current_status AS

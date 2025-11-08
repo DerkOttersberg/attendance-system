@@ -361,6 +361,73 @@ def today_attendance():
         cursor.close()
         conn.close()
 
+@app.route('/api/attendance/filter', methods=['GET'])
+def filter_attendance():
+    """
+    Get filtered attendance records
+    Query params: user_id, start_date, end_date
+    """
+    user_id = request.args.get('user_id')
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+    
+    conn = get_db_connection()
+    if not conn:
+        return jsonify({'error': 'Database connection failed'}), 500
+    
+    try:
+        cursor = conn.cursor(dictionary=True)
+        
+        # Build dynamic query
+        query = """
+            SELECT 
+                a.id,
+                a.date,
+                u.name,
+                u.department,
+                a.clock_in,
+                a.clock_out,
+                a.work_duration,
+                a.status,
+                a.signature_data
+            FROM attendance a
+            JOIN users u ON a.user_id = u.id
+            WHERE 1=1
+        """
+        params = []
+        
+        if user_id:
+            query += " AND a.user_id = %s"
+            params.append(user_id)
+        
+        if start_date:
+            query += " AND a.date >= %s"
+            params.append(start_date)
+        
+        if end_date:
+            query += " AND a.date <= %s"
+            params.append(end_date)
+        
+        query += " ORDER BY a.date DESC, a.clock_in DESC"
+        
+        cursor.execute(query, params)
+        records = cursor.fetchall()
+        
+        # Convert datetime objects to strings
+        for record in records:
+            if record['clock_in']:
+                record['clock_in'] = record['clock_in'].isoformat()
+            if record['clock_out']:
+                record['clock_out'] = record['clock_out'].isoformat()
+            if record['date']:
+                record['date'] = record['date'].isoformat()
+        
+        return jsonify(records)
+        
+    finally:
+        cursor.close()
+        conn.close()
+
 @app.route('/api/attendance/all', methods=['GET'])
 def all_attendance():
     """Get all attendance records with signatures"""
@@ -403,6 +470,8 @@ def all_attendance():
     finally:
         cursor.close()
         conn.close()
+
+        
 
 def log_scan(cursor, rfid_uid, action, success, message):
     """Helper function to log scans"""
