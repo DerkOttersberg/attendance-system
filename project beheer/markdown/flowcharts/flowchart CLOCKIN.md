@@ -66,4 +66,3 @@ flowchart TD
     style ShowSignature fill:#e8f5e9
     style ShowSuccess fill:#e8f5e9
     style ShowError fill:#ffebee
-    ```
