@@ -31,4 +31,3 @@ flowchart LR
     style F fill:#ffebee
     style K fill:#e8f5e9
     style L fill:#fff9c4
-    ```
