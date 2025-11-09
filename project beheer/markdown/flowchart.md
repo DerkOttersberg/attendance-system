@@ -1,3 +1,7 @@
+# RFID Attendance System
+
+## System Flow
+```mermaid
 flowchart TD
     Start([User Scans RFID Card])
     Start --> ReadRFID[M4 Core: Read RFID via PN532]
@@ -62,3 +66,4 @@ flowchart TD
     style ShowSignature fill:#e8f5e9
     style ShowSuccess fill:#e8f5e9
     style ShowError fill:#ffebee
+    ```
