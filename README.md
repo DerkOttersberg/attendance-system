@@ -111,7 +111,7 @@ For detailed setup instructions, see:
 - [GUI Development](./docs/GUI_SETUP.md) - ImGui interface development
 - [API Documentation](./docs/API.md) - Backend endpoints and usage
 - [Database Schema](./docs/DATABASE.md) - Data structure and relationships
-- [Flowcharts](./project%20beheer/project%20beheer/Markdown/FlowCharts/) - Process flow diagrams
+
 
 ### Development Guides
 - [Testing Guide](./docs/TESTING.md)
