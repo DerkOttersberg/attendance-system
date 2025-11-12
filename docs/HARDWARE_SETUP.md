@@ -391,7 +391,7 @@ You should now have a runnable binary in `bin/imgui_app`.
 ## 🚀 Deploying to STM32
 
 ```bash
-scp bin/imgui_app root@192.168.1.100:/home/root/
+scp bin/imgui_app root@your_stm32_ip_adress:/home/root/
 chmod +x /home/root/imgui_app
 ./imgui_app
 ```
@@ -411,7 +411,7 @@ Test API connectivity:
 ```cpp
 // In main.cpp
 //change this line to your current IP ADRESS
-#define API_BASE_URL "http://192.168.11.242:5000"
+#define API_BASE_URL "http://your_host_server_ip_adress:5000"
 ```
 
 **Expected**: IMGUI will put debug prints in the console showing it works
