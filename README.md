@@ -114,7 +114,6 @@ For detailed setup instructions, see:
 - [Flowcharts](./project%20beheer/project%20beheer/Markdown/FlowCharts/) - Process flow diagrams
 
 ### Development Guides
-- [Contributing Guide](./docs/CONTRIBUTING.md)
 - [Testing Guide](./docs/TESTING.md)
 - [Deployment Guide](./docs/DEPLOYMENT.md)
 
