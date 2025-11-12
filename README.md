@@ -140,22 +140,27 @@ attendance-system/
 │       ├── RFID_test.ino
 │       └── Touchscreen_test/
 │
-├── project beheer/               # Project management
-│   └── project beheer/
-│       ├── Burndown diagrams/    # Sprint tracking
-│       └── Markdown/
-│           └── FlowCharts/       # System flowcharts
-│
-└── docs/                         # Documentation (see above)
+├── docs/               # Documentation (see above)
+│   ├── Burndown diagrams/    # Sprint tracking
+│   └── Markdown/
+│       └── FlowCharts/       # System flowcharts
+                      
 ```
 
 ### Key Components
 
 #### 1. **STM32 Device** ([Hardware Setup](./docs/HARDWARE_SETUP.md))
+##### A7 Core
 - Main controller running embedded Linux
 - ImGui-based graphical interface
-- RFID reader integration
 - Touchscreen driver implementation
+
+##### M4 Core
+- RFID reader integration
+
+##### Virtual uart (ttyRPMSG)
+- Communication between M4 <--> A7 Cores
+
 
 #### 2. **Backend API** ([API Documentation](./docs/API.md))
 - Flask-based REST API
@@ -216,13 +221,14 @@ See [Dashboard Flowchart](./project%20beheer/project%20beheer/Markdown/FlowChart
 
 ### Hardware
 - **Microcontroller**: STM32F7 Discovery (DK1/DK2)
-- **RFID**: RC522/PN532 module
+- **RFID**: RC522 module
 - **Display**: SPI touchscreen (driver-dependent)
-- **OS**: Embedded Linux
+- **OS**: OpenSTMlinux
 
 ### Software
 - **GUI Framework**: Dear ImGui (C++)
-- **Backend**: Python Flask
+- **Low Level**: STMcubeIDE (C, C++, Assembly)
+- **Backend API**: Python Flask
 - **Database**: PostgreSQL
 - **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
 - **Containerization**: Docker
@@ -232,6 +238,7 @@ See [Dashboard Flowchart](./project%20beheer/project%20beheer/Markdown/FlowChart
 - Visual Studio Code
 - Docker Desktop
 - Git
+- WSL (For compiling Linux applications through the stm32mp157 SDK on windows)
 
 ## 🤝 Contributing
 
