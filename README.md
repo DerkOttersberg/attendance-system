@@ -105,6 +105,7 @@ For detailed setup instructions, see:
 - [Admin Guide](./docs/ADMIN_GUIDE.md) - Managing the system via web dashboard
 
 ### Technical Documentation
+- [Index](./docs/docs_index.md) - Index of this repository
 - [Architecture Overview](./docs/ARCHITECTURE.md) - System design and component interaction
 - [Hardware Setup](./docs/HARDWARE_SETUP.md) - STM32 configuration and wiring
 - [GUI Development](./docs/GUI_SETUP.md) - ImGui interface development
