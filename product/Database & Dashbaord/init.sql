@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS scan_log (
 
 -- Sample data (only insert if not exists)
 INSERT IGNORE INTO users (rfid_uid, name, email, department) VALUES
-('8144EE19', 'Jamey Lee Stone', 'john.doe@company.com', 'Hot princess'),
+('8144EE19', 'Jamey Lee Stone', 'john.doe@company.com', 'WMO'),
 ('11F3EF12', 'Derk Ottersberg', 'jane.smith@company.com', 'Marketing'),
 ('53C991A6', 'Bob Wilson', 'bob.wilson@company.com', 'Engineering'),
 ('12A7F9B1', 'Silas', 'silas@company.com', 'Engineering'),
