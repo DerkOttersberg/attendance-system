@@ -101,27 +101,27 @@ The project supports two STM32 Discovery boards:
 The RC522 RFID module connects to the STM32 M4 core via SPI:
 
 ```
-RC522 Module          STM32F769-DISCO
+RC522 Module          STM32MP157F-DK2
 ┌──────────┐         ┌──────────┐
 │   VCC    │────────→│   3.3V   │
 │   GND    │────────→│   GND    │
-│   RST    │────────→│   PB0    │
-│   IRQ    │         │   (NC)   │
-│   MISO   │────────→│   PB4    │
-│   MOSI   │────────→│   PB5    │
-│   SCK    │────────→│   PB3    │
-│   SDA    │────────→│   PA15   │ (CS)
+│   RST    │────────→│   PD15   │
+│   IRQ    │         │   NaN    │
+│   MISO   │────────→│   PF8    │
+│   MOSI   │────────→│   PF9    │
+│   SCK    │────────→│   PH6    │
+│   SDA    │────────→│   PD14   │ (CS)
 └──────────┘         └──────────┘
 ```
 
 **Pin Configuration**:
 - **VCC**: 3.3V power (do NOT use 5V)
 - **GND**: Ground
-- **RST**: Reset pin (PB0)
-- **MISO**: SPI data out (PB4)
-- **MOSI**: SPI data in (PB5)
-- **SCK**: SPI clock (PB3)
-- **SDA**: Chip select (PA15)
+- **RST**: Reset pin (PD15)
+- **MISO**: SPI data out (PF8)
+- **MOSI**: SPI data in (PF9)
+- **SCK**: SPI clock (PH6)
+- **SDA**: Chip select (PD14)
 
 ### Touchscreen
 
