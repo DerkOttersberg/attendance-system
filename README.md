@@ -213,7 +213,7 @@ Display Welcome Screen → User Signs on Touchscreen →
 Signature Stored → Time Entry Created → Success Feedback
 ```
 
-See [Clock-In Flowchart](./project%20beheer/project%20beheer/Markdown/FlowCharts/flowchart%20CLOCKIN%20COMPACT.md) for detailed flow.
+See [Clock-In Flowchart](./docs/flowcharts/flowchart%20CLOCKIN.md) for detailed flow.
 
 ### Dashboard Flow
 See [Dashboard Flowchart](./docs/flowcharts/flowchart%20Dashboard%20compact.md) for administrative workflows.
