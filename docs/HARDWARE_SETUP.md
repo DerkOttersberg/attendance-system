@@ -19,9 +19,9 @@
 
 ## Overview
 
-The attendance device is built around the **STM32F7 Discovery Kit**, which provides:
+The attendance device is built around the **STM32MP157F Discovery Kit**, which provides:
 - Dual-core processor (Cortex-A7 + Cortex-M4)
-- Embedded Linux capability
+- Embedded Linux capability (OPENstLinux)
 - Integrated touchscreen display
 - GPIO pins for peripherals
 
@@ -30,19 +30,19 @@ The attendance device is built around the **STM32F7 Discovery Kit**, which provi
 ```
 ┌─────────────────────────────────────┐
 │       STM32F7 Discovery Board       │
-│  ┌───────────┐      ┌───────────┐  │
-│  │ Cortex-A7 │◄────►│ Cortex-M4 │  │
-│  │  (Linux)  │      │  (RFID)   │  │
-│  └─────┬─────┘      └─────┬─────┘  │
-│        │                   │         │
-│   ┌────▼────┐         ┌───▼───┐    │
-│   │ImGui GUI│         │ RFID  │    │
-│   │         │         │Reader │    │
-│   └────┬────┘         └───────┘    │
+│  ┌───────────┐      ┌───────────┐   │
+│  │ Cortex-A7 │◄────►│ Cortex-M4 │   │
+│  │  (Linux)  │      │  (RFID)   │   │
+│  └─────┬─────┘      └─────┬─────┘   │
+│        │                   │        │
+│   ┌────▼────┐         ┌───▼───┐     │
+│   │ImGui GUI│         │ RFID  │     │
+│   │         │         │Reader │     │
+│   └────┬────┘         └───────┘     │
 │        │                            │
-│   ┌────▼────────┐                  │
-│   │ Touchscreen │                  │
-│   └─────────────┘                  │
+│   ┌────▼────────┐                   │
+│   │ Touchscreen │                   │
+│   └─────────────┘                   │
 └─────────────────────────────────────┘
 ```
 
@@ -58,7 +58,7 @@ The attendance device is built around the **STM32F7 Discovery Kit**, which provi
 | **RFID Reader** | RC522 Module | 1 | Card reading |
 | **Touchscreen** | Integrated on board | 1 | User input & display |
 | **Power Supply** | 5V 2A USB | 1 | Power delivery |
-| **MicroSD Card** | 8GB+ Class 10 | 1 | Linux filesystem (optional) |
+| **MicroSD Card** | 16GB+ Class 10 | 1 | Linux filesystem (optional) |
 
 ### Optional Components
 
@@ -75,22 +75,21 @@ The attendance device is built around the **STM32F7 Discovery Kit**, which provi
 
 The project supports two STM32 Discovery boards:
 
-### STM32F746-DISCO (DK1)
-- **Display**: 4.3" 480x272 LCD
-- **Touchscreen**: Capacitive
-- **RAM**: 340KB
-- **Flash**: 1MB
+### STM32MP157D (DK1)
+- **Display**: 4.3" 800x480 LCD
+- **Touchscreen**: Resistive
+- **RAM**: 4-Gbit DDR3L, 16 bits, 533 MHz
+- **Wiring**: SPI, HDMI
 - **Project Path**: `Product/STMCUBEIDE/dk1/`
 
-### STM32F769-DISCO (DK2) ⭐ **Recommended**
+### STM32MP157F (DK2) ⭐ **Recommended**
 - **Display**: 4.0" 800x480 LCD
 - **Touchscreen**: Capacitive
-- **RAM**: 512KB
-- **Flash**: 2MB
-- **Better performance**: Faster processor
+- **RAM**: 4-Gbit DDR3L, 16 bits, 533 MHz
+- **Different wiring**: Integrated Display Through MIPI DSI
 - **Project Path**: `Product/STMCUBEIDE/dk2/`
 
-> **Note**: This guide focuses on DK2 (STM32F769), but steps are similar for DK1.
+> **Note**: This guide focuses on DK2 (STM32MP157F), but steps are similar for DK1.
 
 ---
 
@@ -150,12 +149,8 @@ Download from [ST's website](https://www.st.com/en/development-tools/stm32cubeid
 
 Right-click project → **Properties**:
 
-**C/C++ Build → Settings**:
-- **Optimization**: `-O2` (release) or `-Og` (debug)
-- **Debugging**: Enable `-g` flag for debug builds
-
 **C/C++ General → Paths and Symbols**:
-- Add include paths for ImGui and custom libraries
+- Install Libraries for C, python3-dev
 
 ### 4. Install Dependencies
 
@@ -167,8 +162,7 @@ The project requires several libraries pre-installed on the STM32:
 ssh root@<stm32-ip>
 
 # Install required packages
-opkg update
-opkg install libstdc++ libpthread
+apt update (You need to be SuperUser)
 ```
 
 **ImGui**: Already included in project (`Product/GUI/IMGUI/`)
@@ -177,115 +171,55 @@ opkg install libstdc++ libpthread
 
 ## Flashing Firmware
 
-### Method 1: Using STM32CubeIDE (Recommended)
+### Using STM32CubeProgrammer
 
-1. **Connect board** via USB ST-LINK
-2. **Build project**: Click hammer icon or press `Ctrl+B`
-3. **Flash**: Click play icon (Run) or press `F11`
-4. Monitor console for flash progress
+Follow the Flashing Guide from manufacturers website https://www.st.com
+Download the Yocto Linux image
 
-**Expected Output**:
-```
-Downloading...
-File downloaded successfully
-Verified OK
-Debugger connection lost.
-Shutting down...
-```
+Its recommend to install the command line flasher, instead of using the UI programmer
 
-### Method 2: Using STM32CubeProgrammer
 
-1. Open STM32CubeProgrammer
-2. Connect to board (ST-LINK)
-3. Load `.elf` or `.bin` file from build directory
-4. Click **Download**
 
-### Method 3: Using Command Line
 
-```bash
-# Navigate to build directory
-cd Product/STMCUBEIDE/dk2/Debug/
-
-# Flash using st-flash
-st-flash write firmware.bin 0x08000000
-```
-
----
-
-## Installing Embedded Linux (Optional)
-
-For advanced features, you can run embedded Linux on the A7 core:
-
-### 1. Prepare SD Card
-
-Download and flash Yocto Linux image:
-```bash
-# Download image
-wget <yocto-image-url>
-
-# Flash to SD card (Linux)
-sudo dd if=image.wic of=/dev/sdX bs=4M status=progress
-sync
-```
-
-### 2. Configure Boot
+#### 1. Configure Boot
 
 Set boot switches on STM32 board to boot from SD card (refer to board manual).
 
-### 3. First Boot
+#### 2. First Boot
 
-Insert SD card and power on. Default credentials:
-- **Username**: `root`
-- **Password**: (none)
-
-### 4. Network Configuration
-
-```bash
-# Connect via Ethernet or WiFi
-ifconfig eth0 192.168.1.100 netmask 255.255.255.0
-route add default gw 192.168.1.1
-
-# Or use NetworkManager
-nmcli device wifi connect "SSID" password "PASSWORD"
-```
+Insert SD card and power on. 
 
 ---
 
 ## Hardware Testing
 
-### Test 1: Board Power & Boot
+### Board Power & Boot
 
 1. Connect USB power
 2. Check for LED indicators
 3. Display should show boot sequence
 4. Touchscreen backlight should activate
 
-**Expected**: Board boots within 5-10 seconds
+**Expected**: Board boots within 20-45 seconds
 
 ---
 
-### Test 2: Touchscreen Calibration
+## Test 3: RFID Reader
 
-Test included in `Product/ESP32/Touchscreen_test/`:
+Project build included in `C:\Users\derko\OneDrive\Documents\gittest\attendance-system\product\STM32CUBEIDE\workspace_1.19.0\dk2`:
 
-1. Flash test sketch to board
-2. Screen displays touch coordinates
-3. Touch corners and center to verify accuracy
-
-**Expected**: Coordinates match touch position
-
----
-
-### Test 3: RFID Reader
-
-Test included in `Product/ESP32/RFID_test.ino`:
-
-1. Flash test sketch
-2. Open serial monitor (115200 baud)
+1. Connect st-link
+2. Configure the IP Adress in STMCUBEIDE
+3. Configure OPENOCD
+4. Upload project
+5. SSH into the STM32
+6. Read out the data
+    1. "cat /dev/ttyRPMSG* &" (usually this is 0. This will make it so you can read out print statements in the console for testing)
+    2. "echo "help" > /dev/ttyRPMSG*" (Nudge the M4 Core to start sending)
 3. Scan RFID card near reader
-4. UID should appear in serial output
+4. UID should appear in the terminal
 
-**Expected Output**:
+**Expected Similar Output**:
 ```
 Card detected!
 UID: A1 B2 C3 D4
@@ -294,16 +228,179 @@ Card type: MIFARE 1KB
 
 ---
 
-### Test 4: ImGui Display
+# Test 4: ImGui Display
 
-Main GUI test:
+This test demonstrates the **main GUI display** for your STM32 board using **Dear ImGui** and **GLFW**.
 
-1. Flash full firmware from `Product/GUI/IMGUI/v1.2.5.2/`
-2. GUI should render on touchscreen
-3. Touch interface should respond
-4. Check for visual glitches
+---
 
-**Expected**: Smooth 30+ FPS rendering
+## 🧰 Prerequisites
+
+### On Your Main PC
+
+1. **Install WSL (Ubuntu 22.04)**
+   ```bash
+   wsl --install -d Ubuntu-22.04
+   sudo apt update
+   sudo apt upgrade -y
+   ```
+
+2. **Set Up Cross Compiler**
+   ```bash
+   wsl.exe -d Ubuntu-24.04
+   cd ~
+   ```
+
+3. **Install Build Dependencies**
+   ```bash
+   sudo apt install -y        build-essential        cmake        git        wget        curl        pkg-config        python3        python3-pip        libssl-dev        device-tree-compiler        u-boot-tools        bison        flex        bc        libncurses-dev        dosfstools        mtools        parted        rsync
+   ```
+
+---
+
+### On Your STM32 Board
+
+1. **Install Required Packages**
+   ```bash
+   opkg update
+   opkg install libdrm libgbm mesa-gl libgles2 libegl
+   ```
+
+---
+
+## 🧩 Installing the OpenSTLinux SDK
+
+1. Download the SDK from STMicroelectronics:
+   ```
+   gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz
+   ```
+
+2. Extract and set up the environment:
+   ```bash
+   export PATH=/opt/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/bin:$PATH
+   export CROSS_COMPILE=arm-none-linux-gnueabihf-
+   export ARCH=arm
+   ```
+
+3. Verify installation:
+   ```bash
+   $CC --version
+   ```
+
+---
+
+## 🧱 Building ImGui and GLFW
+
+1. **Clone Repositories**
+   ```bash
+   mkdir -p ~/imgui_stm32
+   cd ~/imgui_stm32
+   git clone https://github.com/ocornut/imgui.git
+   git clone https://github.com/glfw/glfw.git
+   ```
+
+2. **Build GLFW**
+   ```bash
+   cd glfw
+   mkdir build && cd build
+   cmake ..        -DCMAKE_BUILD_TYPE=Release        -DGLFW_BUILD_EXAMPLES=OFF        -DGLFW_BUILD_TESTS=OFF        -DGLFW_BUILD_DOCS=OFF        -DGLFW_BUILD_WAYLAND=ON        -DGLFW_BUILD_X11=OFF
+   make -j$(nproc)
+   sudo make install
+   ```
+
+---
+
+## 📝 Project Setup
+
+1. In your `imgui_stm32` directory, copy the files from:
+   ```
+   attendance-system\product\GUI\IMGUI\v1.2.5.2
+   ```
+   *(Copy the files directly — no subfolder.)*
+
+2. **Create `CMakeLists.txt`**
+   ```cmake
+   cmake_minimum_required(VERSION 3.10)
+   project(imgui_stm32)
+
+   set(CMAKE_CXX_STANDARD 11)
+   set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+   # ImGui sources
+   set(IMGUI_DIR ${CMAKE_CURRENT_SOURCE_DIR}/imgui)
+   file(GLOB IMGUI_SOURCES ${IMGUI_DIR}/*.cpp)
+   list(APPEND IMGUI_SOURCES
+       ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+       ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+   )
+
+   # GLFW
+   set(GLFW_DIR ${CMAKE_CURRENT_SOURCE_DIR}/glfw)
+
+   # Executable
+   add_executable(imgui_app
+       main.cpp
+       ${IMGUI_SOURCES}
+   )
+
+   target_include_directories(imgui_app PRIVATE
+       ${IMGUI_DIR}
+       ${IMGUI_DIR}/backends
+       ${GLFW_DIR}/include
+   )
+
+   target_compile_definitions(imgui_app PRIVATE 
+       GLFW_INCLUDE_ES2
+       GLFW_EXPOSE_NATIVE_WAYLAND
+       IMGUI_IMPL_OPENGL_ES2
+   )
+
+   target_link_libraries(imgui_app
+       ${GLFW_DIR}/build/src/libglfw3.a
+       GLESv2
+       EGL
+       dl
+       pthread
+       m
+       curl
+   )
+
+   # Output Directory
+   set_target_properties(imgui_app PROPERTIES
+       RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+       BUILD_RPATH "${SYSROOT}/lib"
+       INSTALL_RPATH "${SYSROOT}/lib"
+   )
+   ```
+
+---
+
+## ⚙️ Building the Project
+
+```bash
+cd ~/imgui_stm32
+mkdir build && cd build
+cmake ..
+make -j$(nproc)
+```
+
+You should now have a runnable binary in `bin/imgui_app`.
+
+---
+
+## 🚀 Deploying to STM32
+
+```bash
+scp bin/imgui_app root@192.168.1.100:/home/root/
+chmod +x /home/root/imgui_app
+./imgui_app
+```
+
+
+
+
+**Expected Result:** Smooth 30+ FPS rendering on STM32 display.
+
 
 ---
 
@@ -313,21 +410,11 @@ Test API connectivity:
 
 ```cpp
 // In main.cpp
-#include "api_client.h"
-
-void testAPI() {
-    APIClient client("http://192.168.1.100:5000");
-    bool connected = client.testConnection();
-    
-    if (connected) {
-        printf("API connection: SUCCESS\n");
-    } else {
-        printf("API connection: FAILED\n");
-    }
-}
+//change this line to your current IP ADRESS
+#define API_BASE_URL "http://192.168.11.242:5000"
 ```
 
-**Expected**: "API connection: SUCCESS"
+**Expected**: IMGUI will put debug prints in the console showing it works
 
 ---
 
