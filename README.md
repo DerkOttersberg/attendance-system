@@ -3,7 +3,7 @@
 A comprehensive hardware-based time tracking and attendance management system built with STM32 microcontroller, featuring RFID authentication, touchscreen signature capture, and web-based administration.
 
 ![Project Status](https://img.shields.io/badge/status-in%20development-yellow)
-![Hardware](https://img.shields.io/badge/hardware-STM32-blue)
+![Hardware](https://img.shields.io/badge/hardware-STM32mp157f-blue)
 ![Backend](https://img.shields.io/badge/backend-Python%20Flask-green)
 
 ## 📋 Table of Contents
@@ -15,7 +15,7 @@ A comprehensive hardware-based time tracking and attendance management system bu
 - [Documentation](#documentation)
 - [Project Structure](#project-structure)
 - [Development Status](#development-status)
-- [Contributing](#contributing)
+
 
 ## 🎯 Overview
 
@@ -216,19 +216,19 @@ Signature Stored → Time Entry Created → Success Feedback
 See [Clock-In Flowchart](./project%20beheer/project%20beheer/Markdown/FlowCharts/flowchart%20CLOCKIN%20COMPACT.md) for detailed flow.
 
 ### Dashboard Flow
-See [Dashboard Flowchart](./project%20beheer/project%20beheer/Markdown/FlowCharts/flowchart%20Dashboard%20compact.md) for administrative workflows.
+See [Dashboard Flowchart](./docs/flowcharts/flowchart%20Dashboard%20compact.md) for administrative workflows.
 
 ## 🛠️ Technology Stack
 
 ### Hardware
-- **Microcontroller**: STM32F7 Discovery (DK1/DK2)
+- **Microcontroller**: STM32MP157F Discovery (DK1/DK2)
 - **RFID**: RC522 module
 - **Display**: SPI touchscreen (driver-dependent)
 - **OS**: OpenSTMlinux
 
 ### Software
 - **GUI Framework**: Dear ImGui (C++)
-- **Low Level**: STMcubeIDE (C, C++, Assembly)
+- **Low Level hardware control**: STMcubeIDE (C, C++, Assembly)
 - **Backend API**: Python Flask
 - **Database**: PostgreSQL
 - **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
@@ -238,42 +238,25 @@ See [Dashboard Flowchart](./project%20beheer/project%20beheer/Markdown/FlowChart
 - STM32CubeIDE
 - Visual Studio Code
 - Docker Desktop
-- Git
 - WSL (For compiling Linux applications through the stm32mp157 SDK on windows)
+- Git
 
-## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](./docs/CONTRIBUTING.md) for details on:
-- Code style and standards
-- Development workflow
-- Testing requirements
-- Pull request process
-
-## 📄 License
-
-This project is developed as part of an educational/commercial project. License details to be determined.
+This project is developed as part of an educational/commercial project. License BitsEnBytes
 
 ## 📞 Contact & Support
 
 For questions, issues, or contributions:
 - Create an issue in the repository
 - Contact the development team
-- See [Project Management](./project%20beheer/) for sprint planning and burndown charts
 
 ## 🎓 Project Management
 
 This project follows Agile methodology with:
-- Sprint-based development
 - User story tracking
-- Regular burndown chart updates
-
-See [Project Beheer](./project%20beheer/project%20beheer/) for:
-- Burndown diagrams
-- Sprint planning documents
-- Technical flowcharts
 
 ---
 
 **Last Updated**: November 2025  
-**Version**: 1.2.5.2  
+**Version**: 1.0.1.2  
 **Status**: Active Development
