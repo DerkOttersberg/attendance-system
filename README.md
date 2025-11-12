@@ -8,13 +8,13 @@ A comprehensive hardware-based time tracking and attendance management system bu
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Features](#features)
-- [System Architecture](#system-architecture)
-- [Quick Start](#quick-start)
-- [Documentation](#documentation)
-- [Project Structure](#project-structure)
-- [Development Status](#development-status)
+- [Overview](#-Overview)
+- [Features](#-features)
+- [System Architecture](#-system-architecture)
+- [Quick Start](#-quick-start)
+- [Documentation](#-documentation)
+- [Project Structure](#-project-structure)
+- [Development Status](#-development-status)
 
 
 ## 🎯 Overview
@@ -260,3 +260,4 @@ This project follows Agile methodology with:
 **Last Updated**: November 2025  
 **Version**: 1.0.1.2  
 **Status**: Active Development
+
