@@ -206,7 +206,7 @@ Insert SD card and power on.
 
 ## Test 3: RFID Reader
 
-Project build included in `C:\Users\derko\OneDrive\Documents\gittest\attendance-system\product\STM32CUBEIDE\workspace_1.19.0\dk2`:
+Project build included in `attendance-system\product\STM32CUBEIDE\workspace_1.19.0\dk2`:
 
 1. Connect st-link
 2. Configure the IP Adress in STMCUBEIDE
@@ -214,10 +214,10 @@ Project build included in `C:\Users\derko\OneDrive\Documents\gittest\attendance-
 4. Upload project
 5. SSH into the STM32
 6. Read out the data
-    1. "cat /dev/ttyRPMSG* &" (usually this is 0. This will make it so you can read out print statements in the console for testing)
-    2. "echo "help" > /dev/ttyRPMSG*" (Nudge the M4 Core to start sending)
-3. Scan RFID card near reader
-4. UID should appear in the terminal
+    1. `cat /dev/ttyRPMSG* &` (usually this is 0. This will make it so you can read out print statements in the console for testing)
+    2. `echo "help" > /dev/ttyRPMSG*` (Nudge the M4 Core to start sending)
+7. Scan RFID card near reader
+8. UID should appear in the terminal
 
 **Expected Similar Output**:
 ```
