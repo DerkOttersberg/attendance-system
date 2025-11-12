@@ -66,9 +66,9 @@ This attendance system provides a seamless way for users to clock in and out usi
 │  (Backend)      │
 └────────┬────────┘
          │
-┌────────▼────────┐      ┌──────────────┐
-│   PostgreSQL    │◄────►│ Web Dashboard│
-│    Database     │      └──────────────┘
+┌────────▼────────┐      ┌──────────────┐      ┌──────────────┐
+│   PostgreSQL    │◄────►│ Web Dashboard│◄────►|Export to PDF |
+│    Database     │      └──────────────┘      └──────────────┘
 └─────────────────┘
 ```
 
