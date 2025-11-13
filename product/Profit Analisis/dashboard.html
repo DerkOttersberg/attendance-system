@@ -1,0 +1,294 @@
+import React, { useState } from 'react';
+import { LineChart, Line, BarChart, Bar, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ReferenceLine } from 'recharts';
+
+export default function ProductInvestmentAnalysis() {
+  const [ontwikkelKosten, setOntwikkelKosten] = useState(1300);
+  const [uurBesparing, setUurBesparing] = useState(1);
+  const [uurTarief, setUuurTarief] = useState(35);
+  const [elektriciteit, setElektriciteit] = useState(3);
+
+  // Berekeningen
+  const besparingPerWeek = (uurBesparing * uurTarief) - elektriciteit;
+  const breakEvenWeken = Math.ceil(ontwikkelKosten / besparingPerWeek);
+  const breakEvenMaanden = (breakEvenWeken / 4.33).toFixed(1);
+
+  // Data voor grafieken (104 weken = 2 jaar)
+  const generateData = () => {
+    const data = [];
+    for (let week = 0; week <= 104; week++) {
+      const kosten = ontwikkelKosten + (elektriciteit * week);
+      const opbrengst = (uurBesparing * uurTarief * week);
+      const nettoWinst = opbrengst - kosten;
+      
+      data.push({
+        week,
+        maand: (week / 4.33).toFixed(1),
+        kosten,
+        opbrengst,
+        nettoWinst,
+        breakEven: 0
+      });
+    }
+    return data;
+  };
+
+  const data = generateData();
+
+  // Maandelijkse samenvatting
+  const generateMonthlyData = () => {
+    const monthly = [];
+    for (let month = 0; month <= 24; month++) {
+      const week = month * 4.33;
+      const kosten = ontwikkelKosten + (elektriciteit * week);
+      const opbrengst = (uurBesparing * uurTarief * week);
+      const nettoWinst = opbrengst - kosten;
+      
+      monthly.push({
+        maand: month,
+        nettoWinst: Math.round(nettoWinst)
+      });
+    }
+    return monthly;
+  };
+
+  const monthlyData = generateMonthlyData();
+
+  return (
+    <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-8">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-4xl font-bold text-white mb-8">Product Investering Analyse</h1>
+
+        {/* Inputs */}
+        <div className="bg-slate-800 rounded-lg p-6 mb-8 shadow-xl">
+          <h2 className="text-2xl font-semibold text-white mb-4">Parameters</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Ontwikkelkosten (€)
+              </label>
+              <input
+                type="number"
+                value={ontwikkelKosten}
+                onChange={(e) => setOntwikkelKosten(Number(e.target.value))}
+                className="w-full px-3 py-2 bg-slate-700 text-white rounded border border-slate-600 focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Uren besparing/week
+              </label>
+              <input
+                type="number"
+                step="0.5"
+                value={uurBesparing}
+                onChange={(e) => setUuurBesparing(Number(e.target.value))}
+                className="w-full px-3 py-2 bg-slate-700 text-white rounded border border-slate-600 focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Uurtarief (€)
+              </label>
+              <input
+                type="number"
+                value={uurTarief}
+                onChange={(e) => setUuurTarief(Number(e.target.value))}
+                className="w-full px-3 py-2 bg-slate-700 text-white rounded border border-slate-600 focus:outline-none focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-300 mb-2">
+                Elektriciteit/week (€)
+              </label>
+              <input
+                type="number"
+                step="0.5"
+                value={elektriciteit}
+                onChange={(e) => setElektriciteit(Number(e.target.value))}
+                className="w-full px-3 py-2 bg-slate-700 text-white rounded border border-slate-600 focus:outline-none focus:border-blue-500"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Key Metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg p-6 shadow-xl">
+            <h3 className="text-sm font-medium text-blue-100 mb-2">Netto Besparing/Week</h3>
+            <p className="text-4xl font-bold text-white">€{besparingPerWeek}</p>
+            <p className="text-sm text-blue-100 mt-2">€{(besparingPerWeek * 4.33).toFixed(0)}/maand</p>
+          </div>
+          <div className="bg-gradient-to-br from-green-600 to-green-700 rounded-lg p-6 shadow-xl">
+            <h3 className="text-sm font-medium text-green-100 mb-2">Break-Even Punt</h3>
+            <p className="text-4xl font-bold text-white">{breakEvenWeken} weken</p>
+            <p className="text-sm text-green-100 mt-2">{breakEvenMaanden} maanden</p>
+          </div>
+          <div className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-lg p-6 shadow-xl">
+            <h3 className="text-sm font-medium text-purple-100 mb-2">Winst na 2 jaar</h3>
+            <p className="text-4xl font-bold text-white">€{Math.round((besparingPerWeek * 104) - ontwikkelKosten)}</p>
+            <p className="text-sm text-purple-100 mt-2">ROI: {(((besparingPerWeek * 104) / ontwikkelKosten - 1) * 100).toFixed(0)}%</p>
+          </div>
+        </div>
+
+        {/* Chart 1: Break-Even Analyse */}
+        <div className="bg-slate-800 rounded-lg p-6 mb-8 shadow-xl">
+          <h2 className="text-2xl font-semibold text-white mb-4">1. Break-Even Diagram</h2>
+          <ResponsiveContainer width="100%" height={400}>
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+              <XAxis 
+                dataKey="week" 
+                stroke="#94a3b8"
+                label={{ value: 'Weken', position: 'insideBottom', offset: -5, fill: '#94a3b8' }}
+              />
+              <YAxis 
+                stroke="#94a3b8"
+                label={{ value: 'Euro (€)', angle: -90, position: 'insideLeft', fill: '#94a3b8' }}
+              />
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px' }}
+                labelStyle={{ color: '#e2e8f0' }}
+              />
+              <Legend wrapperStyle={{ color: '#e2e8f0' }} />
+              <ReferenceLine 
+                y={0} 
+                stroke="#ef4444" 
+                strokeDasharray="3 3"
+                label={{ value: 'Break-Even', fill: '#ef4444', position: 'right' }}
+              />
+              <ReferenceLine 
+                x={breakEvenWeken} 
+                stroke="#22c55e" 
+                strokeDasharray="3 3"
+                label={{ value: `Week ${breakEvenWeken}`, fill: '#22c55e', position: 'top' }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="kosten" 
+                stroke="#ef4444" 
+                strokeWidth={3}
+                name="Totale Kosten"
+                dot={false}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="opbrengst" 
+                stroke="#22c55e" 
+                strokeWidth={3}
+                name="Totale Opbrengst"
+                dot={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+          <p className="text-slate-400 text-sm mt-2">
+            Het snijpunt is je break-even punt: waar kosten en opbrengst gelijk zijn.
+          </p>
+        </div>
+
+        {/* Chart 2: Cumulatieve Winst */}
+        <div className="bg-slate-800 rounded-lg p-6 mb-8 shadow-xl">
+          <h2 className="text-2xl font-semibold text-white mb-4">2. Cumulatieve Winst/Verlies</h2>
+          <ResponsiveContainer width="100%" height={400}>
+            <AreaChart data={data}>
+              <defs>
+                <linearGradient id="colorProfit" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#22c55e" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#22c55e" stopOpacity={0.1}/>
+                </linearGradient>
+                <linearGradient id="colorLoss" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#ef4444" stopOpacity={0.8}/>
+                  <stop offset="95%" stopColor="#ef4444" stopOpacity={0.1}/>
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+              <XAxis 
+                dataKey="week" 
+                stroke="#94a3b8"
+                label={{ value: 'Weken', position: 'insideBottom', offset: -5, fill: '#94a3b8' }}
+              />
+              <YAxis 
+                stroke="#94a3b8"
+                label={{ value: 'Netto Winst (€)', angle: -90, position: 'insideLeft', fill: '#94a3b8' }}
+              />
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px' }}
+                labelStyle={{ color: '#e2e8f0' }}
+                formatter={(value) => `€${Math.round(value)}`}
+              />
+              <ReferenceLine y={0} stroke="#94a3b8" strokeWidth={2} />
+              <Area 
+                type="monotone" 
+                dataKey="nettoWinst" 
+                stroke="#3b82f6" 
+                strokeWidth={3}
+                fill="url(#colorProfit)"
+                name="Netto Winst"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+          <p className="text-slate-400 text-sm mt-2">
+            Onder de nul = verlies (rode zone), boven de nul = winst (groene zone).
+          </p>
+        </div>
+
+        {/* Chart 3: Maandelijkse Winst */}
+        <div className="bg-slate-800 rounded-lg p-6 shadow-xl">
+          <h2 className="text-2xl font-semibold text-white mb-4">3. Netto Winst per Maand</h2>
+          <ResponsiveContainer width="100%" height={400}>
+            <BarChart data={monthlyData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+              <XAxis 
+                dataKey="maand" 
+                stroke="#94a3b8"
+                label={{ value: 'Maanden', position: 'insideBottom', offset: -5, fill: '#94a3b8' }}
+              />
+              <YAxis 
+                stroke="#94a3b8"
+                label={{ value: 'Netto Winst (€)', angle: -90, position: 'insideLeft', fill: '#94a3b8' }}
+              />
+              <Tooltip 
+                contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px' }}
+                labelStyle={{ color: '#e2e8f0' }}
+                formatter={(value) => `€${value}`}
+              />
+              <ReferenceLine y={0} stroke="#94a3b8" strokeWidth={2} />
+              <Bar 
+                dataKey="nettoWinst" 
+                fill="#3b82f6"
+                radius={[8, 8, 0, 0]}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+          <p className="text-slate-400 text-sm mt-2">
+            Rode balken = verlies, blauwe balken = winst. Let op hoe snel de winst groeit na break-even!
+          </p>
+        </div>
+
+        {/* Uitleg */}
+        <div className="bg-slate-800 rounded-lg p-6 mt-8 shadow-xl">
+          <h2 className="text-2xl font-semibold text-white mb-4">Hoe deze te visualiseren?</h2>
+          <div className="text-slate-300 space-y-3">
+            <p><strong className="text-white">Voor presentaties:</strong></p>
+            <ul className="list-disc list-inside space-y-1 ml-4">
+              <li>Rechtsklik op elke grafiek → "Opslaan als afbeelding"</li>
+              <li>Of maak een screenshot (Windows: Win+Shift+S, Mac: Cmd+Shift+4)</li>
+              <li>Plak in PowerPoint, Word, of Google Slides</li>
+            </ul>
+            <p className="mt-4"><strong className="text-white">Voor rapporten:</strong></p>
+            <ul className="list-disc list-inside space-y-1 ml-4">
+              <li>Print deze pagina naar PDF via je browser (Ctrl+P)</li>
+              <li>Of exporteer de grafieken individueel als PNG/JPG</li>
+            </ul>
+            <p className="mt-4"><strong className="text-white">Tips:</strong></p>
+            <ul className="list-disc list-inside space-y-1 ml-4">
+              <li>Pas de parameters aan met de sliders om verschillende scenario's te testen</li>
+              <li>De eerste grafiek toont wanneer je quitte speelt</li>
+              <li>De tweede grafiek laat zien hoe je winst groeit over tijd</li>
+              <li>De derde grafiek toont maandelijkse resultaten in staafvorm</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
