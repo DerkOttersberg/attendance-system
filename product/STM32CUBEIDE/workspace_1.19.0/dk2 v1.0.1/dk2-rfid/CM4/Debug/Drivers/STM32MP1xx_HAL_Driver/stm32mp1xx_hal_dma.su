@@ -1,0 +1,17 @@
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:177:19:HAL_DMA_Init	32	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:377:19:HAL_DMA_DeInit	24	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:496:19:HAL_DMA_Start	32	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:552:19:HAL_DMA_Start_IT	32	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:635:19:HAL_DMA_Abort	32	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:721:19:HAL_DMA_Abort_IT	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:757:19:HAL_DMA_PollForTransfer	48	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:925:6:HAL_DMA_IRQHandler	32	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:1159:19:HAL_DMA_RegisterCallback	32	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:1226:19:HAL_DMA_UnRegisterCallback	24	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:1317:22:HAL_DMA_GetState	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:1328:10:HAL_DMA_GetError	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:1354:13:DMA_SetConfig	32	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:1402:17:DMA_CalcBaseAndBitshift	24	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:1430:26:DMA_CheckFifoParam	24	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:1524:13:DMA_CalcDMAMUXChannelBaseAndMask	24	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_dma.c:1549:13:DMA_CalcDMAMUXRequestGenBaseAndMask	24	static

@@ -21,6 +21,9 @@ logging.basicConfig(
     ]
 )
 
+
+
+
 # Database configuration
 DB_CONFIG = {
     'host': os.getenv('DB_HOST', 'localhost'),
@@ -37,6 +40,7 @@ def get_db_connection():
     except Error as e:
         logging.error(f"Database connection error: {e}")
         return None
+
 
 @app.route('/health', methods=['GET'])
 def health_check():

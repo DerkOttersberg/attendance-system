@@ -1,0 +1,13 @@
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:275:13:rpmsg_virtio_hold_rx_buffer	0	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:456:13:rpmsg_virtio_tx_callback	0	static
+../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/system/generic/mutex.h:43:20:__metal_mutex_init	0	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:541:12:rpmsg_virtio_ns_callback	56	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:351:12:rpmsg_virtio_send_offchannel_nocopy	48	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:469:13:rpmsg_virtio_rx_callback	48	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:287:13:rpmsg_virtio_release_rx_buffer	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:307:14:rpmsg_virtio_get_tx_payload_buffer	40	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:417:12:rpmsg_virtio_send_offchannel_raw	48	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:43:6:rpmsg_virtio_init_shm_pool	0	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:594:5:rpmsg_virtio_get_buffer_size	8	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:608:5:rpmsg_init_vdev	48	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:751:6:rpmsg_deinit_vdev	8	static

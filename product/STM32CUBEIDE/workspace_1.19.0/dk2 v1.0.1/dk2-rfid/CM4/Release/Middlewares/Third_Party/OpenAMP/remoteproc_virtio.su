@@ -1,0 +1,10 @@
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:128:13:rproc_virtio_read_config	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:19:13:rproc_virtio_virtqueue_notify	8	static
+../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/io.h:235:1:metal_io_read.constprop	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:33:22:rproc_virtio_get_status	8	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:82:17:rproc_virtio_get_features	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:197:1:rproc_virtio_create_vdev	56	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:271:6:rproc_virtio_remove_vdev	24	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:290:5:rproc_virtio_init_vring	8	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:311:5:rproc_virtio_notified	24	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:334:6:rproc_virtio_wait_remote_ready	8	static

@@ -1,0 +1,14 @@
+../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/io.h:161:1:metal_io_phys	5
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtqueue.c:73:5:virtqueue_create	1
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtqueue.c:121:5:virtqueue_add_buffer	3
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtqueue.c:185:7:virtqueue_get_buffer	7
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtqueue.c:223:10:virtqueue_get_buffer_length	1
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtqueue.c:235:6:virtqueue_free	5
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtqueue.c:258:7:virtqueue_get_available_buffer	8
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtqueue.c:299:5:virtqueue_add_consumed_buffer	2
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtqueue.c:342:5:virtqueue_enable_cb	5
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtqueue.c:353:6:virtqueue_disable_cb	4
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtqueue.c:395:6:virtqueue_kick	7
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtqueue.c:415:6:virtqueue_dump	4
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtqueue.c:441:10:virtqueue_get_desc_size	2
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtqueue.c:701:6:virtqueue_notification	2

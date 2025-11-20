@@ -1,0 +1,6 @@
+../../Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/rpmsg.h:158:19:rpmsg_send	32	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.c:54:12:VIRT_UART_read_cb	32	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.c:69:25:VIRT_UART_Init	32	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.c:86:25:VIRT_UART_DeInit	16	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.c:93:25:VIRT_UART_RegisterCallback	32	static
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/virtual_driver/virt_uart.c:113:25:VIRT_UART_Transmit	32	static

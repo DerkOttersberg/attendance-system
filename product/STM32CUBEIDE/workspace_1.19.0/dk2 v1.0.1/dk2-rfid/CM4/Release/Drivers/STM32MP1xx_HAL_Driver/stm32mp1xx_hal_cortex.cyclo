@@ -1,0 +1,15 @@
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_cortex.c:138:6:HAL_NVIC_SetPriorityGrouping	1
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_cortex.c:160:6:HAL_NVIC_SetPriority	3
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_cortex.c:182:6:HAL_NVIC_EnableIRQ	2
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_cortex.c:198:6:HAL_NVIC_DisableIRQ	2
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_cortex.c:211:6:HAL_NVIC_SystemReset	1
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_cortex.c:224:10:HAL_SYSTICK_Config	2
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_cortex.c:254:6:HAL_MPU_ConfigRegion	2
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_cortex.c:298:10:HAL_NVIC_GetPriorityGrouping	1
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_cortex.c:325:6:HAL_NVIC_GetPriority	3
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_cortex.c:340:6:HAL_NVIC_SetPendingIRQ	2
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_cortex.c:358:10:HAL_NVIC_GetPendingIRQ	2
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_cortex.c:374:6:HAL_NVIC_ClearPendingIRQ	2
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_cortex.c:391:10:HAL_NVIC_GetActive	2
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_cortex.c:414:13:HAL_SYSTICK_Callback	1
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Drivers/STM32MP1xx_HAL_Driver/Src/stm32mp1xx_hal_cortex.c:405:6:HAL_SYSTICK_IRQHandler	1

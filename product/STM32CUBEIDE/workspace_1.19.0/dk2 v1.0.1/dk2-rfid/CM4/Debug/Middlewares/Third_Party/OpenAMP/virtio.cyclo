@@ -1,0 +1,4 @@
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtio.c:42:13:virtio_dev_name	3
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtio.c:54:20:virtio_feature_name	5
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtio.c:75:6:virtio_describe	1
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtio.c:86:5:virtio_create_virtqueues	4

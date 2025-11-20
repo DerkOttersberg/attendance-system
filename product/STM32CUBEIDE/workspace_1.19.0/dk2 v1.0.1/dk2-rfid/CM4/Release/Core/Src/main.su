@@ -1,0 +1,12 @@
+../Core/Src/main.c:607:6:VIRT_UART_RxCpltCallback	20	static
+../Core/Src/main.c:576:13:MX_GPIO_Init	32	static
+../Core/Src/main.c:371:13:MX_SPI5_Init	8	static,ignoring_inline_asm
+../Core/Src/main.c:241:6:SystemClock_Config	352	static,ignoring_inline_asm
+../Core/Src/main.c:326:6:PeriphCommonClock_Config	352	static,ignoring_inline_asm
+../Core/Src/main.c:892:6:qprint	280	static
+../Core/Src/main.c:692:6:ExecuteScanOnce	32	static
+../Core/Src/main.c:780:6:ExecuteReadBlock	32	static
+../Core/Src/main.c:838:6:ExecuteWriteBlock	24	static
+../Core/Src/main.c:632:6:ProcessCommand	16	static
+../Core/Src/main.c:115:5:main	144	static,ignoring_inline_asm
+../Core/Src/main.c:930:6:Error_Handler	0	static,ignoring_inline_asm
