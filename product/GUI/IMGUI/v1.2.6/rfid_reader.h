@@ -103,39 +103,34 @@ public:
     
     // Send a command to the M4 core
     bool SendCommand(const std::string& command) {
-    if (fd < 0) {
-        if (!Open()) {
-            fprintf(stderr, "⚠️ Cannot send command: device not open\n");
+        if (fd < 0) {
+            if (!Open()) {
+                fprintf(stderr, "⚠️ Cannot send command: device not open\n");
+                return false;
+            }
+        }
+        
+        // Add newline if not present
+        std::string cmd = command;
+        if (cmd.empty() || cmd.back() != '\n') {
+            cmd += "\n";
+        }
+        
+        ssize_t bytes_written = write(fd, cmd.c_str(), cmd.length());
+        
+        if (bytes_written < 0) {
+            fprintf(stderr, "⚠️ Failed to send command: %s\n", strerror(errno));
             return false;
         }
+        
+        if ((size_t)bytes_written != cmd.length()) {
+            fprintf(stderr, "⚠️ Incomplete write: %zd/%zu bytes\n", bytes_written, cmd.length());
+            return false;
+        }
+        
+        return true;
     }
     
-    // Add newline if not present
-    std::string cmd = command;
-    if (cmd.empty() || cmd.back() != '\n') {
-        cmd += "\n";
-    }
-    
-    ssize_t bytes_written = write(fd, cmd.c_str(), cmd.length());
-    
-    if (bytes_written < 0) {
-        fprintf(stderr, "⚠️ Failed to send command: %s\n", strerror(errno));
-        return false;
-    }
-    
-    if ((size_t)bytes_written != cmd.length()) {
-        fprintf(stderr, "⚠️ Incomplete write: %zd/%zu bytes\n", bytes_written, cmd.length());
-        return false;
-    }
-    
-    // ADD THIS LINE - Force the data to be sent immediately
-    tcdrain(fd);  // Wait until all output has been transmitted
-    
-    printf("✅ Sent command: %s", cmd.c_str());  // Debug output
-    
-    return true;
-}
-    //
     // Convenience functions for specific commands
     bool Send_RED_ON_Command() {
         return SendCommand("red_on");
