@@ -66,7 +66,12 @@
 
         <div id="users" class="tab-content">
             <div class="card">
-                <h2>Registered Users</h2>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">
+                    <h2 style="margin:0;">Registered Users</h2>
+                    <div>
+                        <button class="btn btn-primary" onclick="showAddUserModal()">➕ Add User</button>
+                    </div>
+                </div>
                 <div id="usersContent"></div>
             </div>
         </div>
@@ -76,6 +81,32 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeModal()">×</button>
             <div id="signatureModalContent"></div>
+        </div>
+    </div>
+
+    <div id="addUserModal" class="modal" onclick="closeAddUserModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeAddUserModal()">×</button>
+            <div style="padding:1rem;">
+                <h2 style="margin-bottom:0.5rem;">Add New User</h2>
+                <p style="margin-top:0;margin-bottom:1rem;color:#475569;">Enter the RFID UID (required) and optional details.</p>
+                <div style="display:grid;gap:0.5rem;">
+                    <label>RFID UID (paste or type)</label>
+                    <input id="newUserUid" type="text" placeholder="e.g. 04A2B3C4" />
+
+                    <label>Name (optional)</label>
+                    <input id="newUserName" type="text" placeholder="Full name" />
+
+                    <label>Email (optional)</label>
+                    <input id="newUserEmail" type="email" placeholder="user@example.com" />
+
+                    <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:0.5rem;">
+                        <button class="btn btn-secondary" onclick="closeAddUserModal()">Cancel</button>
+                        <button class="btn btn-primary" onclick="submitAddUser()">Create User</button>
+                    </div>
+                </div>
+                <div id="addUserMessage" style="margin-top:0.75rem;color:#dc2626;display:none"></div>
+            </div>
         </div>
     </div>
 

@@ -1,0 +1,3 @@
+/home/derk/imgui_stm32_project/build/CMakeFiles/imgui_app.dir
+/home/derk/imgui_stm32_project/build/CMakeFiles/edit_cache.dir
+/home/derk/imgui_stm32_project/build/CMakeFiles/rebuild_cache.dir

@@ -182,6 +182,46 @@ function closeModal(event) {
     }
 }
 
+// Add User modal handlers
+function showAddUserModal() {
+    document.getElementById('addUserMessage').style.display = 'none';
+    document.getElementById('newUserUid').value = '';
+    document.getElementById('newUserName').value = '';
+    document.getElementById('newUserEmail').value = '';
+    document.getElementById('addUserModal').classList.add('active');
+}
+
+function closeAddUserModal(event) {
+    if (!event || event.target.id === 'addUserModal') {
+        document.getElementById('addUserModal').classList.remove('active');
+    }
+}
+
+async function submitAddUser() {
+    const uid = document.getElementById('newUserUid').value.trim();
+    const name = document.getElementById('newUserName').value.trim();
+    const email = document.getElementById('newUserEmail').value.trim();
+    const msgEl = document.getElementById('addUserMessage');
+
+    if (!uid) {
+        msgEl.textContent = 'RFID UID is required';
+        msgEl.style.display = 'block';
+        return;
+    }
+
+    msgEl.style.display = 'none';
+    try {
+        await API.createUser({ rfid_uid: uid, name: name || null, email: email || null });
+        // refresh the users list (reload all data for simplicity)
+        if (window.loadAllData) await window.loadAllData();
+        closeAddUserModal();
+    } catch (err) {
+        console.error('Error creating user:', err);
+        msgEl.textContent = err.message || 'Failed to create user';
+        msgEl.style.display = 'block';
+    }
+}
+
 function switchTab(tabName) {
     document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));

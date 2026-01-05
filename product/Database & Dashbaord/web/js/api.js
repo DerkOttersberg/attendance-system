@@ -36,4 +36,20 @@ const API = {
         const response = await fetch(`${CONFIG.API_BASE}/api/attendance/filter?${params}`);
         return await response.json();
     }
+,
+    async createUser(user) {
+        const response = await fetch(`${CONFIG.API_BASE}/api/users`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(user)
+        });
+
+        // Return parsed JSON or throw on non-2xx
+        if (!response.ok) {
+            const text = await response.text();
+            throw new Error(text || 'Failed to create user');
+        }
+
+        return await response.json();
+    }
 };
