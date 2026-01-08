@@ -327,6 +327,41 @@ def add_user():
         cursor.close()
         conn.close()
 
+
+@app.route('/api/users', methods=['DELETE'])
+def delete_users():
+    """Delete users permanently by id list (expects JSON {"ids": [1,2,3]})"""
+    data = request.get_json()
+    if not data or 'ids' not in data:
+        return jsonify({'error': 'Missing ids list'}), 400
+
+    ids = data.get('ids')
+    if not isinstance(ids, list) or len(ids) == 0:
+        return jsonify({'error': 'ids must be a non-empty list'}), 400
+
+    conn = get_db_connection()
+    if not conn:
+        return jsonify({'error': 'Database connection failed'}), 500
+
+    try:
+        cursor = conn.cursor()
+        # Build placeholder string and execute
+        placeholders = ','.join(['%s'] * len(ids))
+        query = f"DELETE FROM users WHERE id IN ({placeholders})"
+        cursor.execute(query, ids)
+        deleted = cursor.rowcount
+        conn.commit()
+        return jsonify({'success': True, 'deleted_count': deleted})
+
+    except Error as e:
+        conn.rollback()
+        logging.error(f"Failed to delete users: {e}")
+        return jsonify({'error': str(e)}), 500
+
+    finally:
+        cursor.close()
+        conn.close()
+
 @app.route('/api/attendance/today', methods=['GET'])
 def today_attendance():
     """Get all attendance records for today"""
@@ -404,13 +439,26 @@ def filter_attendance():
             query += " AND a.user_id = %s"
             params.append(user_id)
         
-        if start_date:
-            query += " AND a.date >= %s"
-            params.append(start_date)
-        
-        if end_date:
-            query += " AND a.date <= %s"
-            params.append(end_date)
+            if start_date:
+                query += " AND a.date >= %s"
+                params.append(start_date)
+
+            if end_date:
+                query += " AND a.date <= %s"
+                params.append(end_date)
+
+            # Department filter (users.department)
+            department = request.args.get('department')
+            if department:
+                query += " AND u.department = %s"
+                params.append(department)
+
+            # Signature presence filter: 'with', 'without', or 'any' (default)
+            signature = request.args.get('signature')
+            if signature == 'with':
+                query += " AND a.signature_data IS NOT NULL AND a.signature_data <> ''"
+            elif signature == 'without':
+                query += " AND (a.signature_data IS NULL OR a.signature_data = '')"
         
         query += " ORDER BY a.date DESC, a.clock_in DESC"
         
@@ -483,6 +531,228 @@ def log_scan(cursor, rfid_uid, action, success, message):
         INSERT INTO scan_log (rfid_uid, action, success, message)
         VALUES (%s, %s, %s, %s)
     """, (rfid_uid, action, success, message))
+
+
+def ensure_departments_table(conn):
+    """Create departments table if missing and populate from existing user.department values."""
+    try:
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS departments (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(100) UNIQUE NOT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+        """)
+
+        # populate with distinct department names from users
+        cursor.execute("SELECT DISTINCT department FROM users WHERE department IS NOT NULL AND department <> ''")
+        rows = cursor.fetchall()
+        for row in rows:
+            name = row[0]
+            if not name:
+                continue
+            try:
+                cursor.execute("INSERT IGNORE INTO departments (name) VALUES (%s)", (name,))
+            except Exception:
+                # ignore duplicate or insertion errors
+                pass
+        conn.commit()
+    finally:
+        try:
+            cursor.close()
+        except Exception:
+            pass
+
+
+@app.route('/api/departments', methods=['GET'])
+def list_departments():
+    conn = get_db_connection()
+    if not conn:
+        return jsonify({'error': 'Database connection failed'}), 500
+
+    try:
+        ensure_departments_table(conn)
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT id, name FROM departments ORDER BY name ASC")
+        depts = cursor.fetchall()
+        return jsonify(depts)
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@app.route('/api/departments', methods=['POST'])
+def create_department():
+    data = request.get_json() or {}
+    name = (data.get('name') or '').strip()
+    if not name:
+        return jsonify({'error': 'Missing department name'}), 400
+
+    conn = get_db_connection()
+    if not conn:
+        return jsonify({'error': 'Database connection failed'}), 500
+
+    try:
+        ensure_departments_table(conn)
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO departments (name) VALUES (%s)", (name,))
+        conn.commit()
+        return jsonify({'success': True, 'id': cursor.lastrowid, 'name': name}), 201
+    except Error as e:
+        conn.rollback()
+        return jsonify({'error': str(e)}), 400
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@app.route('/api/departments/<int:dept_id>', methods=['DELETE'])
+def delete_department(dept_id):
+    conn = get_db_connection()
+    if not conn:
+        return jsonify({'error': 'Database connection failed'}), 500
+
+    try:
+        ensure_departments_table(conn)
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT name FROM departments WHERE id = %s", (dept_id,))
+        row = cursor.fetchone()
+        if not row:
+            return jsonify({'error': 'Department not found'}), 404
+        name = row['name']
+
+        # unset department from users that reference this name
+        cursor2 = conn.cursor()
+        cursor2.execute("UPDATE users SET department = NULL WHERE department = %s", (name,))
+        affected = cursor2.rowcount
+
+        cursor.execute("DELETE FROM departments WHERE id = %s", (dept_id,))
+        conn.commit()
+        return jsonify({'success': True, 'users_cleared': affected})
+    except Error as e:
+        conn.rollback()
+        return jsonify({'error': str(e)}), 500
+    finally:
+        try:
+            cursor.close()
+        except Exception:
+            pass
+        try:
+            cursor2.close()
+        except Exception:
+            pass
+        conn.close()
+
+
+@app.route('/api/users/<int:user_id>/department', methods=['PUT'])
+def set_user_department(user_id):
+    data = request.get_json() or {}
+    # department may be null/empty
+    dept = data.get('department')
+    if dept is not None:
+        dept = dept.strip()
+        if dept == '':
+            dept = None
+
+    conn = get_db_connection()
+    if not conn:
+        return jsonify({'error': 'Database connection failed'}), 500
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute("UPDATE users SET department = %s WHERE id = %s", (dept, user_id))
+        conn.commit()
+        if cursor.rowcount == 0:
+            return jsonify({'error': 'User not found'}), 404
+        return jsonify({'success': True})
+    except Error as e:
+        conn.rollback()
+        return jsonify({'error': str(e)}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+
+@app.route('/api/users/<int:user_id>/uid', methods=['PUT'])
+def update_user_uid(user_id):
+    data = request.get_json() or {}
+    new_uid = (data.get('rfid_uid') or '').strip().upper()
+    if not new_uid:
+        return jsonify({'error': 'Missing rfid_uid'}), 400
+
+    conn = get_db_connection()
+    if not conn:
+        return jsonify({'error': 'Database connection failed'}), 500
+
+    try:
+        cursor = conn.cursor(dictionary=True)
+        # check for duplicate uid on other users
+        cursor.execute("SELECT id FROM users WHERE rfid_uid = %s AND id != %s", (new_uid, user_id))
+        dup = cursor.fetchone()
+        if dup:
+            return jsonify({'error': 'RFID UID already in use'}), 400
+
+        cursor = conn.cursor()
+        cursor.execute("UPDATE users SET rfid_uid = %s WHERE id = %s", (new_uid, user_id))
+        conn.commit()
+        if cursor.rowcount == 0:
+            return jsonify({'error': 'User not found'}), 404
+        return jsonify({'success': True})
+    except Error as e:
+        conn.rollback()
+        return jsonify({'error': str(e)}), 500
+    finally:
+        try:
+            cursor.close()
+        except Exception:
+            pass
+        conn.close()
+
+
+@app.route('/api/users/<int:user_id>', methods=['PUT'])
+def update_user(user_id):
+    """Update user fields (name, email, department, rfid_uid) partial update."""
+    data = request.get_json() or {}
+    allowed = ['name', 'email', 'department', 'rfid_uid']
+    updates = {k: (v.strip() if isinstance(v, str) else v) for k, v in data.items() if k in allowed}
+
+    if not updates:
+        return jsonify({'error': 'No valid fields to update'}), 400
+
+    # If rfid_uid in updates, normalize
+    if 'rfid_uid' in updates and updates['rfid_uid']:
+        updates['rfid_uid'] = updates['rfid_uid'].upper()
+
+    conn = get_db_connection()
+    if not conn:
+        return jsonify({'error': 'Database connection failed'}), 500
+
+    try:
+        cursor = conn.cursor()
+        # build dynamic SET
+        set_parts = []
+        params = []
+        for k, v in updates.items():
+            set_parts.append(f"{k} = %s")
+            params.append(v)
+
+        params.append(user_id)
+        query = f"UPDATE users SET {', '.join(set_parts)} WHERE id = %s"
+
+        cursor.execute(query, params)
+        conn.commit()
+        if cursor.rowcount == 0:
+            return jsonify({'error': 'User not found'}), 404
+        return jsonify({'success': True})
+    except Error as e:
+        conn.rollback()
+        return jsonify({'error': str(e)}), 500
+    finally:
+        try:
+            cursor.close()
+        except Exception:
+            pass
+        conn.close()
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

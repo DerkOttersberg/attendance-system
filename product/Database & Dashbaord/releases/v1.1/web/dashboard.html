@@ -9,7 +9,7 @@
 <body>
     <div class="header">
         <div class="container">
-            <h1>🔐 RFID Attendance Dashboard</h1>
+            <h1>RFID Attendance Dashboard</h1>
             <p>Real-time attendance tracking and signature management</p>
         </div>
     </div>
@@ -23,7 +23,9 @@
             <button class="tab" onclick="switchTab('users')">Users</button>
         </div>
 
-        <button class="refresh-btn" onclick="loadAllData()">🔄 Refresh Data</button>
+        <div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:1rem;">
+            <button class="refresh-btn" onclick="loadAllData()">🔄 Refresh Data</button>
+        </div>
 
         <div id="today" class="tab-content active">
             <div class="card">
@@ -43,12 +45,26 @@
                         </select>
                     </div>
                     <div class="filter-group">
+                        <label>Department</label>
+                        <select id="filterDepartment">
+                            <option value="">All Departments</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
                         <label>Start Date</label>
                         <input type="date" id="filterStartDate">
                     </div>
                     <div class="filter-group">
                         <label>End Date</label>
                         <input type="date" id="filterEndDate">
+                    </div>
+                    <div class="filter-group">
+                        <label>Signature</label>
+                        <select id="filterSignature">
+                            <option value="any">Any</option>
+                            <option value="with">With Signature</option>
+                            <option value="without">Without Signature</option>
+                        </select>
                     </div>
                     <div class="filter-actions">
                         <button class="btn btn-primary" onclick="applyFilters()">🔍 Filter</button>
@@ -68,8 +84,10 @@
             <div class="card">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">
                     <h2 style="margin:0;">Registered Users</h2>
-                    <div>
+                    <div style="display:flex;gap:0.5rem;align-items:center;">
                         <button class="btn btn-primary" onclick="showAddUserModal()">➕ Add User</button>
+                        <button id="deleteSelectedBtn" class="btn btn-danger" onclick="deleteSelectedUsers()" disabled>🗑️ Delete Selected</button>
+                        <button class="btn btn-secondary" onclick="showDepartmentsModal()">🏷️ Manage Departments</button>
                     </div>
                 </div>
                 <div id="usersContent"></div>
@@ -105,8 +123,17 @@
                         <button class="btn btn-primary" onclick="submitAddUser()">Create User</button>
                     </div>
                 </div>
+
+                
                 <div id="addUserMessage" style="margin-top:0.75rem;color:#dc2626;display:none"></div>
             </div>
+        </div>
+    </div>
+
+    <div id="departmentsModal" class="modal" onclick="closeDepartmentsModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeDepartmentsModal()">×</button>
+            <div id="departmentsModalContent"></div>
         </div>
     </div>
 

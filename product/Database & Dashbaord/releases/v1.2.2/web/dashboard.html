@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RFID Attendance Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>RFID Attendance Dashboard</h1>
+            <p>Real-time attendance tracking and signature management</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="stats-grid" id="statsGrid"></div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('today')">Today's Attendance</button>
+            <button class="tab" onclick="switchTab('all')">All Attendance</button>
+            <button class="tab" onclick="switchTab('users')">Users</button>
+        </div>
+
+        <div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:1rem;">
+            <button class="refresh-btn" onclick="loadAllData()">🔄 Refresh Data</button>
+        </div>
+
+        <div id="today" class="tab-content active">
+            <div class="card">
+                <h2>Today's Attendance</h2>
+                <div id="todayContent"></div>
+            </div>
+        </div>
+
+        <div id="all" class="tab-content">
+            <div class="filters">
+                <h3 style="margin-bottom: 1rem; color: #1e293b;">Filter Attendance Records</h3>
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>User</label>
+                        <select id="filterUser">
+                            <option value="">All Users</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Department</label>
+                        <select id="filterDepartment">
+                            <option value="">All Departments</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Start Date</label>
+                        <input type="date" id="filterStartDate">
+                    </div>
+                    <div class="filter-group">
+                        <label>End Date</label>
+                        <input type="date" id="filterEndDate">
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn btn-primary" onclick="applyFilters()">🔍 Filter</button>
+                        <button class="btn btn-secondary" onclick="clearFilters()">✕ Clear</button>
+                        <button class="btn btn-success" onclick="exportToPDF()">📄 Export PDF</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h2>All Attendance Records</h2>
+                <div id="filterResults"></div>
+                <div id="allContent"></div>
+            </div>
+        </div>
+
+        <div id="users" class="tab-content">
+            <div class="card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">
+                    <h2 style="margin:0;">Registered Users</h2>
+                    <div style="display:flex;gap:0.5rem;align-items:center;">
+                        <button class="btn btn-primary" onclick="showAddUserModal()">➕ Add User</button>
+                        <button id="deleteSelectedBtn" class="btn btn-danger" onclick="deleteSelectedUsers()" disabled>🗑️ Delete Selected</button>
+                        <button class="btn btn-secondary" onclick="showDepartmentsModal()">🏷️ Manage Departments</button>
+                    </div>
+                </div>
+                <div id="usersContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="signatureModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div id="signatureModalContent"></div>
+        </div>
+    </div>
+
+    <div id="addUserModal" class="modal" onclick="closeAddUserModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeAddUserModal()">×</button>
+            <div style="padding:1rem;">
+                <h2 style="margin-bottom:0.5rem;">Add New User</h2>
+                <p style="margin-top:0;margin-bottom:1rem;color:#475569;">Enter the RFID UID (required) and optional details.</p>
+                <div style="display:grid;gap:0.5rem;">
+                    <label>RFID UID (paste or type)</label>
+                    <input id="newUserUid" type="text" placeholder="e.g. 04A2B3C4" />
+
+                    <label>Name (optional)</label>
+                    <input id="newUserName" type="text" placeholder="Full name" />
+
+                    <label>Email (optional)</label>
+                    <input id="newUserEmail" type="email" placeholder="user@example.com" />
+
+                    <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:0.5rem;">
+                        <button class="btn btn-secondary" onclick="closeAddUserModal()">Cancel</button>
+                        <button class="btn btn-primary" onclick="submitAddUser()">Create User</button>
+                    </div>
+                </div>
+
+                
+                <div id="addUserMessage" style="margin-top:0.75rem;color:#dc2626;display:none"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="departmentsModal" class="modal" onclick="closeDepartmentsModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeDepartmentsModal()">×</button>
+            <div id="departmentsModalContent"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
