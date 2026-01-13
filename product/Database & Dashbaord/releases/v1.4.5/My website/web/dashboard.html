@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RFID Attendance Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="header">
+        <div class="container header-content">
+            <img src="images/logo.png" alt="Logo" class="logo">
+            <div>
+                <h1>RFID Attendance Dashboard</h1>
+                <p>Real-time attendance tracking and signature management</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="stats-grid" id="statsGrid"></div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('today')">Today's Attendance</button>
+            <button class="tab" onclick="switchTab('all')">All Attendance</button>
+            <button class="tab" onclick="switchTab('users')">Users</button>
+        </div>
+
+        <div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:1rem;">
+            <button class="refresh-btn" onclick="loadAllData()">🔄 Refresh Data</button>
+            <button class="refresh-btn" style="background-color: #0ea5e9;" onclick="loginToExternalAPI()">🔐 Login to External API</button>
+        </div>
+
+        <div id="loginMessage" style="display:none;"></div>
+
+        <div id="today" class="tab-content active">
+            <div class="card">
+                <h2>Today's Attendance</h2>
+                <div id="todayContent"></div>
+            </div>
+        </div>
+
+        <div id="all" class="tab-content">
+            <div class="filters">
+                <div class="filter-header" onclick="toggleFilterPanel()">
+                    <h3 style="margin: 0; color: #1e293b;">🔽 Filter Attendance Records</h3>
+                    <span class="filter-toggle">−</span>
+                </div>
+                <div class="filter-panel" id="filterPanel">
+                    <div class="filter-section">
+                        <div class="filter-section-title">User & Department</div>
+                        <div class="filter-row">
+                            <div class="filter-group">
+                                <label>User</label>
+                                <select id="filterUser">
+                                    <option value="">All Users</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label>Department</label>
+                                <select id="filterDepartment">
+                                    <option value="">All Departments</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <div class="filter-section-title">Date Range</div>
+                        <div class="filter-row">
+                            <div class="filter-group">
+                                <label>Start Date</label>
+                                <input type="date" id="filterStartDate">
+                            </div>
+                            <div class="filter-group">
+                                <label>End Date</label>
+                                <input type="date" id="filterEndDate">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-section">
+                        <div class="filter-section-title">Product Type</div>
+                        <div class="filter-row">
+                            <div class="filter-group">
+                                <label>Product</label>
+                                <select id="filterProduct">
+                                    <option value="">All Products</option>
+                                    <option value="Dagbesteding">Dagbesteding</option>
+                                    <option value="Werkleertraject">Werkleertraject</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="filter-actions-row">
+                        <button class="btn btn-primary" onclick="applyFilters()">🔍 Filter</button>
+                        <button class="btn btn-secondary" onclick="clearFilters()">✕ Clear</button>
+                        <button class="btn btn-success" onclick="exportToPDF()">📄 Export PDF</button>
+                        <button class="btn btn-info" onclick="showManualAttendanceModal()">✏️ Manual Entry</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h2>All Attendance Records</h2>
+                <div id="filterResults"></div>
+                <div id="allContent"></div>
+            </div>
+        </div>
+
+        <div id="users" class="tab-content">
+            <div class="card">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">
+                    <h2 style="margin:0;">Registered Users</h2>
+                    <div style="display:flex;gap:0.5rem;align-items:center;">
+                        <button class="btn btn-primary" onclick="showAddUserModal()">➕ Add User</button>
+                        <button id="deleteSelectedBtn" class="btn btn-danger" onclick="deleteSelectedUsers()" disabled>🗑️ Delete Selected</button>
+                        <button class="btn btn-secondary" onclick="showDepartmentsModal()">🏷️ Manage Departments</button>
+                        <button class="btn btn-secondary" onclick="showProductsModal()">📦 Manage Products</button>
+                    </div>
+                </div>
+                <div id="usersContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="signatureModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div id="signatureModalContent"></div>
+        </div>
+    </div>
+
+    <div id="addUserModal" class="modal" onclick="closeAddUserModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeAddUserModal()">×</button>
+            <div style="padding:1rem;">
+                <h2 style="margin-bottom:0.5rem;">Add New User</h2>
+                <p style="margin-top:0;margin-bottom:1rem;color:#475569;">Enter the RFID UID (required) and optional details.</p>
+                <div style="display:grid;gap:0.5rem;">
+                    <label>RFID UID (paste or type)</label>
+                    <input id="newUserUid" type="text" placeholder="e.g. 04A2B3C4" />
+
+                    <label>Name (optional)</label>
+                    <input id="newUserName" type="text" placeholder="Full name" />
+
+                    <label>Email (optional)</label>
+                    <input id="newUserEmail" type="email" placeholder="user@example.com" />
+
+                    <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:0.5rem;">
+                        <button class="btn btn-secondary" onclick="closeAddUserModal()">Cancel</button>
+                        <button class="btn btn-primary" onclick="submitAddUser()">Create User</button>
+                    </div>
+                </div>
+
+                
+                <div id="addUserMessage" style="margin-top:0.75rem;color:#dc2626;display:none"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="departmentsModal" class="modal" onclick="closeDepartmentsModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeDepartmentsModal()">×</button>
+            <div id="departmentsModalContent"></div>
+        </div>
+    </div>
+
+    <div id="productsModal" class="modal" onclick="closeProductsModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeProductsModal()">×</button>
+            <div id="productsModalContent"></div>
+        </div>
+    </div>
+
+    <div id="manualAttendanceModal" class="modal" onclick="closeManualAttendanceModal(event)">
+        <div class="modal-content" style="max-width: 600px;" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeManualAttendanceModal()">×</button>
+            <div style="padding: 1.5rem;">
+                <h2 style="margin-bottom: 1rem;">Manual Attendance Entry</h2>
+                <div style="display: grid; gap: 0.75rem; margin-bottom: 1.5rem;">
+                    <div>
+                        <label>User *</label>
+                        <select id="manualUser" required>
+                            <option value="">Select User...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Date *</label>
+                        <input type="date" id="manualDate" required>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                        <div>
+                            <label>Clock In Time *</label>
+                            <input type="time" id="manualClockIn" required>
+                        </div>
+                        <div>
+                            <label>Clock Out Time</label>
+                            <input type="time" id="manualClockOut">
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem;">Signature *</label>
+                    <div style="border: 2px solid #e2e8f0; border-radius: 0.5rem; background: white;">
+                        <canvas id="signatureCanvas" style="display: block; cursor: crosshair; width: 100%; height: 200px;"></canvas>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                        <button class="btn btn-secondary" type="button" onclick="clearSignatureCanvas()">Clear Signature</button>
+                    </div>
+                </div>
+                <div id="manualAttendanceMessage" style="margin-bottom: 1rem; padding: 0.75rem; border-radius: 0.375rem; display: none;"></div>
+                <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                    <button class="btn btn-secondary" onclick="closeManualAttendanceModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="submitManualAttendance()">Save Attendance</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
