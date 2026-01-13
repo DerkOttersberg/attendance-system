@@ -17,6 +17,16 @@ const API = {
         return await response.json();
     },
 
+    async Loginpunten() {
+        const response = await fetch(`http://10.10.1.6/login/BitsGoes1!`, {
+                method: "GET",
+                credentials: "include"
+            });
+        if (response.status == 200) {
+            console.log(response.cookies)
+        }
+    },
+
     async fetchAllAttendance() {
         const response = await fetch(`${CONFIG.API_BASE}/api/attendance/all`);
         return await response.json();
