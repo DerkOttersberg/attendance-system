@@ -101,15 +101,16 @@ The RC522 RFID module connects to the STM32 M4 core via SPI:
 
 ```
 RC522 Module          STM32MP157F-DK2
+
 ┌──────────┐         ┌──────────┐
-│   VCC    │────────→│   3.3V   │
-│   GND    │────────→│   GND    │
-│   RST    │────────→│   PD15   │
+│   VCC    │────────→│   3.3V  Pin 1 │
+│   RST    │────────→│   PD15 D5    │
+│   GND     │────────→│   GND 6   │
 │   IRQ    │         │   NaN    │
-│   MISO   │────────→│   PF8    │
-│   MOSI   │────────→│   PF9    │
-│   SCK    │────────→│   PH6    │
-│   SDA    │────────→│   PD14   │ (CS)
+│   MISO   │────────→│   PF8   21 │
+│   MOSI   │────────→│   PF9   19 │
+│   SCK    │────────→│   PH6 D9   │
+│   SDA    │────────→│   PD14  D3 │ (CS)
 └──────────┘         └──────────┘
 ```
 
