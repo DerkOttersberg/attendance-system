@@ -1,0 +1,7 @@
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/system/generic/mutex.h:65:20:__metal_mutex_acquire	3
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/system/generic/mutex.h:75:20:__metal_mutex_release	1
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/system/generic/mutex.h:80:19:__metal_mutex_is_acquired	1
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/mutex.h:61:20:metal_mutex_acquire	1
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/mutex.h:71:20:metal_mutex_release	1
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/mutex.h:81:19:metal_mutex_is_acquired	1
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/system/generic/condition.c:17:5:metal_condition_wait	8

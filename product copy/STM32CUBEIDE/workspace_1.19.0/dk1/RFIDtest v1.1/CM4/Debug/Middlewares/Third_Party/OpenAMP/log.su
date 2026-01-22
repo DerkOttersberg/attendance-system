@@ -1,0 +1,5 @@
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/log.c:13:6:metal_default_log_handler	12	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/log.c:44:6:metal_set_log_handler	16	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/log.c:49:19:metal_get_log_handler	4	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/log.c:54:6:metal_set_log_level	16	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/log.c:59:22:metal_get_log_level	4	static

@@ -1,0 +1,16 @@
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/io.h:132:1:metal_io_virt	16	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/io.h:146:1:metal_io_virt_to_offset	24	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/io.h:235:1:metal_io_read	64	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/system/generic/alloc.h:25:21:metal_allocate_memory	16	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/system/generic/alloc.h:30:20:metal_free_memory	16	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/include/openamp/virtqueue.h:202:33:virtqueue_allocate	24	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:19:13:rproc_virtio_virtqueue_notify	32	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:33:22:rproc_virtio_get_status	32	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:66:17:rproc_virtio_get_dfeatures	32	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:82:17:rproc_virtio_get_features	40	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:128:13:rproc_virtio_read_config	40	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:197:1:rproc_virtio_create_vdev	64	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:271:6:rproc_virtio_remove_vdev	32	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:290:5:rproc_virtio_init_vring	32	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:311:5:rproc_virtio_notified	32	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/remoteproc/remoteproc_virtio.c:334:6:rproc_virtio_wait_remote_ready	24	static

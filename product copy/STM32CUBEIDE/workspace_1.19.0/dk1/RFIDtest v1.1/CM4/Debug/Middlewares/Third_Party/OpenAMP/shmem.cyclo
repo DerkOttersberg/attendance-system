@@ -1,0 +1,5 @@
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/list.h:47:20:metal_list_add_before	1
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/list.h:71:20:metal_list_add_tail	1
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/io.h:120:22:metal_io_region_size	1
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/shmem.c:18:5:metal_shmem_register_generic	2
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/libmetal/lib/shmem.c:31:5:metal_shmem_open_generic	4

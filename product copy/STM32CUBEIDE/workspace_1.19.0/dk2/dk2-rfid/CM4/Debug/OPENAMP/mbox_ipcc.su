@@ -1,0 +1,5 @@
+../OPENAMP/mbox_ipcc.c:74:5:MAILBOX_Init	8	static
+../OPENAMP/mbox_ipcc.c:104:5:MAILBOX_Poll	24	static
+../OPENAMP/mbox_ipcc.c:150:5:MAILBOX_Notify	24	static
+../OPENAMP/mbox_ipcc.c:196:6:IPCC_channel1_callback	24	static
+../OPENAMP/mbox_ipcc.c:219:6:IPCC_channel2_callback	24	static

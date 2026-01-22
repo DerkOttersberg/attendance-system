@@ -1,0 +1,47 @@
+attendance-system/ 
+├── Product
+│   ├──  Database & Dashboard
+│   |        ├──  api
+│   |        |       ├──  app.py
+│   |        |       ├──  Dockerfile
+│   |        |       ├──  requirments
+│   |        ├──  web
+│   |        |       ├──  css
+│   |        |       |     ├──  styles.css
+│   |        |       ├──  js
+│   |        |       |     ├──  api.js
+│   |        |       |     ├──  config.js
+│   |        |       |     ├──  export.js
+│   |        |       |     ├──  filters.js
+│   |        |       |     ├──  main.js
+│   |        |       |    ├──  ui.js
+│   |        |       ├──  dashboard.html
+│   |        ├──  docker-compose.yml
+│   |        ├──  init.sql
+│   ├──  GUI
+│   |     ├──  IMGUI             // this is the real main GUI im using on the stm32
+│   |     |       ├──  v1.2.5.2
+│   |     |           ├──  v1.2.5.2
+│   |     |              ├──  api_client.h
+│   |     |              ├──  main.cpp
+│   |     |                 ├──  rfid_reader.h
+│   |     |              ├──  touch_handler.h
+│   |     |              ├──  ui_renderer.h
+│   |     ├──  KIVY      //this is a python GUI test which i ended up scrapping because python is to slower
+│   |        ├──  v1.5.py
+│   ├──  STMCUBEIDE
+│   |        ├──  dk1 // for stm157d-dk1 board
+│   |        ├──  dk2 // for stm157f-dk2 board
+│   ├──  ESP32
+│       ├──  RFID_test.ino
+│       ├──  Touchscreen_test
+│           ├──  Touchscreen_test.ino
+│           ├──  Signature_drawer.py
+│ 
+├── project beheer
+|    ├── project beheer
+|           ├── Burndown diagrams
+|           ├── Markdown
+|               ├── FlowCharts
+|                   ├── flowchart Dashboard compact.md
+|                   ├── flowchart CLOCKIN COMPACT.md

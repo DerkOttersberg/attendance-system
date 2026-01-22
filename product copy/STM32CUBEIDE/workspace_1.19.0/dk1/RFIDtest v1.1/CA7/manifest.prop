@@ -1,0 +1,5 @@
+MANIFEST_VERSION = openstlinux-6.6-yocto-scarthgap-mpu-v25.06.11
+KERNEL_DT = ./DeviceTree/RFIDtest/kernel
+OPTEE_DT = ./DeviceTree/RFIDtest/optee-os
+UBOOT_DT = ./DeviceTree/RFIDtest/u-boot
+TFA_DT = ./DeviceTree/RFIDtest/tf-a

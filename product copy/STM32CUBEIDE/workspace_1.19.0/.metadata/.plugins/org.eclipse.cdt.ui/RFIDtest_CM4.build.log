@@ -1,0 +1,10 @@
+15:03:07 **** Incremental Build of configuration Debug for project RFIDtest_CM4 ****
+make -j16 all 
+arm-none-eabi-size  RFIDtest_CM4.elf 
+   text	   data	    bss	    dec	    hex	filename
+  38604	    288	   2388	  41280	   a140	RFIDtest_CM4.elf
+Finished building: default.size.stdout
+ 
+
+15:03:07 Build Finished. 0 errors, 0 warnings. (took 276ms)
+

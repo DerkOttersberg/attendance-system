@@ -1,0 +1,4 @@
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtio.c:42:13:virtio_dev_name	24	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtio.c:54:20:virtio_feature_name	32	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtio.c:75:6:virtio_describe	24	static
+C:/Users/derko/STM32Cube/Repository/STM32Cube_FW_MP1_V1.7.0/Middlewares/Third_Party/OpenAMP/open-amp/lib/virtio/virtio.c:86:5:virtio_create_virtqueues	72	static

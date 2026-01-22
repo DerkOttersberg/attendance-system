@@ -1,0 +1,3 @@
+../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/list.h:41:20:metal_list_init	1
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/libmetal/lib/init.c:10:5:metal_init	2
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/libmetal/lib/init.c:30:6:metal_finish	1

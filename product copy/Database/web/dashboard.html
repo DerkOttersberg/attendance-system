@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RFID Attendance Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #64748b;
+            font-weight: 500;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .tab:hover {
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-card h3 {
+            font-size: 0.875rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .filters {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #475569;
+            margin-bottom: 0.5rem;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            background: white;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8fafc;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge.clocked-in {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge.clocked-out {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge.active {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .signature-preview {
+            width: 150px;
+            height: 60px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            padding: 4px;
+            background: white;
+            cursor: pointer;
+            transition: transform 0.2s;
+            display: block;
+        }
+
+        .signature-preview svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .signature-preview:hover {
+            transform: scale(1.05);
+        }
+
+        .modal-content svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #ef4444;
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.25rem;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            background: #dc2626;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #64748b;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .refresh-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .refresh-btn:hover {
+            background: #5568d3;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 3rem;
+            color: #64748b;
+        }
+
+        .results-summary {
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-summary strong {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>🔐 RFID Attendance Dashboard</h1>
+            <p>Real-time attendance tracking and signature management</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="stats-grid" id="statsGrid">
+            <!-- Stats will be loaded here -->
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('today')">Today's Attendance</button>
+            <button class="tab" onclick="switchTab('all')">All Attendance</button>
+            <button class="tab" onclick="switchTab('users')">Users</button>
+        </div>
+
+        <button class="refresh-btn" onclick="loadAllData()">🔄 Refresh Data</button>
+
+        <div id="today" class="tab-content active">
+            <div class="card">
+                <h2>Today's Attendance</h2>
+                <div id="todayContent"></div>
+            </div>
+        </div>
+
+        <div id="all" class="tab-content">
+            <div class="filters">
+                <h3 style="margin-bottom: 1rem; color: #1e293b;">Filter Attendance Records</h3>
+                <div class="filter-grid">
+                    <div class="filter-group">
+                        <label>User</label>
+                        <select id="filterUser">
+                            <option value="">All Users</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Start Date</label>
+                        <input type="date" id="filterStartDate">
+                    </div>
+                    <div class="filter-group">
+                        <label>End Date</label>
+                        <input type="date" id="filterEndDate">
+                    </div>
+                    <div class="filter-actions">
+                        <button class="btn btn-primary" onclick="applyFilters()">🔍 Filter</button>
+                        <button class="btn btn-secondary" onclick="clearFilters()">✕ Clear</button>
+                        <button class="btn btn-success" onclick="exportToPDF()">📄 Export PDF</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <h2>All Attendance Records</h2>
+                <div id="filterResults"></div>
+                <div id="allContent"></div>
+            </div>
+        </div>
+
+        <div id="users" class="tab-content">
+            <div class="card">
+                <h2>Registered Users</h2>
+                <div id="usersContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="signatureModal" class="modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div id="signatureModalContent"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <script>
+        const API_BASE = 'http://192.168.11.242:5000';
+        let allAttendanceData = [];
+        let filteredAttendanceData = [];
+        let allUsers = [];
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        function showSignature(signature, userName) {
+            const modal = document.getElementById('signatureModal');
+            const content = document.getElementById('signatureModalContent');
+            
+            content.innerHTML = `
+                <h2 style="margin-bottom: 1rem;">${userName}'s Signature</h2>
+                <div style="border: 2px solid #e2e8f0; border-radius: 8px; padding: 1rem; background: #f8fafc;">
+                    ${signature}
+                </div>
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal(event) {
+            if (!event || event.target.id === 'signatureModal') {
+                document.getElementById('signatureModal').classList.remove('active');
+            }
+        }
+
+        function formatDateTime(dateStr) {
+            if (!dateStr) return '-';
+            const date = new Date(dateStr);
+            return date.toLocaleString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function formatDuration(minutes) {
+            if (!minutes) return '-';
+            const hours = Math.floor(minutes / 60);
+            const mins = minutes % 60;
+            return `${hours}h ${mins}m`;
+        }
+
+        async function loadStats() {
+            try {
+                const [todayResponse, usersResponse] = await Promise.all([
+                    fetch(`${API_BASE}/api/attendance/today`),
+                    fetch(`${API_BASE}/api/users`)
+                ]);
+
+                const todayData = await todayResponse.json();
+                const usersData = await usersResponse.json();
+
+                const clockedIn = todayData.filter(r => r.status === 'clocked_in').length;
+                const clockedOut = todayData.filter(r => r.status === 'clocked_out').length;
+                const totalUsers = usersData.filter(u => u.active).length;
+
+                document.getElementById('statsGrid').innerHTML = `
+                    <div class="stat-card">
+                        <h3>Total Users</h3>
+                        <div class="value">${totalUsers}</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Currently Clocked In</h3>
+                        <div class="value">${clockedIn}</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Clocked Out Today</h3>
+                        <div class="value">${clockedOut}</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Total Today</h3>
+                        <div class="value">${todayData.length}</div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading stats:', error);
+                document.getElementById('statsGrid').innerHTML = '<div class="error">Failed to load statistics</div>';
+            }
+        }
+
+        async function loadTodayAttendance() {
+            const content = document.getElementById('todayContent');
+            content.innerHTML = '<div class="loading">Loading...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/attendance/today`);
+                const data = await response.json();
+
+                if (data.length === 0) {
+                    content.innerHTML = '<div class="no-data">No attendance records for today</div>';
+                    return;
+                }
+
+                content.innerHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Department</th>
+                                <th>Clock In</th>
+                                <th>Clock Out</th>
+                                <th>Duration</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.map(record => `
+                                <tr>
+                                    <td><strong>${record.name}</strong></td>
+                                    <td>${record.department || '-'}</td>
+                                    <td>${formatDateTime(record.clock_in)}</td>
+                                    <td>${formatDateTime(record.clock_out)}</td>
+                                    <td>${formatDuration(record.work_duration)}</td>
+                                    <td><span class="badge ${record.status.replace('_', '-')}">${record.status.replace('_', ' ').toUpperCase()}</span></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } catch (error) {
+                console.error('Error loading today attendance:', error);
+                content.innerHTML = '<div class="error">Failed to load attendance data</div>';
+            }
+        }
+
+        function renderAttendanceTable(data, containerId) {
+            const content = document.getElementById(containerId);
+            
+            if (data.length === 0) {
+                content.innerHTML = '<div class="no-data">No attendance records found</div>';
+                return;
+            }
+
+            content.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Clock In</th>
+                            <th>Clock Out</th>
+                            <th>Duration</th>
+                            <th>Signature</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${data.map(record => `
+                            <tr>
+                                <td>${new Date(record.date).toLocaleDateString()}</td>
+                                <td><strong>${record.name}</strong></td>
+                                <td>${record.department || '-'}</td>
+                                <td>${formatDateTime(record.clock_in)}</td>
+                                <td>${formatDateTime(record.clock_out)}</td>
+                                <td>${formatDuration(record.work_duration)}</td>
+                                <td>
+                                    ${record.signature_data ? 
+                                        `<div class="signature-preview" onclick='showSignature(\`${record.signature_data.replace(/`/g, '\\`')}\`, "${record.name}")'>
+                                            ${record.signature_data.replace(/<svg/, '<svg viewBox="0 0 550 270" preserveAspectRatio="xMidYMid meet"')}
+                                        </div>` 
+                                        : '-'}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        async function loadAllAttendance() {
+            const content = document.getElementById('allContent');
+            content.innerHTML = '<div class="loading">Loading all attendance records...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/attendance/all`);
+                allAttendanceData = await response.json();
+                filteredAttendanceData = allAttendanceData;
+                
+                document.getElementById('filterResults').innerHTML = '';
+                renderAttendanceTable(allAttendanceData, 'allContent');
+            } catch (error) {
+                console.error('Error loading all attendance:', error);
+                content.innerHTML = '<div class="error">Failed to load attendance data</div>';
+            }
+        }
+
+        async function loadUsers() {
+            const content = document.getElementById('usersContent');
+            content.innerHTML = '<div class="loading">Loading users...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/users`);
+                allUsers = await response.json();
+
+                // Populate user filter dropdown
+                const userSelect = document.getElementById('filterUser');
+                userSelect.innerHTML = '<option value="">All Users</option>' + 
+                    allUsers.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
+
+                if (allUsers.length === 0) {
+                    content.innerHTML = '<div class="no-data">No users found</div>';
+                    return;
+                }
+
+                content.innerHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>RFID UID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Department</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${allUsers.map(user => `
+                                <tr>
+                                    <td>${user.id}</td>
+                                    <td><code>${user.rfid_uid}</code></td>
+                                    <td><strong>${user.name}</strong></td>
+                                    <td>${user.email || '-'}</td>
+                                    <td>${user.department || '-'}</td>
+                                    <td><span class="badge ${user.active ? 'active' : ''}">${user.active ? 'ACTIVE' : 'INACTIVE'}</span></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } catch (error) {
+                console.error('Error loading users:', error);
+                content.innerHTML = '<div class="error">Failed to load users</div>';
+            }
+        }
+
+        async function applyFilters() {
+            const userId = document.getElementById('filterUser').value;
+            const startDate = document.getElementById('filterStartDate').value;
+            const endDate = document.getElementById('filterEndDate').value;
+
+            const params = new URLSearchParams();
+            if (userId) params.append('user_id', userId);
+            if (startDate) params.append('start_date', startDate);
+            if (endDate) params.append('end_date', endDate);
+
+            const content = document.getElementById('allContent');
+            content.innerHTML = '<div class="loading">Filtering...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/attendance/filter?${params}`);
+                filteredAttendanceData = await response.json();
+
+                const userName = userId ? allUsers.find(u => u.id == userId)?.name : 'All Users';
+                const dateRange = startDate || endDate ? 
+                    `${startDate || 'Beginning'} to ${endDate || 'Today'}` : 'All Time';
+
+                document.getElementById('filterResults').innerHTML = `
+                    <div class="results-summary">
+                        <div>
+                            Showing <strong>${filteredAttendanceData.length}</strong> records for 
+                            <strong>${userName}</strong> (${dateRange})
+                        </div>
+                    </div>
+                `;
+
+                renderAttendanceTable(filteredAttendanceData, 'allContent');
+            } catch (error) {
+                console.error('Error filtering attendance:', error);
+                content.innerHTML = '<div class="error">Failed to filter attendance data</div>';
+            }
+        }
+
+        function clearFilters() {
+            document.getElementById('filterUser').value = '';
+            document.getElementById('filterStartDate').value = '';
+            document.getElementById('filterEndDate').value = '';
+            document.getElementById('filterResults').innerHTML = '';
+            filteredAttendanceData = allAttendanceData;
+            renderAttendanceTable(allAttendanceData, 'allContent');
+        }
+
+        async function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            const userId = document.getElementById('filterUser').value;
+            const startDate = document.getElementById('filterStartDate').value;
+            const endDate = document.getElementById('filterEndDate').value;
+
+            const userName = userId ? allUsers.find(u => u.id == userId)?.name : 'All Users';
+            const dateRange = startDate || endDate ? 
+                `${startDate || 'Beginning'} to ${endDate || 'Today'}` : 'All Time';
+
+            // Title
+            doc.setFontSize(18);
+            doc.text('Attendance Report', 14, 20);
+            
+            doc.setFontSize(12);
+            doc.text(`User: ${userName}`, 14, 30);
+            doc.text(`Period: ${dateRange}`, 14, 37);
+            doc.text(`Total Records: ${filteredAttendanceData.length}`, 14, 44);
+
+            let yPos = 55;
+            doc.setFontSize(10);
+
+            // Calculate total hours
+            let totalMinutes = 0;
+            filteredAttendanceData.forEach(r => {
+                if (r.work_duration) totalMinutes += r.work_duration;
+            });
+            const totalHours = Math.floor(totalMinutes / 60);
+            const totalMins = totalMinutes % 60;
+            
+            doc.text(`Total Hours Worked: ${totalHours}h ${totalMins}m`, 14, yPos);
+            yPos += 10;
+
+            // Records
+            for (let i = 0; i < filteredAttendanceData.length; i++) {
+                const record = filteredAttendanceData[i];
+                
+                if (yPos > 270) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+
+                doc.setFontSize(11);
+                doc.setFont(undefined, 'bold');
+                doc.text(`${new Date(record.date).toLocaleDateString()} - ${record.name}`, 14, yPos);
+                yPos += 6;
+
+                doc.setFont(undefined, 'normal');
+                doc.setFontSize(9);
+                doc.text(`Clock In: ${formatDateTime(record.clock_in)}`, 14, yPos);
+                doc.text(`Clock Out: ${formatDateTime(record.clock_out)}`, 80, yPos);
+                doc.text(`Duration: ${formatDuration(record.work_duration)}`, 150, yPos);
+                yPos += 6;
+
+                // Add signature if exists
+                if (record.signature_data) {
+                    doc.text('Signature:', 14, yPos);
+                    yPos += 5;
+                    
+                    // Create temporary div for signature
+                    const tempDiv = document.createElement('div');
+                    tempDiv.style.width = '180px';
+                    tempDiv.style.height = '70px';
+                    tempDiv.style.position = 'absolute';
+                    tempDiv.style.left = '-9999px';
+                    tempDiv.style.display = 'flex';
+                    tempDiv.style.alignItems = 'center';
+                    tempDiv.style.justifyContent = 'center';
+                    tempDiv.innerHTML = record.signature_data
+    .replace(/<svg/, '<svg viewBox="0 0 550 270" preserveAspectRatio="xMidYMid meet"')
+    .replace(/width="550"/, 'width="100%"')
+    .replace(/height="270"/, 'height="100%"');
+                    document.body.appendChild(tempDiv);
+
+                    try {
+                        const canvas = await html2canvas(tempDiv, { backgroundColor: '#ffffff' });
+                        const imgData = canvas.toDataURL('image/png');
+                        doc.addImage(imgData, 'PNG', 14, yPos, 50, 20);
+                        yPos += 25;
+                    } catch (e) {
+                        console.error('Error rendering signature:', e);
+                        yPos += 5;
+                    }
+                    
+                    document.body.removeChild(tempDiv);
+                } else {
+                    yPos += 5;
+                    }
+
+                doc.setDrawColor(200, 200, 200);
+                doc.line(14, yPos, 196, yPos);
+                yPos += 8;
+            }
+
+            // Save PDF
+            const filename = `Attendance_${userName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+            doc.save(filename);
+        }
+
+        async function loadAllData() {
+            await loadStats();
+            await loadTodayAttendance();
+            await loadUsers();
+            await loadAllAttendance();
+        }
+
+        // Load data on page load
+        loadAllData();
+
+        // Auto-refresh every 30 seconds
+        setInterval(loadAllData, 30000);
+    </script>
+</body>
+</html>
