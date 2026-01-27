@@ -1,5 +1,7 @@
 # STAGEVERSLAG - ATTENDANCE SYSTEM
 
+> **Note (Jan 2026):** This report is historical. For the current system documentation, see [docs/docs_index.md](docs/docs_index.md).
+
 **Student:** Derk Ottersberg  
 **Studentnummer:** 1076265  
 **Stageperiode:** 10 Januari 2025 – 28 Januari 2026  
