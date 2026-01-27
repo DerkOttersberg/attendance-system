@@ -16,6 +16,8 @@ The dashboard is served by Nginx from the backend release at:
 - Department & product management
 - PDF export (single or bulk)
 
+![Dashboard Data Flow](diagrams/08-dashboard-data-flow/RFID%20Attendance%20API%20Pipeline-2026-01-27-194826.png)
+
 ---
 
 ## Key Files

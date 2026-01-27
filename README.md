@@ -42,6 +42,8 @@ The system consists of:
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and the diagrams in [docs/diagrams](docs/diagrams).
 
+![Component Deployment](docs/diagrams/01-component-deployment/RFID%20Attendance%20API%20Pipeline-2026-01-27-194226.png)
+
 ## Quick Start (Backend + Dashboard)
 
 From the latest backend release:
@@ -66,6 +68,8 @@ For hardware and GUI setup, see [docs/HARDWARE_SETUP.md](docs/HARDWARE_SETUP.md)
 - [Dashboard Guide](docs/DASHBOARD.md)
 - [Device Firmware (M4)](docs/DEVICE_FIRMWARE.md)
 - [ImGui App (A7)](docs/GUI_IMGUI.md)
+- [WiFi Network Change (STM32)](docs/change%20network%20in%20stm32%20wifi.txt)
+- [ImGui Autostart (Systemd)](docs/IMGUI_AUTOSTART.md)
 - [Detailed Process Flow](docs/markdown/detailed_process.md)
 - [Project Backlog](docs/BACKLOG.md)
 

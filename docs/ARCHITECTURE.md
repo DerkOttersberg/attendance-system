@@ -8,6 +8,8 @@ Overview of the attendance system architecture based on the current release set.
 
 The system uses a **dual-core STM32MP157F** device as the client and a **Flask + MySQL** backend. The A7 core provides the GUI and network stack, while the M4 core handles real-time RFID and hardware feedback. A web dashboard provides admin visibility and exports. On clock-out, the backend updates points on an external “Punten” website.
 
+![Component Deployment](diagrams/01-component-deployment/RFID%20Attendance%20API%20Pipeline-2026-01-27-194226.png)
+
 ---
 
 ## Core Components

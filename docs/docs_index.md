@@ -16,7 +16,9 @@ docs/
 ├── DASHBOARD.md                # Web dashboard guide
 ├── DEVICE_FIRMWARE.md          # M4 firmware overview
 ├── GUI_IMGUI.md                # A7 ImGui app overview
+├── IMGUI_AUTOSTART.md           # (Blank) systemd autostart notes
 ├── BACKLOG.md                  # Current status + roadmap
+├── change network in stm32 wifi.txt  # WiFi change steps
 ├── GUI_SETUP.md                # (Do not edit) GUI setup notes
 ├── HARDWARE_SETUP.md           # (Do not edit) hardware setup notes
 ├── stm32mp1-m4-autostart.md    # (Do not edit) autostart notes
@@ -43,6 +45,7 @@ docs/
 - [Hardware Setup](HARDWARE_SETUP.md)
 - [Device Firmware](DEVICE_FIRMWARE.md)
 - [Autostart Notes](stm32mp1-m4-autostart.md)
+- [WiFi Network Change](change%20network%20in%20stm32%20wifi.txt)
 
 ### Backend
 - [Backend Setup](BACKEND_SETUP.md)
@@ -51,6 +54,7 @@ docs/
 
 ### Frontend / Dashboard
 - [Dashboard Guide](DASHBOARD.md)
+- [ImGui Autostart (Systemd)](IMGUI_AUTOSTART.md)
 
 ---
 
