@@ -374,7 +374,214 @@ Both cores are coordinated through systemd services that ensure proper boot sequ
 └─────────────────────────────────────────────────┘
 ```
 
-### Service 1: M4 Firmware Auto-Start
+---
+
+## M4 Firmware Development & Deployment
+
+### Development Environment Setup
+
+Before creating systemd services, you need to compile the M4 firmware on your development machine and deploy it to the board.
+
+#### Prerequisites
+
+- **STM32CubeIDE** (v1.10.0 or higher) installed on your development machine
+- **ARM GCC Compiler** for cross-compilation
+- **SSH access** to the STM32MP157F-DK2 board
+- Project source code in `Product/STMCUBEIDE/dk2/`
+
+#### Compilation Steps (Development Machine)
+
+**1. Build Release Version in STM32CubeIDE**
+
+```
+1. Open STM32CubeIDE
+2. Import project: File → Import → Existing Projects into Workspace
+3. Select: Product/STMCUBEIDE/dk2/
+4. Right-click project → Build Configurations → Set Active → Release
+5. Right-click project → Build Project
+6. Wait for compilation to complete (no errors)
+```
+
+**Expected output**: Compiled `.elf` file in project directory
+```
+Product/STMCUBEIDE/dk2/Release/YourProjectName.elf
+```
+
+**2. Verify Compilation Success**
+
+Check build console for:
+```
+Finished building: YourProjectName.elf
+```
+
+If you see errors, ensure:
+- All dependencies are linked correctly
+- M4-specific compiler flags are set (ARM Cortex-M4)
+- No syntax errors in C/C++ code
+
+---
+
+### Manual M4 Firmware Deployment
+
+Before automating with systemd, understand the manual deployment process.
+
+#### Step 1: Copy Firmware to Device
+
+On your **development machine**, copy the compiled `.elf` file to the board:
+
+```bash
+# From your development machine
+scp Product/STMCUBEIDE/dk2/Release/YourProjectName.elf root@<stm32-ip>:/lib/firmware/
+```
+
+**Replace**:
+- `<stm32-ip>`: IP address of your STM32MP157F-DK2 (e.g., `192.168.1.100`)
+
+**Verify transfer**:
+```bash
+ssh root@<stm32-ip>
+ls -la /lib/firmware/YourProjectName.elf
+```
+
+#### Step 2: Create Symbolic Link
+
+On the **STM32MP157F-DK2 board** (via SSH):
+
+```bash
+cd /lib/firmware
+ln -sf YourProjectName.elf rproc-m4-fw.elf
+ls -la rproc-m4-fw.elf  # Verify symlink was created
+```
+
+This symlink ensures the remoteproc framework can find the firmware using a standard name.
+
+#### Step 3: Load and Start M4 Firmware
+
+```bash
+cd /sys/class/remoteproc/remoteproc0
+echo rproc-m4-fw.elf > firmware
+echo start > state
+```
+
+**Expected behavior**:
+- No error messages
+- System should output kernel messages about M4 loading
+
+#### Step 4: Verify M4 is Running
+
+```bash
+cat /sys/class/remoteproc/remoteproc0/state
+```
+
+**Expected output**: `running`
+
+**If output is "failed"**:
+```bash
+dmesg | tail -20  # Check kernel error messages
+journalctl -xe    # Check system journal
+```
+
+#### Step 5: Test M4 Communication
+
+```bash
+# Listen for M4 messages (run in background)
+cat /dev/ttyRPMSG0 &
+
+# Send a test command to wake up M4
+echo "help" > /dev/ttyRPMSG0
+```
+
+**Expected**: M4 firmware should respond with output in the terminal
+
+---
+
+### Manual Start/Stop M4 Firmware
+
+Once the firmware is deployed, you can control it manually:
+
+#### Start M4
+```bash
+cd /sys/class/remoteproc/remoteproc0
+echo rproc-m4-fw.elf > firmware
+echo start > state
+cat state  # Verify: should show "running"
+```
+
+#### Stop M4
+```bash
+cd /sys/class/remoteproc/remoteproc0
+echo stop > state
+cat state  # Verify: should show "offline"
+```
+
+#### Restart M4
+```bash
+cd /sys/class/remoteproc/remoteproc0
+echo stop > state
+sleep 1
+echo rproc-m4-fw.elf > firmware
+echo start > state
+cat state  # Verify: should show "running"
+```
+
+---
+
+### Development Workflow
+
+This is the recommended workflow when developing M4 firmware:
+
+**1. Develop & Debug in STM32CubeIDE**
+   - Write code in your project
+   - Use debug mode (F11 step-through, breakpoints)
+   - Test individual functions
+
+**2. Prepare for Deployment**
+   - Build Release version (not Debug)
+   - Ensure no compilation errors
+   - Test on board manually
+
+**3. Deploy to Board**
+   ```bash
+   scp Product/STMCUBEIDE/dk2/Release/YourProjectName.elf root@<stm32-ip>:/lib/firmware/
+   ssh root@<stm32-ip>
+   cd /lib/firmware && ln -sf YourProjectName.elf rproc-m4-fw.elf
+   ```
+
+**4. Test Manual Start**
+   ```bash
+   cd /sys/class/remoteproc/remoteproc0
+   echo rproc-m4-fw.elf > firmware
+   echo start > state
+   cat /sys/class/remoteproc/remoteproc0/state  # Verify: running
+   ```
+
+**5. Verify Communication**
+   ```bash
+   cat /dev/ttyRPMSG0 &
+   echo "help" > /dev/ttyRPMSG0
+   ```
+
+**6. Update Symlink (if filename changed)**
+   ```bash
+   cd /lib/firmware
+   ln -sf NewFirmware.elf rproc-m4-fw.elf
+   ```
+
+**7. Automate with Systemd** (see below)
+   - Set up m4-autostart.service
+   - Test reboot to ensure auto-start works
+
+**8. Monitor in Production**
+   ```bash
+   # View logs
+   journalctl -u m4-autostart.service -f
+   # Check M4 status
+   systemctl status m4-autostart.service
+   ```
+
+---
+
+## Service 1: M4 Firmware Auto-Start
 
 The M4 core runs firmware for RFID reading and hardware control. This service loads and starts the M4 firmware automatically at boot.
 
@@ -607,15 +814,120 @@ dmesg | grep -i remoteproc
 dmesg | grep -i m4
 ```
 
-**Verify firmware exists**:
+**Verify firmware exists and is accessible**:
 ```bash
 ls -la /lib/firmware/rproc-m4-fw.elf
+file /lib/firmware/rproc-m4-fw.elf  # Should show ELF 32-bit format
 ```
 
-**Test manual M4 start**:
+**Check if symlink is correct**:
 ```bash
+cd /lib/firmware
+ls -la rproc-m4-fw.elf
+readlink rproc-m4-fw.elf  # Should show the actual filename
+```
+
+**Check remoteproc device availability**:
+```bash
+ls -la /sys/class/remoteproc/
+cat /sys/class/remoteproc/remoteproc0/name  # Should show: m4
+```
+
+**Test manual M4 start** (without systemd):
+```bash
+# Stop current service
+sudo systemctl stop m4-autostart.service
+
+# Test manual loading
+cd /sys/class/remoteproc/remoteproc0
+echo rproc-m4-fw.elf > firmware
+echo start > state
+
+# Check result
+cat state  # Should show "running"
+cat /proc/device-tree/aliases/rproc0  # Verify M4 alias exists
+
+# View detailed status
+cat /sys/class/remoteproc/remoteproc0/state
+cat /sys/class/remoteproc/remoteproc0/power/control
+```
+
+**Check service file syntax**:
+```bash
+sudo systemd-analyze verify m4-autostart.service
+```
+
+**View service execution details**:
+```bash
+sudo journalctl -u m4-autostart.service -n 50
+sudo journalctl -u m4-autostart.service -f  # Follow in real-time
+```
+
+#### M4 Communication Tests
+
+If M4 starts but doesn't respond to commands:
+
+```bash
+# Check RPMSG devices exist
+ls -la /dev/ttyRPMSG*
+
+# Listen for M4 output
+cat /dev/ttyRPMSG0 &
+RPMSG_PID=$!
+
+# Send test command
+echo "test" > /dev/ttyRPMSG0
+
+# Kill listener after testing
+kill $RPMSG_PID
+```
+
+**Expected output**: M4 firmware should respond with acknowledgment
+
+#### M4 State Issues
+
+**If state shows "failed"**:
+```bash
+# Check fault message
+cat /sys/class/remoteproc/remoteproc0/power/autosuspend_delay_ms
+cat /sys/kernel/debug/remoteproc/remoteproc0/trace0  # If available
+
+# Restart remoteproc
+echo stop > /sys/class/remoteproc/remoteproc0/state
 echo rproc-m4-fw.elf > /sys/class/remoteproc/remoteproc0/firmware
 echo start > /sys/class/remoteproc/remoteproc0/state
+```
+
+**If state shows "offline"**:
+```bash
+# M4 may have crashed, check logs
+dmesg | tail -30
+journalctl -xe
+
+# Try restarting
+echo rproc-m4-fw.elf > /sys/class/remoteproc/remoteproc0/firmware
+echo start > /sys/class/remoteproc/remoteproc0/state
+```
+
+#### Firmware Version Mismatch
+
+If you've updated the firmware but M4 still uses old version:
+
+```bash
+# Check current symlink
+ls -la /lib/firmware/rproc-m4-fw.elf
+
+# Stop M4
+sudo systemctl stop m4-autostart.service
+
+# Update symlink
+cd /lib/firmware
+ln -sf NewFirmwareName.elf rproc-m4-fw.elf
+
+# Restart
+sudo systemctl start m4-autostart.service
+
+# Verify
 cat /sys/class/remoteproc/remoteproc0/state  # Should show "running"
 ```
 
