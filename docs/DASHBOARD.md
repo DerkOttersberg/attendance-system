@@ -179,7 +179,7 @@ Real-time feed of all card scans:
 |------|------|----------|--------|--------|
 | 16:47 | John Doe | 04:3A:B2:C1 | Clock-in | ✓ Success |
 | 16:45 | Jane Smith | 08:4F:C3:D2 | Clock-out | ✓ Success |
-| 16:43 | Unknown | FF:FF:FF:FF | Scan | ⚠ Not registered |
+| 16:43 | Unknown | FF:FF:FF:FF | Scan | Not registered |
 
 Click unknown cards to register new user.
 

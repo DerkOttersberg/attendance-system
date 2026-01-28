@@ -4,11 +4,11 @@
 
 ---
 
-## 📋 Quick Navigation
+## Quick Navigation
 
 This documentation is organized by **setup location** and **component**. Choose your path:
 
-### 🎯 I want to...
+### I want to...
 
 - **[Get Started (30 min overview)](#getting-started)**
 - **[Set up the STM32MP157F-DK2 device](#stm32-device-setup)**
@@ -25,53 +25,7 @@ This documentation is organized by **setup location** and **component**. Choose 
 
 The attendance system consists of three main parts:
 
-```
-┌─────────────────────────────────────────────────────┐
-│         RFID Attendance System Architecture         │
-├─────────────────────────────────────────────────────┤
-│                                                     │
-│  ┌──────────────────────────────────────────────┐  │
-│  │    STM32MP157F-DK2 (On Device)              │  │
-│  │  ┌────────────────┐    ┌─────────────────┐  │  │
-│  │  │  A7 Core       │    │   M4 Core       │  │  │
-│  │  │ (ImGui App)    │◄──►│ (RFID Firmware) │  │  │
-│  │  │ (Linux)        │    │ (via RPMSG)     │  │  │
-│  │  └────────┬───────┘    └─────────────────┘  │  │
-│  │           │                                   │  │
-│  │      ┌────▼─────┐                            │  │
-│  │      │  Touchscreen                          │  │
-│  │      │  Display                              │  │
-│  │      └───────────┘                           │  │
-│  └────────────┬────────────────────────────────┘  │
-│               │                                    │
-│               │ WiFi / Ethernet                    │
-│               ▼                                    │
-│  ┌──────────────────────────────────────────────┐  │
-│  │   Backend Server (Your Laptop/Server)       │  │
-│  │  ┌──────────────────────────────────────┐   │  │
-│  │  │  Flask API                           │   │  │
-│  │  │  - /api/scan                         │   │  │
-│  │  │  - /api/clock_in_with_signature      │   │  │
-│  │  │  - /api/attendance                   │   │  │
-│  │  └──────────────┬───────────────────────┘   │  │
-│  │                │                            │  │
-│  │  ┌──────────────▼───────────────────────┐   │  │
-│  │  │  MySQL Database                      │   │  │
-│  │  │  - users                             │   │  │
-│  │  │  - attendance                        │   │  │
-│  │  │  - scan_log                          │   │  │
-│  │  └───────────────────────────────────────┘   │  │
-│  │                                              │  │
-│  │  ┌──────────────────────────────────────┐   │  │
-│  │  │  Dashboard (Web UI)                  │   │  │
-│  │  │  - Attendance records                │   │  │
-│  │  │  - User management                   │   │  │
-│  │  │  - Reports & export                  │   │  │
-│  │  └───────────────────────────────────────┘   │  │
-│  └──────────────────────────────────────────────┘  │
-│                                                     │
-└─────────────────────────────────────────────────────┘
-```
+![RFID Attendance System Architecture](diagrams/01-component-deployment/RFID%20Attendance%20API%20Pipeline-2026-01-27-194226.png)
 
 ### Technology Stack
 
@@ -88,7 +42,7 @@ The attendance system consists of three main parts:
 
 ---
 
-## 📍 Setup by Location
+## Setup by Location
 
 ### STM32 Device Setup
 
@@ -133,35 +87,7 @@ Everything on your **laptop/server** (not on the STM32).
 
 ### High-Level Data Flow
 
-```
-┌──────────────────────────────────────────────────────────┐
-│                    CLOCK-IN FLOW                         │
-├──────────────────────────────────────────────────────────┤
-│                                                          │
-│  1. User scans RFID card at terminal                    │
-│     └─ RFID reader (M4 core) detects UID               │
-│                                                          │
-│  2. M4 sends UID to A7 via RPMSG (/dev/ttyRPMSG0)      │
-│     └─ ImGui application receives scan event            │
-│                                                          │
-│  3. ImGui app calls: POST /api/scan                     │
-│     └─ Backend checks if user exists                    │
-│                                                          │
-│  4. User signs on touchscreen                           │
-│     └─ Signature captured as SVG path                   │
-│                                                          │
-│  5. ImGui submits: POST /api/clock_in_with_signature   │
-│     └─ Body: {uid, signature_svg, timestamp}           │
-│                                                          │
-│  6. Backend inserts into:                              │
-│     └─ attendance (record created)                      │
-│     └─ scan_log (transaction recorded)                  │
-│                                                          │
-│  7. ImGui shows success screen with visual feedback     │
-│     └─ Green LED on, success sound                      │
-│                                                          │
-└──────────────────────────────────────────────────────────┘
-```
+![Clock-In Flow Diagram](diagrams/03-clock-in-signature/clock%20in%20flow.png)
 
 ### Component Responsibilities
 
@@ -200,7 +126,7 @@ Everything on your **laptop/server** (not on the STM32).
 
 ---
 
-## 📚 Complete Documentation Index
+## Complete Documentation Index
 
 ### Device Setup (On STM32)
 - [WiFi Configuration](SETUP_STM32_WIFI.md) - Network connectivity
@@ -229,7 +155,7 @@ Everything on your **laptop/server** (not on the STM32).
 
 ---
 
-## 🚀 Common Tasks
+## Common Tasks
 
 ### First-Time Setup (30 minutes)
 
@@ -279,7 +205,7 @@ Everything on your **laptop/server** (not on the STM32).
 
 ---
 
-## 🆘 Troubleshooting
+## Troubleshooting
 
 ### Device Issues
 - [RFID not scanning](TROUBLESHOOTING.md#rfid-not-scanning)
@@ -297,7 +223,7 @@ Everything on your **laptop/server** (not on the STM32).
 
 ---
 
-## 📖 Documentation Standards
+## Documentation Standards
 
 All documents follow this structure:
 
@@ -310,7 +236,7 @@ All documents follow this structure:
 
 ---
 
-## 🔄 Feedback & Updates
+## Feedback & Updates
 
 - Last Updated: January 28, 2026
 - Version: 1.5.2 (Device v1.0.4, Backend v1.5.2)
@@ -319,7 +245,7 @@ For issues or suggestions, refer to [BACKLOG.md](BACKLOG.md).
 
 ---
 
-## 📞 Quick Reference
+## Quick Reference
 
 | Need | Document |
 |------|-----------|

@@ -112,7 +112,7 @@ curl http://<backend-ip>:5000/health
 # {"status": "ok"}
 ```
 
-✅ **Success**: Backend is running and accessible!
+**Success**: Backend is running and accessible!
 
 ---
 

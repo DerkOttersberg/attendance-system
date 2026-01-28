@@ -63,7 +63,7 @@ cat /sys/class/remoteproc/remoteproc0/state  # Should show "running"
 # Press Ctrl+C to stop (or on-screen exit button)
 ```
 
-✅ **Success**: ImGui displays on the touchscreen!
+**Success**: ImGui displays on the touchscreen!
 
 ### Step 4: Create systemd Service File (On STM32 Board)
 
@@ -165,7 +165,7 @@ systemctl status imgui-app.service
 tail /root/imgui.log
 ```
 
-✅ **Success**: ImGui is running and auto-starting!
+**Success**: ImGui is running and auto-starting!
 
 ---
 
@@ -209,7 +209,7 @@ Time    Event                                      Service
 28s     graphical.target reaches (Wayland init)  (graphics)
 35s     imgui-app.service starts                 imgui-app
         └─ Wait 20 sec for M4 + graphics
-55s     ImGui application displays on touchscreen ✅ Ready!
+55s     ImGui application displays on touchscreen - Ready!
 ```
 
 ---
@@ -356,7 +356,7 @@ Transfer ──────► /root/imgui_app
            │
            Check logs
            │
-         ✅ Running
+         Running
 ```
 
 ---

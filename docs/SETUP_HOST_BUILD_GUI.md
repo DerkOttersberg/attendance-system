@@ -483,13 +483,13 @@ make -j$(nproc)
 
 Before transferring to STM32, verify:
 
-- ✅ Binary built successfully: `ls -lh build/bin/imgui_app`
-- ✅ Binary is ARM executable: `file build/bin/imgui_app`
-- ✅ Binary size < 20 MB: `ls -lh build/bin/imgui_app`
-- ✅ Backend URL correctly set in code
-- ✅ API endpoint is accessible: `curl http://backend-ip:5000/health`
-- ✅ M4 firmware already deployed on STM32
-- ✅ WiFi configured on STM32
+- Binary built successfully: `ls -lh build/bin/imgui_app`
+- Binary is ARM executable: `file build/bin/imgui_app`
+- Binary size < 20 MB: `ls -lh build/bin/imgui_app`
+- Backend URL correctly set in code
+- API endpoint is accessible: `curl http://backend-ip:5000/health`
+- M4 firmware already deployed on STM32
+- WiFi configured on STM32
 
 ---
 

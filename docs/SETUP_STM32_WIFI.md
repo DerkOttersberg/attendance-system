@@ -91,7 +91,7 @@ ip addr show wlan0
     valid_lft forever preferred_lft forever
 ```
 
-✅ **Success**: You have an IP address (e.g., `192.168.1.100`)
+**Success**: You have an IP address (e.g., `192.168.1.100`)
 
 ### Step 5: Test Internet Connectivity
 
@@ -110,7 +110,7 @@ PING google.com (142.250.185.46) 56(84) bytes of data.
 3 packets transmitted, 3 received, 0% packet loss
 ```
 
-✅ **Success**: WiFi is working!
+**Success**: WiFi is working!
 
 ---
 
@@ -297,8 +297,8 @@ wpa_passphrase "SSID" "ActualPassword"
 ## Security Best Practices
 
 1. **Always use PSK hash, never store plain passwords:**
-   ✅ `psk=e1eea16c4e9e3e9a4c...` (good)
-   ❌ `psk="password"` (bad)
+   `psk=e1eea16c4e9e3e9a4c...` (good)
+   `psk="password"` (bad)
 
 2. **Change WiFi password regularly:**
    ```bash

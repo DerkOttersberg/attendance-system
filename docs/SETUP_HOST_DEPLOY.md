@@ -71,7 +71,7 @@ tail /root/imgui.log
   # Should return: {"status": "ok"}
   ```
 
-✅ **Success**: System is deployed and working!
+**Success**: System is deployed and working!
 
 ---
 
@@ -217,7 +217,7 @@ curl -X POST http://<backend-ip>:5000/api/scan \
 5. **Confirm submission**
 6. **Check dashboard** at `http://backend-ip:8080` for attendance record
 
-✅ **Complete**: System is fully deployed!
+**Complete**: System is fully deployed!
 
 ---
 

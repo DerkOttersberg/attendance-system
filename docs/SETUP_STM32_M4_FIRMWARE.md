@@ -157,7 +157,7 @@ echo "test" > /dev/ttyRPMSG0
 # Should see response
 ```
 
-✅ **Success**: M4 firmware is loaded and auto-starting!
+**Success**: M4 firmware is loaded and auto-starting!
 
 ---
 
