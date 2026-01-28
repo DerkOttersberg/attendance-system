@@ -1,262 +1,107 @@
 # Attendance System
 
-A comprehensive hardware-based time tracking and attendance management system built with STM32 microcontroller, featuring RFID authentication, touchscreen signature capture, and web-based administration.
+Hardware-based attendance terminal with RFID, signature capture, and a web dashboard. The device runs on STM32MP157F (dual-core A7 + M4) and communicates with a Flask API backed by MySQL. A points update integrates with the existing “Punten” website.
 
-![Project Status](https://img.shields.io/badge/status-in%20development-yellow)
-![Hardware](https://img.shields.io/badge/hardware-STM32mp157f-blue)
-![Backend](https://img.shields.io/badge/backend-Python%20Flask-green)
+![Project Status](https://img.shields.io/badge/status-production--ready-brightgreen)
+![Hardware](https://img.shields.io/badge/hardware-STM32MP157F-blue)
+![Backend](https://img.shields.io/badge/backend-Flask%20%2B%20MySQL-green)
 
-## 📋 Table of Contents
+## Table of Contents
 
-- [Overview](#-Overview)
-- [Features](#-features)
-- [System Architecture](#-system-architecture)
-- [Quick Start](#-quick-start)
-- [Documentation](#-documentation)
-- [Project Structure](#-project-structure)
-- [Development Status](#-development-status)
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Architecture](#architecture)
+- [Quick Start (Backend + Dashboard)](#quick-start-backend--dashboard)
+- [Documentation](#documentation)
+- [Project Structure](#project-structure)
+- [Current Status](#current-status)
 
+## Overview
 
-## 🎯 Overview
+The system consists of:
 
-This attendance system provides a seamless way for users to clock in and out using RFID cards, with digital signature capture for legal verification. The system consists of:
+- **Clock-in device** (STM32MP157F):
+    - **M4 core** handles RFID polling, LEDs, buzzer, and OpenAMP/RPMSG
+    - **A7 core** runs Linux + ImGui GUI + REST API client
+- **Backend API** (Flask): attendance logic, signature storage, user management
+- **Web dashboard** (HTML/CSS/JS): live attendance, filtering, PDF export
+- **Database** (MySQL): users, attendance, scan_log, departments, products
+- **Points website integration**: updates points on clock-out
 
-- **Hardware Device**: STM32-based terminal with RFID reader and touchscreen
-- **Backend API**: Flask-based REST API for data management
-- **Web Dashboard**: Administrative interface for attendance monitoring and reporting
-- **Database**: PostgreSQL for secure data storage
+## Key Features
 
-## ✨ Features
+- RFID scan for clock-in/out
+- Signature capture on clock-in (SVG)
+- Live admin dashboard + PDF export
+- Manual attendance entries (with signature)
+- Department/product management
+- LED/buzzer feedback via M4 commands
+- Points update to the external “Punten” website
 
-### Core Functionality
-- ✅ RFID-based clock in/out
-- ✅ Touchscreen signature capture
-- ✅ Real-time user feedback and status display
-- ✅ Network communication with server
-- ✅ Attendance data export to PDF with signatures
+## Architecture
 
-### Administrative
-- ✅ Web-based dashboard for attendance overview
-- ✅ User management interface
-- ✅ Report generation and export
-- 🔄 Points system integration (in progress)
-- 🔄 Multi-language support (planned)
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and the diagrams in [docs/diagrams](docs/diagrams).
 
-### System Features
-- ✅ Automatic server communication
-- ✅ Database synchronization
-- 🔄 Offline mode with queue management (in progress)
-- 🔄 Error handling with LED/buzzer feedback (planned)
+![Component Deployment](docs/diagrams/01-component-deployment/RFID%20Attendance%20API%20Pipeline-2026-01-27-194226.png)
 
-## 🏗️ System Architecture
+## Quick Start (Backend + Dashboard)
 
-```
-┌─────────────────┐
-│  RFID Reader    │
-└────────┬────────┘
-         │
-┌────────▼────────┐      ┌──────────────┐
-│  STM32 Device   │◄────►│  Touchscreen │
-│   (ImGui GUI)   │      └──────────────┘
-└────────┬────────┘
-         │ Network
-         │ (WiFi/Ethernet)
-┌────────▼────────┐
-│   Flask API     │
-│  (Backend)      │
-└────────┬────────┘
-         │
-┌────────▼────────┐      ┌──────────────┐      ┌──────────────┐
-│   PostgreSQL    │◄────►│ Web Dashboard│◄────►|Export to PDF |
-│    Database     │      └──────────────┘      └──────────────┘
-└─────────────────┘
-```
-
-For detailed architecture documentation, see [Architecture Overview](./docs/ARCHITECTURE.md).
-
-## 🚀 Quick Start
-
-### Prerequisites
-- STM32F7 Discovery Board (DK1 or DK2)
-- RFID reader module
-- Compatible touchscreen
-- Docker and Docker Compose
-- Python 3.9+
-
-### Running the Backend
+From the latest backend release:
 
 ```bash
-cd Product/Database\ &\ Dashboard
+cd "product/Database & Dashbaord/releases/v1.5.2/My website"
 docker-compose up -d
 ```
 
-The API will be available at `http://localhost:5000`  
-The dashboard will be available at `http://localhost:8080`
+- API: http://localhost:5000
+- Dashboard: http://localhost:8080
 
-For detailed setup instructions, see:
-- [Hardware Setup Guide](./docs/HARDWARE_SETUP.md)
-- [Backend Setup Guide](./docs/BACKEND_SETUP.md)
-- [GUI Development Guide](./docs/GUI_SETUP.md)
+For hardware and GUI setup, see [docs/HARDWARE_SETUP.md](docs/HARDWARE_SETUP.md) and [docs/GUI_SETUP.md](docs/GUI_SETUP.md).
 
-## 📚 Documentation
+## Documentation
 
-### User Documentation
-- [User Manual](./docs/USER_MANUAL.md) - How to use the attendance device
-- [Admin Guide](./docs/ADMIN_GUIDE.md) - Managing the system via web dashboard
+- [Documentation Index](docs/docs_index.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Backend Setup](docs/BACKEND_SETUP.md)
+- [API Reference](docs/API.md)
+- [Database Schema](docs/DATABASE.md)
+- [Dashboard Guide](docs/DASHBOARD.md)
+- [Device Firmware (M4)](docs/DEVICE_FIRMWARE.md)
+- [ImGui App (A7)](docs/GUI_IMGUI.md)
+- [WiFi Network Change (STM32)](docs/change%20network%20in%20stm32%20wifi.txt)
+- [ImGui Autostart (Systemd)](docs/IMGUI_AUTOSTART.md)
+- [Detailed Process Flow](docs/markdown/detailed_process.md)
+- [Project Backlog](docs/BACKLOG.md)
 
-### Technical Documentation
-- [Index](./docs/docs_index.md) - Index of this repository
-- [Architecture Overview](./docs/ARCHITECTURE.md) - System design and component interaction
-- [Hardware Setup](./docs/HARDWARE_SETUP.md) - STM32 configuration and wiring
-- [GUI Development](./docs/GUI_SETUP.md) - ImGui interface development
-- [API Documentation](./docs/API.md) - Backend endpoints and usage
-- [Database Schema](./docs/DATABASE.md) - Data structure and relationships
-
-
-### Development Guides
-- [Testing Guide](./docs/TESTING.md)
-- [Deployment Guide](./docs/DEPLOYMENT.md)
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 attendance-system/
-├── Product/
-│   ├── Database & Dashboard/     # Backend API and web interface
-│   │   ├── api/                  # Flask REST API
-│   │   ├── web/                  # Web dashboard (HTML/CSS/JS)
-│   │   ├── docker-compose.yml    # Docker configuration
-│   │   └── init.sql              # Database initialization
-│   │
-│   ├── GUI/                      # User interface implementations
-│   │   ├── IMGUI/                # Main GUI (C++ ImGui) ✅ Active
-│   │   └── KIVY/                 # Python GUI test (deprecated)
-│   │
-│   ├── STMCUBEIDE/              # STM32 firmware projects
-│   │   ├── dk1/                  # For STM32F7-DK1 board
-│   │   └── dk2/                  # For STM32F7-DK2 board
-│   │
-│   └── ESP32/                    # Hardware testing sketches
-│       ├── RFID_test.ino
-│       └── Touchscreen_test/
-│
-├── docs/               # Documentation (see above)
-│   ├── Burndown diagrams/    # Sprint tracking
-│   └── Markdown/
-│       └── FlowCharts/       # System flowcharts
-                      
+├── product/
+│   ├── Database & Dashbaord/
+│   │   └── releases/v1.5.2/My website/   # Flask API + MySQL + web dashboard
+│   │   └── releases/v1.5.2/target website/ # Points website API (Express)
+│   ├── GUI/IMGUI/v1.4.1/                 # Current A7 ImGui app
+│   ├── STM32CUBEIDE/workspace_1.19.0/
+│   │   └── dk2 v1.0.4/                   # Current M4 firmware (main.c)
+│   └── ESP32/                            # Hardware test sketches
+├── docs/                                # All documentation
+└── STAGEVERSLAG_v2.md                    # Internship report (historical)
 ```
 
-### Key Components
+## Current Status
 
-#### 1. **STM32 Device** ([Hardware Setup](./docs/HARDWARE_SETUP.md))
-##### A7 Core
-- Main controller running embedded Linux
-- ImGui-based graphical interface
-- Touchscreen driver implementation
+**Production-ready** for internal use.
 
-##### M4 Core
-- RFID reader integration
+**Active components**:
+- M4 firmware: RFID + command parser + buzzer/LED control
+- A7 ImGui app: signature capture + admin PIN + API client
+- Flask API: attendance, signatures, manual entry, departments/products
+- Dashboard: filtering, user management, PDF export
 
-##### Virtual uart (ttyRPMSG)
-- Communication between M4 <--> A7 Cores
-
-
-#### 2. **Backend API** ([API Documentation](./docs/API.md))
-- Flask-based REST API
-- PostgreSQL database
-- Docker containerized
-- Handles authentication, time entries, and signatures
-
-#### 3. **Web Dashboard** ([Admin Guide](./docs/ADMIN_GUIDE.md))
-- Real-time attendance monitoring
-- User management
-- Report generation and PDF export
-- Responsive design
-
-## 📊 Development Status
-
-### Completed ✅
-- [x] Hardware foundation (STM32, RFID, touchscreen)
-- [x] RFID check-in/check-out functionality
-- [x] Touchscreen signature capture
-- [x] ImGui-based user interface
-- [x] Backend API with database
-- [x] Web dashboard
-- [x] PDF export with signatures
-- [x] Network communication
-
-### In Progress 🔄
-- [ ] Physical encasing design
-- [ ] Offline mode with queue management
-- [ ] Points system integration
-- [ ] User status display enhancements
-- [ ] Admin user management interface
-
-### Planned 📋
-- [ ] Error feedback (LED/buzzer)
-- [ ] System reset functionality
-- [ ] Multi-language support
-- [ ] Security implementation
-- [ ] Custom PCB design
-- [ ] GUI screen restriction (kiosk mode)
-
-See the [Product Backlog](./docs/BACKLOG.md) for detailed task breakdown.
-
-## 🔄 Process Flows
-
-### Clock-In Flow
-```
-User Scans RFID → Device Reads Card → API Validates User → 
-Display Welcome Screen → User Signs on Touchscreen → 
-Signature Stored → Time Entry Created → Success Feedback
-```
-
-See [Clock-In Flowchart](./docs/flowcharts/flowchart%20CLOCKIN.md) for detailed flow.
-
-### Dashboard Flow
-See [Dashboard Flowchart](./docs/flowcharts/flowchart%20Dashboard%20compact.md) for administrative workflows.
-
-## 🛠️ Technology Stack
-
-### Hardware
-- **Microcontroller**: STM32MP157F Discovery (DK1/DK2)
-- **RFID**: RC522 module
-- **Display**: SPI touchscreen (driver-dependent)
-- **OS**: OpenSTMlinux
-
-### Software
-- **GUI Framework**: Dear ImGui (C++)
-- **Low Level hardware control**: STMcubeIDE (C, C++, Assembly)
-- **Backend API**: Python Flask
-- **Database**: PostgreSQL
-- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
-- **Containerization**: Docker
-
-### Development Tools
-- STM32CubeIDE
-- Visual Studio Code
-- Docker Desktop
-- WSL (For compiling Linux applications through the stm32mp157 SDK on windows)
-- Git
-
-
-This project is developed as part of an educational/commercial project. License BitsEnBytes
-
-## 📞 Contact & Support
-
-For questions, issues, or contributions:
-- Create an issue in the repository
-- Contact the development team
-
-## 🎓 Project Management
-
-This project follows Agile methodology with:
-- User story tracking
+**Planned / backlog**: see [docs/BACKLOG.md](docs/BACKLOG.md).
 
 ---
 
-**Last Updated**: November 2025  
-**Version**: 1.0.1.2  
-**Status**: Active Development
+**Last Updated**: January 27, 2026
 

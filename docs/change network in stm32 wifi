@@ -1,15 +1,3 @@
-nano /etc/wpa_supplicant/wpa_supplicant-wlan0.conf
-
-
-
-✅ Correct way to update PSK for the new password
-
-Your new password is:
-
-WLanVanBitsEnBytes
-
-1️⃣ Generate a new hashed PSK
-
 Run this exact command:
 
 wpa_passphrase "BitsEnBytes" "WLanVanBitsEnBytes"
@@ -24,10 +12,9 @@ network={
 }
 
 
-👉 Copy only the psk=... hex line
-(do NOT use the commented plaintext line)
+Copy only the psk=... hex line
 
-2️⃣ Update your config file
+Update your config file
 
 Edit:
 
@@ -44,10 +31,10 @@ network={
 
 Save & exit.
 
-3️⃣ Restart Wi-Fi
+Restart Wi-Fi
 systemctl restart wpa_supplicant@wlan0
 systemctl restart udhcpc-wlan0
 
-4️⃣ Verify
+Verify
 ip addr show wlan0
 ping -c 3 google.com
