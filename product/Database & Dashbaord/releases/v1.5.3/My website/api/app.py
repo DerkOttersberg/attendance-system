@@ -7,6 +7,7 @@ from datetime import datetime, date
 import logging
 import sys
 import traceback
+import requests
 
 
 app = Flask(__name__)
@@ -41,11 +42,156 @@ def get_db_connection():
         logging.error(f"Database connection error: {e}")
         return None
 
+def update_target_website_points(user_name: str, work_duration_minutes: int):
+    """
+    Update points on the target website based on work duration
+    Less than 4 hours (240 min): 1 point
+    4 hours or more: 2 points
+    """
+    try:
+        logging.info(f"Updating points for {user_name} - Duration: {work_duration_minutes} minutes")
+        
+        # Determine points based on work duration
+        points = 1 if work_duration_minutes < 240 else 2
+        
+        # Step 1: Login to target website
+        target_url = 'https://punten.bitsenbytes.net'
+        login_url = f'{target_url}/api/login/BitsGoes1!'
+        
+        session = requests.Session()
+        
+        # Login
+        login_response = session.get(login_url, timeout=10)
+        if login_response.status_code != 200:
+            logging.error(f"Failed to login to target website: {login_response.status_code}")
+            return False
+        
+        logging.info(f"Successfully logged in to target website")
+        
+        # Step 2: Get all users and find the matching user by name
+        try:
+            users_response = session.get(f'{target_url}/api/allDeelnemers', timeout=10)
+            if users_response.status_code != 200:
+                logging.error(f"Failed to get users from target website: {users_response.status_code}")
+                return False
+            
+            users = users_response.json()
+            user_id = None
+            current_points = 0
+            
+            # Search for user by name (case-insensitive)
+            for user in users:
+                if user.get('naam', '').lower() == user_name.lower():
+                    user_id = user.get('ID') or user.get('id')
+                    current_points = user.get('punten', 0)  # Get current points
+                    break
+            
+            if not user_id:
+                logging.error(f"User '{user_name}' not found on target website")
+                return False
+            
+            logging.info(f"Found user '{user_name}' with ID {user_id} on target website (current points: {current_points})")
+        
+        except Exception as e:
+            logging.error(f"Error fetching users from target website: {e}")
+            return False
+        
+        # Step 3: Update points using the updatePunten endpoint
+        update_url = f'{target_url}/api/updatePunten'
+        
+        # Calculate total points: current + earned
+        total_points = current_points + points
+        
+        update_data = {
+            'id': user_id,
+            'naam': user_name,
+            'punten': total_points
+        }
+        
+        update_response = session.post(update_url, json=update_data, timeout=10)
+        
+        if update_response.status_code == 200:
+            logging.info(f"✅ Successfully updated {user_name} (ID: {user_id}) on target website: {current_points} + {points} = {total_points} points (worked {work_duration_minutes} minutes)")
+            return True
+        else:
+            logging.error(f"Failed to update points on target website: {update_response.status_code}")
+            return False
+            
+    except requests.exceptions.Timeout:
+        logging.error("Timeout while updating points on target website")
+        return False
+    except requests.exceptions.ConnectionError as e:
+        logging.error(f"Connection error while updating target website: {e}")
+        return False
+    except Exception as e:
+        logging.error(f"Error updating points on target website: {e}")
+        return False
+
 
 @app.route('/health', methods=['GET'])
 def health_check():
     """Health check endpoint"""
     return jsonify({'status': 'healthy', 'timestamp': datetime.now().isoformat()})
+
+@app.route('/api/user-points/<user_name>', methods=['GET'])
+def get_user_points(user_name):
+    """Get user's current points from target website"""
+    try:
+        target_url = 'https://punten.bitsenbytes.net'
+        login_url = f'{target_url}/api/login/BitsGoes1!'
+        
+        session = requests.Session()
+        
+        # Login
+        login_response = session.get(login_url, timeout=10)
+        if login_response.status_code != 200:
+            logging.error(f"Failed to login to target website: {login_response.status_code}")
+            return jsonify({'error': 'Failed to connect to target website'}), 500
+        
+        # Get all users
+        users_response = session.get(f'{target_url}/api/allDeelnemers', timeout=10)
+        if users_response.status_code != 200:
+            logging.error(f"Failed to get users: {users_response.status_code}")
+            return jsonify({'error': 'Failed to fetch users'}), 500
+        
+        users = users_response.json()
+        
+        # Find user by name (case-insensitive)
+        for user in users:
+            if user.get('naam', '').lower() == user_name.lower():
+                return jsonify({
+                    'user_name': user.get('naam'),
+                    'points': user.get('punten', 0)
+                }), 200
+        
+        # User not found - return 0 points
+        return jsonify({
+            'user_name': user_name,
+            'points': 0
+        }), 200
+        
+    except Exception as e:
+        logging.error(f"Error fetching user points: {e}")
+        return jsonify({'error': str(e), 'points': 0}), 200
+
+@app.route('/api/update-points', methods=['POST'])
+def update_points():
+    """Update points for a user on target website"""
+    data = request.get_json()
+    
+    if not data or 'user_name' not in data or 'work_duration_minutes' not in data:
+        return jsonify({'error': 'Missing user_name or work_duration_minutes'}), 400
+    
+    user_name = data.get('user_name')
+    work_duration_minutes = data.get('work_duration_minutes', 0)
+    
+    # Update points on target website
+    success = update_target_website_points(user_name, work_duration_minutes)
+    
+    if success:
+        return jsonify({'success': True, 'message': 'Points updated'}), 200
+    else:
+        return jsonify({'success': False, 'message': 'Failed to update points'}), 500
 
 @app.route('/api/scan', methods=['POST'])
 def handle_scan():
@@ -104,6 +250,21 @@ def handle_scan():
                     work_duration = TIMESTAMPDIFF(MINUTE, clock_in, NOW())
                 WHERE id = %s
             """, (attendance['id'],))
+            
+            # Get the updated attendance record to get work duration
+            cursor.execute("SELECT work_duration FROM attendance WHERE id = %s", (attendance['id'],))
+            updated_record = cursor.fetchone()
+            work_duration = updated_record['work_duration'] if updated_record else 0
+            
+            # Update points on target website (async - don't block the response)
+            logging.info(f"Clock out for {user['name']}: {work_duration} minutes worked")
+            if work_duration is not None and work_duration >= 0:
+                # Try to update points on target website
+                points_updated = update_target_website_points(user['name'], work_duration)
+                if points_updated:
+                    logging.info(f"Points awarded to {user['name']} on target website")
+                else:
+                    logging.warning(f"Failed to update points for {user['name']} on target website")
             
             action = 'clock_out'
             message = f"Goodbye {user['name']}! Clocked out successfully."
@@ -533,7 +694,7 @@ def create_manual_attendance():
         return jsonify({'error': 'Missing required fields: user_id, date, clock_in'}), 400
     
     user_id = data.get('user_id')
-    date = data.get('date')
+    date_str = data.get('date')
     clock_in = data.get('clock_in')
     clock_out = data.get('clock_out')
     signature_data = data.get('signature_data')
@@ -552,16 +713,26 @@ def create_manual_attendance():
         if not user:
             return jsonify({'error': 'User not found'}), 404
         
+        # Parse date and times
+        try:
+            from datetime import datetime
+            # Extract just the date part (YYYY-MM-DD)
+            date_only = date_str if isinstance(date_str, str) and len(date_str) == 10 else date_str.split('T')[0]
+            
+            # Parse clock in/out times (ISO format: YYYY-MM-DDTHH:MM:SS)
+            clock_in_dt = datetime.fromisoformat(clock_in) if clock_in else None
+            clock_out_dt = datetime.fromisoformat(clock_out) if clock_out else None
+        except Exception as e:
+            logging.error(f"Date parsing error: {e}")
+            return jsonify({'error': f'Invalid date/time format: {str(e)}'}), 400
+        
         # Determine status based on clock_out
-        status = 'clocked_out' if clock_out else 'clocked_in'
+        status = 'clocked_out' if clock_out_dt else 'clocked_in'
         
         # Calculate work duration if both times provided
         work_duration = None
-        if clock_in and clock_out:
+        if clock_in_dt and clock_out_dt:
             try:
-                from datetime import datetime
-                clock_in_dt = datetime.fromisoformat(clock_in)
-                clock_out_dt = datetime.fromisoformat(clock_out)
                 duration_delta = clock_out_dt - clock_in_dt
                 work_duration = int(duration_delta.total_seconds() / 60)  # Convert to minutes
             except Exception as e:
@@ -571,11 +742,11 @@ def create_manual_attendance():
         cursor.execute("""
             INSERT INTO attendance (user_id, date, clock_in, clock_out, status, work_duration, signature_data)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
-        """, (user_id, date, clock_in, clock_out, status, work_duration, signature_data))
+        """, (user_id, date_only, clock_in_dt, clock_out_dt, status, work_duration, signature_data))
         
         conn.commit()
         
-        logging.info(f"Manual attendance created for user {user['name']} on {date}")
+        logging.info(f"Manual attendance created for user {user['name']} on {date_only}")
         
         return jsonify({
             'success': True,

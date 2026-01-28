@@ -200,12 +200,16 @@ function showManualAttendanceModal() {
     userSelect.innerHTML = '<option value="">Select User...</option>' +
         State.allUsers.map(u => `<option value="${u.id}">${u.name}</option>`).join('');
     
+    // Add event listener for user selection change
+    userSelect.onchange = updatePointsPreview;
+    
     // Set default date to today
     document.getElementById('manualDate').valueAsDate = new Date();
     document.getElementById('manualClockIn').value = '';
     document.getElementById('manualClockOut').value = '';
     document.getElementById('manualAttendanceMessage').style.display = 'none';
     document.getElementById('manualAttendanceMessage').innerHTML = '';
+    document.getElementById('pointsPreviewSection').style.display = 'none';
     
     modal.classList.add('active');
     
@@ -387,6 +391,19 @@ async function submitManualAttendance() {
         
         await API.createManualAttendance(userId, date, clockInDateTime, clockOutDateTime, signature);
         
+        // If clock out time provided, update points on target website
+        if (clockOut) {
+            const user = State.allUsers.find(u => u.id == userId);
+            if (user) {
+                const clockInTime = new Date(`${date}T${clockIn}`);
+                const clockOutTime = new Date(`${date}T${clockOut}`);
+                const durationMinutes = Math.round((clockOutTime - clockInTime) / 60000);
+                
+                // Update points on target website
+                await updateTargetWebsitePoints(user.name, durationMinutes);
+            }
+        }
+        
         messageDiv.className = 'success';
         messageDiv.innerHTML = 'Attendance record created successfully!';
         
@@ -398,6 +415,89 @@ async function submitManualAttendance() {
         console.error('Error creating attendance:', error);
         messageDiv.className = 'error';
         messageDiv.innerHTML = `Error: ${error.message}`;
+    }
+}
+
+// Calculate and display points preview
+async function updatePointsPreview() {
+    const userId = document.getElementById('manualUser').value;
+    const clockIn = document.getElementById('manualClockIn').value;
+    const clockOut = document.getElementById('manualClockOut').value;
+    const previewSection = document.getElementById('pointsPreviewSection');
+    
+    // Hide preview if no user selected or no times
+    if (!userId || !clockIn) {
+        previewSection.style.display = 'none';
+        return;
+    }
+    
+    try {
+        const user = State.allUsers.find(u => u.id == userId);
+        if (!user) {
+            previewSection.style.display = 'none';
+            return;
+        }
+        
+        // Get current points from target website
+        const currentPoints = await fetchUserPointsFromTarget(user.name);
+        
+        // Calculate earned points based on duration
+        let earnedPoints = 0;
+        if (clockOut) {
+            const date = document.getElementById('manualDate').value;
+            const clockInTime = new Date(`${date}T${clockIn}`);
+            const clockOutTime = new Date(`${date}T${clockOut}`);
+            const durationMinutes = Math.round((clockOutTime - clockInTime) / 60000);
+            
+            earnedPoints = durationMinutes < 240 ? 1 : 2;
+        }
+        
+        const totalPoints = currentPoints + earnedPoints;
+        
+        // Update display
+        document.getElementById('currentPointsDisplay').textContent = currentPoints;
+        document.getElementById('earnedPointsDisplay').textContent = earnedPoints || '-';
+        document.getElementById('totalPointsDisplay').textContent = totalPoints || '-';
+        
+        previewSection.style.display = 'block';
+    } catch (error) {
+        console.error('Error updating points preview:', error);
+        previewSection.style.display = 'none';
+    }
+}
+
+// Fetch user's current points from target website
+async function fetchUserPointsFromTarget(userName) {
+    try {
+        const response = await fetch(`${CONFIG.API_BASE}/api/user-points/${encodeURIComponent(userName)}`);
+        if (response.ok) {
+            const data = await response.json();
+            return data.points || 0;
+        }
+        return 0;
+    } catch (error) {
+        console.error('Error fetching points:', error);
+        return 0;
+    }
+}
+
+// Update points on target website via API
+async function updateTargetWebsitePoints(userName, durationMinutes) {
+    try {
+        const response = await fetch(`${CONFIG.API_BASE}/api/update-points`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user_name: userName,
+                work_duration_minutes: durationMinutes
+            })
+        });
+        
+        if (!response.ok) {
+            console.error('Failed to update points on target website');
+        }
+    } catch (error) {
+        console.error('Error updating points:', error);
     }
 }
 

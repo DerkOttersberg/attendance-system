@@ -3,6 +3,15 @@
 CREATE DATABASE IF NOT EXISTS rfid_attendance;
 USE rfid_attendance;
 
+-- Grant privileges to rfid_user on the database (recreate user to ensure correct password)
+DROP USER IF EXISTS 'rfid_user'@'%';
+DROP USER IF EXISTS 'rfid_user'@'localhost';
+CREATE USER 'rfid_user'@'%' IDENTIFIED BY 'rfid_pass';
+CREATE USER 'rfid_user'@'localhost' IDENTIFIED BY 'rfid_pass';
+GRANT ALL PRIVILEGES ON rfid_attendance.* TO 'rfid_user'@'%';
+GRANT ALL PRIVILEGES ON rfid_attendance.* TO 'rfid_user'@'localhost';
+FLUSH PRIVILEGES;
+
 -- Users table
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,9 +24,6 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_rfid (rfid_uid)
 );
-
--- Add product column if it doesn't exist (for existing databases)
-ALTER TABLE users ADD COLUMN IF NOT EXISTS product VARCHAR(50);
 
 -- Attendance records table
 CREATE TABLE IF NOT EXISTS attendance (

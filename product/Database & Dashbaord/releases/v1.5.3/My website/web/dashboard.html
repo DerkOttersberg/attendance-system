@@ -24,7 +24,7 @@
             <button class="tab active" onclick="switchTab('today')">Today's Attendance</button>
             <button class="tab" onclick="switchTab('all')">All Attendance</button>
             <button class="tab" onclick="switchTab('users')">Users</button>
-            <button class="tab" onclick="API.fetchTodayAttendance()">Api</button>
+            <a href="https://punten.bitsenbytes.net" target="_blank" class="tab" style="text-decoration: none; cursor: pointer;">Punten Website</a>
         </div>
 
         <div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:1rem;">
@@ -190,11 +190,27 @@
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
                         <div>
                             <label>Clock In Time *</label>
-                            <input type="time" id="manualClockIn" required>
+                            <input type="time" id="manualClockIn" onchange="updatePointsPreview()" required>
                         </div>
                         <div>
                             <label>Clock Out Time</label>
-                            <input type="time" id="manualClockOut">
+                            <input type="time" id="manualClockOut" onchange="updatePointsPreview()">
+                        </div>
+                    </div>
+                    <div id="pointsPreviewSection" style="display: none; background: #f0f9ff; border: 2px solid #0ea5e9; border-radius: 0.5rem; padding: 1rem; margin-top: 0.75rem;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; text-align: center;">
+                            <div>
+                                <div style="font-size: 0.875rem; color: #64748b; margin-bottom: 0.25rem;">Current Points</div>
+                                <div id="currentPointsDisplay" style="font-size: 1.5rem; font-weight: bold; color: #0ea5e9;">-</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.875rem; color: #64748b; margin-bottom: 0.25rem;">+ Points Earned</div>
+                                <div id="earnedPointsDisplay" style="font-size: 1.5rem; font-weight: bold; color: #10b981;">-</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.875rem; color: #64748b; margin-bottom: 0.25rem;">Total Points</div>
+                                <div id="totalPointsDisplay" style="font-size: 1.5rem; font-weight: bold; color: #059669;">-</div>
+                            </div>
                         </div>
                     </div>
                 </div>

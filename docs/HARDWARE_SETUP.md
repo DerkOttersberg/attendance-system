@@ -13,6 +13,10 @@
 - [STM32CubeIDE Setup](#stm32cubeide-setup)
 - [Flashing Firmware](#flashing-firmware)
 - [Hardware Testing](#hardware-testing)
+- [Device Tree Configuration](#device-tree-configuration)
+- [SystemD Services Setup](#systemd-services-setup)
+- [WiFi Configuration](#wifi-configuration)
+- [Performance Optimization](#performance-optimization)
 - [Troubleshooting](#troubleshooting)
 
 ---
@@ -333,6 +337,556 @@ For advanced users, configure peripherals via Device Tree:
 ```
 
 Recompile and flash device tree after changes.
+
+---
+
+## SystemD Services Setup
+
+### Overview
+
+The STM32MP157F-DK2 has two processor cores that need to be managed:
+- **Cortex-M4**: Runs RFID firmware and hardware control
+- **Cortex-A7**: Runs OPENstLinux and the ImGui application
+
+Both cores are coordinated through systemd services that ensure proper boot sequencing and auto-start functionality. The M4 core starts first, followed by the A7 Linux-based GUI application.
+
+### Architecture
+
+```
+┌─────────────────────────────────────────────────┐
+│         STM32MP157F-DK2 Boot Sequence           │
+├─────────────────────────────────────────────────┤
+│                                                 │
+│  1. Power-on → u-Boot → Kernel Load            │
+│                              ↓                  │
+│  2. multi-user.target reached                  │
+│                              ↓                  │
+│  3. m4-autostart.service ────┐ (M4 Core)      │
+│     └─ Load firmware          │                │
+│     └─ Start M4 processor     │                │
+│                              ↓                  │
+│  4. graphical.target reached                   │
+│                              ↓                  │
+│  5. imgui-app.service (A7 Core)                │
+│     └─ Wait 20 seconds (M4 ready)              │
+│     └─ Launch ImGui application                │
+│                                                 │
+└─────────────────────────────────────────────────┘
+```
+
+### Service 1: M4 Firmware Auto-Start
+
+The M4 core runs firmware for RFID reading and hardware control. This service loads and starts the M4 firmware automatically at boot.
+
+#### File Location
+```
+/etc/systemd/system/m4-autostart.service
+```
+
+#### Create the Service File
+
+```bash
+sudo nano /etc/systemd/system/m4-autostart.service
+```
+
+#### Service File Content
+
+```ini
+[Unit]
+Description=Auto-start STM32 M4 Firmware
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c 'echo rproc-m4-fw.elf > /sys/class/remoteproc/remoteproc0/firmware'
+ExecStart=/bin/sh -c 'echo start > /sys/class/remoteproc/remoteproc0/state'
+ExecStart=/bin/sleep 2
+ExecStart=/bin/sh -c 'echo a > /dev/ttyRPMSG0'
+ExecStart=/bin/sh -c 'echo "a" > /dev/ttyRPMSG0'
+RemainAfterExit=yes
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
+#### Configuration Details
+
+| Parameter | Purpose |
+|-----------|---------|
+| `Description` | Service display name |
+| `After=multi-user.target` | Start after Linux system reaches multi-user mode |
+| `Type=oneshot` | Service runs once and exits (doesn't stay running) |
+| `ExecStart` (firmware) | Load the M4 firmware from `/lib/firmware/rproc-m4-fw.elf` |
+| `ExecStart` (state) | Start the M4 processor core |
+| `ExecStart` (sleep) | Wait 2 seconds for M4 to boot |
+| `ExecStart` (ping) | Send test message to verify M4 is responsive |
+| `RemainAfterExit=yes` | Keep service marked as "active" after oneshot completes |
+| `Restart=on-failure` | Automatically restart if the service fails |
+| `WantedBy=multi-user.target` | Enable this service at boot |
+
+#### Enable M4 Auto-Start Service
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable m4-autostart.service
+sudo systemctl start m4-autostart.service
+```
+
+#### Verify M4 Service Status
+
+```bash
+sudo systemctl status m4-autostart.service
+```
+
+**Expected Output**:
+```
+● m4-autostart.service - Auto-start STM32 M4 Firmware
+     Loaded: loaded (/etc/systemd/system/m4-autostart.service; enabled; vendor preset: disabled)
+     Active: active (exited) since Mon 2024-11-20 10:15:32 UTC; 5min ago
+    Process: 234 ExecStart=/bin/sh -c 'echo rproc-m4-fw.elf > /sys/class/remoteproc/remoteproc0/firmware' (code=exited, status=0/SUCCESS)
+```
+
+**Check M4 processor state**:
+```bash
+cat /sys/class/remoteproc/remoteproc0/state
+```
+
+Expected output: `running`
+
+---
+
+### Service 2: ImGui Application (Kiosk Mode)
+
+The A7 core runs the Linux-based ImGui application in kiosk mode (full-screen GUI without desktop environment).
+
+#### File Location
+```
+/etc/systemd/system/imgui-app.service
+```
+
+#### Create the Service File
+
+```bash
+sudo nano /etc/systemd/system/imgui-app.service
+```
+
+#### Service File Content
+
+```ini
+[Unit]
+Description=IMGUI Application
+After=m4-autostart.service graphical.target
+Requires=graphical.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root
+ExecStartPre=/bin/sleep 20
+ExecStart=/root/imgui_app
+Restart=always
+RestartSec=10
+
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+
+StandardOutput=append:/root/imgui.log
+StandardError=append:/root/imgui.log
+
+[Install]
+WantedBy=multi-user.target
+```
+
+#### Configuration Details
+
+| Parameter | Purpose |
+|-----------|---------|
+| `Description` | Service display name |
+| `After=m4-autostart.service graphical.target` | Start only after M4 is ready and graphics are initialized |
+| `Requires=graphical.target` | Require Wayland/graphics to be available |
+| `Type=simple` | Service runs continuously (unlike oneshot) |
+| `User=root` | Run as root (required for hardware access) |
+| `WorkingDirectory=/root` | Set working directory for the application |
+| `ExecStartPre=/bin/sleep 20` | Wait 20 seconds for M4 and graphics to fully initialize |
+| `ExecStart=/root/imgui_app` | Path to the compiled ImGui application binary |
+| `Restart=always` | Automatically restart if the application crashes |
+| `RestartSec=10` | Wait 10 seconds between restart attempts |
+| `WAYLAND_DISPLAY` | Use Wayland display server (modern approach) |
+| `XDG_RUNTIME_DIR` | Runtime directory for Wayland socket |
+| `StandardOutput/Error` | Log application output to file for debugging |
+
+#### Enable ImGui Service
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable imgui-app.service
+sudo systemctl start imgui-app.service
+```
+
+#### Verify ImGui Service Status
+
+```bash
+sudo systemctl status imgui-app.service
+```
+
+**Expected Output**:
+```
+● imgui-app.service - IMGUI Application
+     Loaded: loaded (/etc/systemd/system/imgui-app.service; enabled; vendor preset: disabled)
+     Active: active (running) since Mon 2024-11-20 10:15:52 UTC; 3min ago
+    Process: 456 ExecStartPre=/bin/sleep 20 (code=exited, status=0/SUCCESS)
+   Main PID: 457 (imgui_app)
+     Memory: 45.2M
+     CGroup: /system.slice/imgui-app.service
+             └─457 /root/imgui_app
+```
+
+#### View Application Logs
+
+```bash
+tail -f /root/imgui.log
+```
+
+This is useful for debugging if the ImGui application crashes or has issues.
+
+---
+
+### Service Management Commands
+
+#### View All System Services
+
+```bash
+systemctl list-units --type=service
+```
+
+#### Check Service Dependencies
+
+```bash
+systemctl list-dependencies --reverse m4-autostart.service
+systemctl list-dependencies --reverse imgui-app.service
+```
+
+#### Manual Service Control
+
+```bash
+# Start services
+sudo systemctl start m4-autostart.service
+sudo systemctl start imgui-app.service
+
+# Stop services
+sudo systemctl stop m4-autostart.service
+sudo systemctl stop imgui-app.service
+
+# Restart services
+sudo systemctl restart m4-autostart.service
+sudo systemctl restart imgui-app.service
+
+# Enable/disable auto-start
+sudo systemctl enable m4-autostart.service
+sudo systemctl disable imgui-app.service
+```
+
+#### View Boot Sequence
+
+```bash
+sudo systemctl status
+```
+
+Shows the current system state and all active services.
+
+---
+
+### Troubleshooting Services
+
+#### M4 Service Won't Start
+
+**Check kernel logs**:
+```bash
+dmesg | grep -i remoteproc
+dmesg | grep -i m4
+```
+
+**Verify firmware exists**:
+```bash
+ls -la /lib/firmware/rproc-m4-fw.elf
+```
+
+**Test manual M4 start**:
+```bash
+echo rproc-m4-fw.elf > /sys/class/remoteproc/remoteproc0/firmware
+echo start > /sys/class/remoteproc/remoteproc0/state
+cat /sys/class/remoteproc/remoteproc0/state  # Should show "running"
+```
+
+#### ImGui Application Crashes
+
+**Check logs**:
+```bash
+tail -100 /root/imgui.log
+```
+
+**Verify binary exists and is executable**:
+```bash
+ls -la /root/imgui_app
+file /root/imgui_app  # Should show: ELF 32-bit LSB executable
+```
+
+**Test manual execution**:
+```bash
+/root/imgui_app
+```
+
+**Check for missing libraries**:
+```bash
+ldd /root/imgui_app
+```
+
+#### Services Not Auto-Starting at Boot
+
+**Verify services are enabled**:
+```bash
+systemctl is-enabled m4-autostart.service   # Should output: enabled
+systemctl is-enabled imgui-app.service      # Should output: enabled
+```
+
+**Enable if necessary**:
+```bash
+sudo systemctl enable m4-autostart.service
+sudo systemctl enable imgui-app.service
+```
+
+**Reboot to test**:
+```bash
+sudo reboot
+```
+
+**After reboot, verify both services are running**:
+```bash
+systemctl status m4-autostart.service
+systemctl status imgui-app.service
+```
+
+#### Disable Services
+
+To stop services from auto-starting:
+
+```bash
+sudo systemctl disable m4-autostart.service
+sudo systemctl disable imgui-app.service
+```
+
+---
+
+### Service Deployment Workflow
+
+When deploying a new version of the ImGui application:
+
+1. **Build application on development machine**
+2. **Copy to device**:
+   ```bash
+   scp imgui_app root@<stm32-ip>:/root/
+   chmod +x /root/imgui_app
+   ```
+3. **Restart service**:
+   ```bash
+   sudo systemctl restart imgui-app.service
+   ```
+4. **Verify**:
+   ```bash
+   sudo systemctl status imgui-app.service
+   tail /root/imgui.log
+   ```
+
+---
+
+## WiFi Configuration
+
+### Overview
+
+The STM32MP157F-DK2 supports WiFi connectivity through the embedded WiFi module. This section covers how to connect to a WiFi network using the `wpa_supplicant` tool with pre-shared key (PSK) authentication.
+
+### Prerequisites
+
+- SSH access to the STM32MP157F-DK2 board
+- WiFi network SSID and password
+- Board must be running OPENstLinux with WiFi drivers installed
+
+### Step 1: Generate Secure PSK Hash
+
+To avoid storing plain-text passwords, generate a secure PSK hash using `wpa_passphrase`:
+
+```bash
+wpa_passphrase "BitsEnBytes" "WLanVanBitsEnBytes"
+```
+
+**Expected Output**:
+```
+network={
+    ssid="BitsEnBytes"
+    #psk="WLanVanBitsEnBytes"
+    psk=e1eea16c4e9e3e9a4c5c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f
+}
+```
+
+> **Note**: Copy only the `psk=HEXSTRING` line (the hex value after `psk=`). The commented line with the plain password is for reference only.
+
+### Step 2: Update WiFi Configuration
+
+Edit the WiFi configuration file:
+
+```bash
+nano /etc/wpa_supplicant/wpa_supplicant-wlan0.conf
+```
+
+Replace or add the network configuration with your network details:
+
+```ini
+network={
+    ssid="BitsEnBytes"
+    psk=e1eea16c4e9e3e9a4c5c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f
+}
+```
+
+**Steps in nano editor**:
+1. Find the existing `network={}` block (or add a new one)
+2. Update the `ssid` to your network name
+3. Replace the `psk=` value with your generated hash
+4. **Remove or comment out** any `#psk=` plain text line
+5. Save: `Ctrl + O` → `Enter` → `Ctrl + X`
+
+### Step 3: Restart WiFi Services
+
+Restart the WiFi connection to apply changes:
+
+```bash
+systemctl restart wpa_supplicant@wlan0
+systemctl restart udhcpc-wlan0
+```
+
+**Wait 5-10 seconds** for the services to initialize.
+
+### Step 4: Verify Connection
+
+Check if the WiFi interface has obtained an IP address:
+
+```bash
+ip addr show wlan0
+```
+
+**Expected Output**:
+```
+3: wlan0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500
+    inet 192.168.1.100/24 brd 192.168.1.255 scope global wlan0
+    valid_lft forever preferred_lft forever
+```
+
+> **Important**: Look for `inet 192.168.x.x` (your IP address). If you only see `inet6`, the IPv4 connection failed.
+
+### Step 5: Test Internet Connectivity
+
+Ping a reliable server to verify connectivity:
+
+```bash
+ping -c 3 google.com
+```
+
+**Expected Output**:
+```
+PING google.com (142.250.185.46) 56(84) bytes of data.
+64 bytes from 142.250.185.46: icmp_seq=1 ttl=119 time=25.4 ms
+64 bytes from 142.250.185.46: icmp_seq=2 ttl=119 time=24.8 ms
+64 bytes from 142.250.185.46: icmp_seq=3 ttl=119 time=25.1 ms
+
+--- google.com statistics ---
+3 packets transmitted, 3 received, 0% packet loss
+```
+
+### Troubleshooting WiFi Connection
+
+#### Issue: No IP Address Assigned
+
+**Symptoms**: `ip addr show wlan0` shows no `inet` line
+
+**Solution**:
+1. Check if WiFi device is detected:
+   ```bash
+   ip link show wlan0
+   ```
+   Should show `BROADCAST,MULTICAST,UP,LOWER_UP`
+
+2. Check DHCP client logs:
+   ```bash
+   journalctl -u udhcpc-wlan0 -n 20
+   ```
+
+3. Try manual connection:
+   ```bash
+   wpa_cli -i wlan0 reconnect
+   ```
+
+#### Issue: WPA Handshake Failure
+
+**Symptoms**: `systemctl status wpa_supplicant@wlan0` shows errors
+
+**Verify Configuration**:
+1. Check file syntax:
+   ```bash
+   cat /etc/wpa_supplicant/wpa_supplicant-wlan0.conf
+   ```
+
+2. Verify PSK is correct (must be 64 hex characters):
+   ```bash
+   wpa_passphrase "YourSSID" "YourPassword"
+   ```
+
+3. Test connection manually:
+   ```bash
+   wpa_cli -i wlan0
+   > scan
+   > scan_results
+   > add_network
+   > set_network 0 ssid "YourSSID"
+   > set_network 0 psk YOURHEXSTRING
+   > enable_network 0
+   > status
+   ```
+
+#### Issue: Interface Disabled After Restart
+
+**Symptoms**: `ip link show wlan0` shows `DOWN` state
+
+**Solution**:
+```bash
+ip link set wlan0 up
+systemctl restart wpa_supplicant@wlan0
+```
+
+### Make WiFi Persistent at Boot
+
+To automatically connect on every boot, ensure the systemd service is enabled:
+
+```bash
+systemctl enable wpa_supplicant@wlan0
+systemctl enable udhcpc-wlan0
+```
+
+Verify:
+```bash
+systemctl is-enabled wpa_supplicant@wlan0  # Should output: enabled
+systemctl is-enabled udhcpc-wlan0          # Should output: enabled
+```
+
+### Security Best Practices
+
+1. **Never store plain-text passwords** - Always use PSK hash
+2. **Change default WiFi credentials** - Update SSID and PSK regularly
+3. **Use WPA2/WPA3** - Avoid open networks or WEP encryption
+4. **Restrict SSH access** - Only allow connections from known IPs
+5. **Monitor network logs**:
+   ```bash
+   journalctl -u wpa_supplicant@wlan0 -f  # Follow logs in real-time
+   ```
 
 ---
 
