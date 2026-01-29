@@ -1,0 +1,13 @@
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:275:13:rpmsg_virtio_hold_rx_buffer	1
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:456:13:rpmsg_virtio_tx_callback	1
+../../Middlewares/Third_Party/OpenAMP/libmetal/lib/include/metal/system/generic/mutex.h:43:20:__metal_mutex_init	1
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:541:12:rpmsg_virtio_ns_callback	10
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:351:12:rpmsg_virtio_send_offchannel_nocopy	4
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:469:13:rpmsg_virtio_rx_callback	15
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:287:13:rpmsg_virtio_release_rx_buffer	4
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:307:14:rpmsg_virtio_get_tx_payload_buffer	7
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:417:12:rpmsg_virtio_send_offchannel_raw	2
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:43:6:rpmsg_virtio_init_shm_pool	2
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:594:5:rpmsg_virtio_get_buffer_size	5
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:608:5:rpmsg_init_vdev	7
+C:/Users/derko/STM32CubeIDE/workspace_1.19.0/dk2-rfid/Middlewares/Third_Party/OpenAMP/open-amp/lib/rpmsg/rpmsg_virtio.c:751:6:rpmsg_deinit_vdev	2

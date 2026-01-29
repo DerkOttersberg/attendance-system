@@ -1,0 +1,5 @@
+../OPENAMP/openamp.c:141:5:MX_OPENAMP_Init	9
+../OPENAMP/openamp.c:211:6:OPENAMP_DeInit	1
+../OPENAMP/openamp.c:227:5:OPENAMP_create_endpoint	1
+../OPENAMP/openamp.c:245:6:OPENAMP_check_for_message	1
+../OPENAMP/openamp.c:253:6:OPENAMP_Wait_EndPointready	4
