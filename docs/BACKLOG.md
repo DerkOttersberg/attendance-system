@@ -26,13 +26,13 @@
 | 10 | 6 | System Reset | Reset button for device reboot without unplugging | Must | 2 | Not Started | 2 |
 | 11 | 7 | Hardware Refinement | Custom PCB design for compact, reliable system | Could | 15 | Not Started | 5 |
 | 12 | 4 | Network Communication | Reliable server communication for time entries | Must | 6 | Not Started | 2 |
-| 13 | 4 | Offline Mode Handling | Clock in/out when network unavailable | Must | 8 | Not Started | 3 |
+| 13 | 4 | Offline Mode Handling | Clock in/out when network unavailable | Could | 8 | Not Started | 3 |
 | 14 | 2 | User Status Display | Show current clock status and user information | Should | 4 | Not Started | 3 |
 | 15 | 2 | Multi-language Support | Interface in preferred language (Dutch/English) | Could | 3 | Not Started | 4 |
 | 16 | 4 | Server API Development | Backend endpoints for device communication | Must | 8 | Not Started | 2 |
 | 17 | 3 | Database Schema | Design and implement time tracking database | Must | 5 | Not Started | 1 |
 | 18 | 5 | Admin Web Interface | Web dashboard for attendance management | Must | 10 | Not Started | 4 |
-| 19 | 6 | Security Implementation | Authentication, encryption, secure communication | Must | 6 | Not Started | 3 |
+| 19 | 6 | Security Implementation | Authentication, encryption, secure communication | Should | 6 | Not Started | 3 |
 | 20 | 6 | Device Configuration | Remote configuration and settings management | Should | 5 | Not Started | 4 |
 | 21 | 6 | System Monitoring | Health monitoring and alerts for device issues | Should | 4 | Not Started | 5 |
 | 22 | 7 | Backup & Recovery | Data backup and disaster recovery procedures | Should | 6 | Not Started | 5 |
