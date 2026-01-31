@@ -31,17 +31,7 @@ Specifiek verwerken in het verslag
 (werkwijze + link/screenshot)
 📌 Alles mag in dit document — geen losse test- of reviewdocumenten nodig.
 
-missend
-WSL (Windows Subsystem for Linux)
-STM32MP157 SDK cross-compiler (arm-ostl-linux-gnueabi-gcc)
-Debian dual‑boot (vermeld als noodzakelijke stap)
-STM32CubeProgrammer‑CLI (specifieke toolnaam/CLI)
-3D‑modelleer tools: Blender, Fusion 360, Tinkercad
-Prusa Slicer + 3D‑printer (voor behuizing)
-Datasheets als expliciete bron voor OS‑flash
-Verantwoording projectdoelen als expliciet hoofdstuk (stageverslag)
-Reflectie (stageverslag + reflectiebestand)
-Code review sectie (stageverslag)
+
 Plan van Aanpak (PDF)
 Product backlog (PDF/afbeelding)
 95% presentatie (PDF)
@@ -101,3 +91,13 @@ Als dit aanwezig is, zit je veilig:
 ✔ Planning (backlog + burndown)
 ✔ Git versiebeheer
 
+
+
+
+
+Todo
+presentatie
+vlog
+stageplan
+flyer
+Externe puntenwebsite (broncode) 
