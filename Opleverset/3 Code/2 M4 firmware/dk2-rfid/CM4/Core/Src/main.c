@@ -215,14 +215,7 @@ int main(void)
     /* USER CODE BEGIN 3 */
 
       OPENAMP_check_for_message();
-
-
-
-
-
-
-
-      // Process any pending commands from A7
+      // Process commands van A7
       if (commandReady) {
           commandReady = 0;
           ProcessCommand(rxBuffer);
@@ -233,14 +226,7 @@ int main(void)
       // Auto-scan mode (can be disabled via command)
       if (autoScanEnabled && (HAL_GetTick() - lastAutoScan > 100)) {
           lastAutoScan = HAL_GetTick();
-
-          //uint8_t tagType[2];
-          //MFRC522_Status_t status = MFRC522_Request(PICC_CMD_REQA, tagType);
           ExecuteScanOnce();
-          /*
-          if (status == MFRC522_OK) {
-              ExecuteScanOnce();
-          }*/
       }
   }
   /* USER CODE END 3 */
