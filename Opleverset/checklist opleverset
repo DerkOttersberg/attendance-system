@@ -1,0 +1,102 @@
+Opleverset – Definitieve Checklist
+📦 1. Opleverset (ZIP-bestand)
+•	⬜ Alles zit in één .ZIP
+•	⬜ Geen .RAR / .7zip
+•	⬜ Logische mapstructuur
+•	⬜ Bestandsformaten volgens eisen
+________________________________________
+📘 2. Stageverslag (HOOFDBESTAND)
+📄 Stageverslag.pdf / .docx
+Moet minimaal bevatten:
+Verplicht in het verslag
+•	⬜ Context van het bedrijf
+•	⬜ Beschrijving opdracht & scope
+•	⬜ Uitgevoerde werkzaamheden
+•	⬜ Verantwoording projectdoelen (expliciet hoofdstuk!)
+•	⬜ Analyseren
+•	⬜ Ontwerpen
+•	⬜ Realiseren
+•	⬜ Adviseren
+•	⬜ Manage & Control
+•	⬜ Professional skills
+•	⬜ Reflectie
+Specifiek verwerken in het verslag
+•	⬜ Testen & validatie
+(functionele testen + evt. integratie/acceptatie)
+•	⬜ Code review
+(wie, wat, feedback, aanpassing)
+•	⬜ Planning & proces
+(product backlog + burndown diagram)
+•	⬜ Versiebeheer (Git)
+(werkwijze + link/screenshot)
+📌 Alles mag in dit document — geen losse test- of reviewdocumenten nodig.
+
+
+Plan van Aanpak (PDF)
+Product backlog (PDF/afbeelding)
+95% presentatie (PDF)
+Feedbackformulieren 50% & 95%
+Stage beoordelingsformulier (bijlage 7)
+Flyer als PDF
+Git-link/screenshot
+Externe tools .txt
+________________________________________
+🧠 3. Code
+📂 Code-map
+•	⬜ Attendance systeem (broncode)
+•	⬜ Externe puntenwebsite (broncode)
+•	⬜ Juiste extensies (.js, .py, .cs, etc.)
+•	⬜ Geen .txt of .docx voor code
+________________________________________
+📊 4. Ontwerpen & diagrammen
+📄 PDF / afbeeldingen (mag ook verwerkt zijn in stageverslag)
+•	⬜ Architectuurdiagram
+•	⬜ UML / ERD / flowdiagrammen
+•	⬜ Datasheets (indien gebruikt)
+________________________________________
+🗂 5. Projectdocumentatie
+•	⬜ Plan van Aanpak (PDF)
+•	⬜ Product backlog (PDF / afbeelding)
+•	⬜ Burndown diagram (PDF / afbeelding)
+________________________________________
+🎤 6. Presentaties
+📄 PDF
+•	⬜ 50% presentatie
+•	⬜ 95% presentatie
+________________________________________
+🧑‍💼 7. Professional skills & beoordeling
+📄 PDF
+•	⬜ Reflectie
+•	⬜ Feedbackformulier bedrijfsbegeleider 50%
+•	⬜ Feedbackformulier bedrijfsbegeleider 95%
+•	⬜ Stage beoordelingsformulier (bijlage 7)
+(Mag samen in één document of logisch gegroepeerd)
+________________________________________
+📣 8. Communicatie & promotie
+•	⬜ Flyer (max. 1 A4, PDF)
+•	⬜ Vlog (MP4, max. 100 MB totaal)
+________________________________________
+🔗 9. Links & verwijzingen
+•	⬜ Git repository link (of screenshots)
+•	⬜ Eventuele externe tools in .txt
+________________________________________
+🟢 Minimum om “JA” te scoren op alles
+Als dit aanwezig is, zit je veilig:
+✔ Stageverslag met expliciete projectdoel-verantwoording
+✔ Code
+✔ Flyer + vlog
+✔ PvA
+✔ 50% & 95% presentatie
+✔ Reflectie + feedback
+✔ Planning (backlog + burndown)
+✔ Git versiebeheer
+
+
+
+
+
+Todo
+
+vlog
+
+

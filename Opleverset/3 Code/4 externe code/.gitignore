@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/punten website
+/backend/.vscode
+/backend/obj/Debug
+/backend/node_modules
+/.vs

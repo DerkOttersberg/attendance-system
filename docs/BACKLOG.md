@@ -3,99 +3,99 @@
 ## Table 1: Epics
 | epic_id | epic_name | description | priority | status |
 |---------|-----------|-------------|----------|--------|
-| 1 | Hardware Development | Core hardware components and connectivity | Must | In Progress |
-| 2 | User Interface | Display, input, and user interaction | Must | Not Started |
-| 3 | Data Management | Database, storage, and data handling | Must | Not Started |
-| 4 | System Integration | Server communication and sync | Must | Not Started |
-| 5 | Administrative Features | Reporting and management tools | Must | Not Started |
-| 6 | Quality & Reliability | Error handling, testing, validation | Should | Not Started |
-| 7 | Enhancement Features | Additional functionality and improvements | Could | Not Started |
+| 1 | Hardware Development | Core hardware components and connectivity | Must | Done |
+| 2 | User Interface | Display, input, and user interaction | Must | Done |
+| 3 | Data Management | Database, storage, and data handling | Must | Done |
+| 4 | System Integration | Server communication and sync | Must | Done |
+| 5 | Administrative Features | Reporting and management tools | Must | Done |
+| 6 | Quality & Reliability | Error handling, testing, validation | Should | Done |
+| 7 | Enhancement Features | Additional functionality and improvements | Could | Done |
 
 ## Table 2: User Stories
 | story_id | epic_id | title | description | priority | story_points | status | sprint |
 |----------|---------|-------|-------------|----------|--------------|--------|--------|
-| 1 | 1 | The Hub | System consisting of main hub, sensors, display | Must | 5 | In Progress | 1 |
-| 2 | 1 | Encasing | Physical encasing for the product | Must | 5 | Not Started | 2 |
-| 3 | 2 | RFID Check in | Clock in with RFID card for automatic attendance | Must | 3 | Not Started | 1 |
-| 4 | 2 | RFID Check out | Clock out with same RFID card | Must | 1 | Not Started | 1 |
-| 5 | 2 | Touchscreen Signature | Sign in on touchscreen for legal confirmation | Must | 8 | Not Started | 2 |
-| 6 | 3 | Points Awarding | Automatic points assignment to existing website | Must | 4 | Not Started | 3 |
-| 7 | 3 | Dayparts Calculation | Group attendance into morning/afternoon dayparts | Must | 3 | Not Started | 3 |
-| 8 | 5 | Attendance Overview | Export attendance records with signatures to PDF | Must | 8 | Not Started | 4 |
-| 9 | 6 | Error Feedback | Visual (LED) and audio (buzzer) feedback for failures | Must | 4 | Not Started | 2 |
-| 10 | 6 | System Reset | Reset button for device reboot without unplugging | Must | 2 | Not Started | 2 |
-| 11 | 7 | Hardware Refinement | Custom PCB design for compact, reliable system | Could | 15 | Not Started | 5 |
-| 12 | 4 | Network Communication | Reliable server communication for time entries | Must | 6 | Not Started | 2 |
-| 13 | 4 | Offline Mode Handling | Clock in/out when network unavailable | Must | 8 | Not Started | 3 |
-| 14 | 2 | User Status Display | Show current clock status and user information | Should | 4 | Not Started | 3 |
+| 1 | 1 | The Hub | System consisting of main hub, sensors, display | Must | 5 | Done | 1 |
+| 2 | 1 | Encasing | Physical encasing for the product | Must | 5 | Done | 2 |
+| 3 | 2 | RFID Check in | Clock in with RFID card for automatic attendance | Must | 3 | Done | 1 |
+| 4 | 2 | RFID Check out | Clock out with same RFID card | Must | 1 | Done | 1 |
+| 5 | 2 | Touchscreen Signature | Sign in on touchscreen for legal confirmation | Must | 8 | Done | 2 |
+| 6 | 3 | Points Awarding | Automatic points assignment to existing website | Must | 4 | Done | 3 |
+| 7 | 3 | Dayparts Calculation | Group attendance into morning/afternoon dayparts | Must | 3 | Done | 3 |
+| 8 | 5 | Attendance Overview | Export attendance records with signatures to PDF | Must | 8 | Done | 4 |
+| 9 | 6 | Error Feedback | Visual (LED) and audio (buzzer) feedback for failures | Must | 4 | Done | 2 |
+| 10 | 6 | System Reset | Reset button for device reboot without unplugging | Must | 2 | Done | 2 |
+| 11 | 7 | Hardware Refinement | Custom PCB design for compact, reliable system | Could | 15 | Not started | 5 |
+| 12 | 4 | Network Communication | Reliable server communication for time entries | Must | 6 | Done | 2 |
+| 13 | 4 | Offline Mode Handling | Clock in/out when network unavailable | Could | 8 | Not started | 3 |
+| 14 | 2 | User Status Display | Show current clock status and user information | Should | 4 | Done | 3 |
 | 15 | 2 | Multi-language Support | Interface in preferred language (Dutch/English) | Could | 3 | Not Started | 4 |
-| 16 | 4 | Server API Development | Backend endpoints for device communication | Must | 8 | Not Started | 2 |
-| 17 | 3 | Database Schema | Design and implement time tracking database | Must | 5 | Not Started | 1 |
-| 18 | 5 | Admin Web Interface | Web dashboard for attendance management | Must | 10 | Not Started | 4 |
-| 19 | 6 | Security Implementation | Authentication, encryption, secure communication | Must | 6 | Not Started | 3 |
-| 20 | 6 | Device Configuration | Remote configuration and settings management | Should | 5 | Not Started | 4 |
-| 21 | 6 | System Monitoring | Health monitoring and alerts for device issues | Should | 4 | Not Started | 5 |
-| 22 | 7 | Backup & Recovery | Data backup and disaster recovery procedures | Should | 6 | Not Started | 5 |
+| 16 | 4 | Server API Development | Backend endpoints for device communication | Must | 8 | Done | 2 |
+| 17 | 3 | Database Schema | Design and implement time tracking database | Must | 5 | Done | 1 |
+| 18 | 5 | Admin Web Interface | Web dashboard for attendance management | Must | 10 | Done | 4 |
+| 19 | 6 | Security Implementation | Authentication, encryption, secure communication | Should | 6 | Not Started | 3 |
+| 20 | 6 | Device Configuration | Remote configuration and settings management | Should | 5 | Done | 4 |
+| 21 | 6 | System Monitoring | Health monitoring and alerts for device issues | Should | 4 | Done | 5 |
+| 22 | 7 | Backup & Recovery | Data backup and disaster recovery procedures | Should | 6 | Not started | 5 |
 
 ## Table 3: Tasks (Breakdown of User Stories)
 | task_id | story_id | task_description | estimated_hours | status | assignee | dependencies |
 |---------|----------|------------------|-----------------|--------|----------|--------------|
-| 1 | 1 | Research microcontroller options | 8 | In Progress | Developer | - |
-| 2 | 1 | Research compatible parts | 4 | Not Started | Developer | 1 |
-| 3 | 1 | Start development on devboard | 16 | Not Started | Developer | 2 |
-| 4 | 2 | Design 3D printed encasing | 12 | Not Started | Designer | - |
-| 5 | 2 | Create openable/closable mechanism | 8 | Not Started | Designer | 4 |
-| 6 | 2 | Ensure proper part fitting | 6 | Not Started | Designer | 4 |
-| 7 | 2 | Design wire management | 4 | Not Started | Designer | 4 |
-| 8 | 2 | Plan button placement | 2 | Not Started | Designer | 4 |
-| 9 | 2 | Plan display integration | 4 | Not Started | Designer | 4 |
-| 10 | 2 | Design RFID reader placement | 3 | Not Started | Designer | 4 |
-| 11 | 2 | Create RFID location indicators | 2 | Not Started | Designer | 4 |
-| 12 | 3 | Implement RFID-microcontroller communication | 12 | Not Started | Developer | 3 |
-| 13 | 3 | Parse RFID client data | 6 | Not Started | Developer | 12 |
-| 14 | 3 | Implement time locking mechanism | 4 | Not Started | Developer | 13 |
-| 15 | 4 | Implement RFID checkout communication | 6 | Not Started | Developer | 12 |
-| 16 | 4 | Set end time functionality | 4 | Not Started | Developer | 15 |
-| 17 | 5 | Setup touchscreen hardware and wiring | 8 | Not Started | Developer | 3 |
-| 18 | 5 | Research and install Linux touchscreen drivers | 12 | Not Started | Developer | 17 |
-| 19 | 5 | Configure touchscreen calibration | 4 | Not Started | Developer | 18 |
-| 20 | 5 | Implement touchscreen input handling | 8 | Not Started | Developer | 19 |
-| 21 | 5 | Setup signature database | 8 | Not Started | Developer | 52 |
-| 22 | 5 | Implement signature storage | 8 | Not Started | Developer | 21 |
-| 19 | 6 | Connect to existing website database | 12 | Not Started | Developer | 18 |
-| 20 | 6 | Implement points assignment logic | 8 | Not Started | Developer | 19 |
-| 21 | 6 | Create live data display for website | 10 | Not Started | Developer | 20 |
-| 22 | 7 | Setup attendance database | 6 | Not Started | Developer | 18 |
-| 23 | 7 | Implement morning/afternoon split | 8 | Not Started | Developer | 22 |
-| 24 | 7 | Link signatures to dayparts | 6 | Not Started | Developer | 23 |
-| 25 | 7 | Implement daypart calculation logic | 10 | Not Started | Developer | 24 |
-| 26 | 8 | Create PDF generation system | 16 | Not Started | Developer | 22 |
-| 27 | 8 | Design attendance report template | 8 | Not Started | Designer | - |
-| 28 | 8 | Implement signature embedding in PDF | 8 | Not Started | Developer | 26 |
-| 29 | 9 | Implement LED indicator system | 4 | Not Started | Developer | 3 |
-| 30 | 9 | Add buzzer success feedback | 3 | Not Started | Developer | 3 |
-| 31 | 10 | Install and wire reset button | 2 | Not Started | Developer | 3 |
-| 32 | 10 | Implement reset functionality | 4 | Not Started | Developer | 31 |
-| 33 | 11 | Research standalone microcontroller requirements | 16 | Not Started | Developer | - |
-| 34 | 11 | Create PCB schematic | 20 | Not Started | Developer | 33 |
-| 35 | 11 | Design PCB layout | 16 | Not Started | Developer | 34 |
-| 36 | 11 | Order and test PCB | 12 | Not Started | Developer | 35 |
-| 37 | 12 | Implement WiFi connectivity | 12 | Not Started | Developer | 3 |
-| 38 | 12 | Create HTTP/HTTPS communication | 10 | Not Started | Developer | 37 |
-| 39 | 12 | Implement network error handling | 8 | Not Started | Developer | 38 |
-| 40 | 12 | Add SSL certificate handling | 6 | Not Started | Developer | 38 |
-| 41 | 13 | Create local storage system | 12 | Not Started | Developer | 3 |
-| 42 | 13 | Implement queue management | 8 | Not Started | Developer | 41 |
-| 43 | 13 | Add automatic sync functionality | 10 | Not Started | Developer | 42 |
-| 44 | 13 | Create offline mode indicator | 4 | Not Started | Developer | 41 |
-| 45 | 17 | Design API endpoints | 12 | Not Started | Backend Dev | 18 |
-| 46 | 17 | Implement user validation | 8 | Not Started | Backend Dev | 45 |
-| 47 | 17 | Create clock in/out logic | 12 | Not Started | Backend Dev | 46 |
-| 48 | 17 | Add signature processing | 6 | Not Started | Backend Dev | 47 |
-| 49 | 18 | Design database schema | 8 | Not Started | Backend Dev | - |
-| 50 | 18 | Create database tables | 4 | Not Started | Backend Dev | 49 |
-| 51 | 18 | Setup database indexes | 3 | Not Started | Backend Dev | 50 |
-| 52 | 18 | Implement data validation | 6 | Not Started | Backend Dev | 50 |
+| 1 | 1 | Research microcontroller options | 8 | Done | Developer | - |
+| 2 | 1 | Research compatible parts | 4 | Done | Developer | 1 |
+| 3 | 1 | Start development on devboard | 16 | Done | Developer | 2 |
+| 4 | 2 | Design 3D printed encasing | 12 | Done | Designer | - |
+| 5 | 2 | Create openable/closable mechanism | 8 | Done | Designer | 4 |
+| 6 | 2 | Ensure proper part fitting | 6 | Done | Designer | 4 |
+| 7 | 2 | Design wire management | 4 | Done | Designer | 4 |
+| 8 | 2 | Plan button placement | 2 | Done | Designer | 4 |
+| 9 | 2 | Plan display integration | 4 | Done | Designer | 4 |
+| 10 | 2 | Design RFID reader placement | 3 | Done | Designer | 4 |
+| 11 | 2 | Create RFID location indicators | 2 | Done | Designer | 4 |
+| 12 | 3 | Implement RFID-microcontroller communication | 12 | Done | Developer | 3 |
+| 13 | 3 | Parse RFID client data | 6 | Done | Developer | 12 |
+| 14 | 3 | Implement time locking mechanism | 4 | Done | Developer | 13 |
+| 15 | 4 | Implement RFID checkout communication | 6 | Done | Developer | 12 |
+| 16 | 4 | Set end time functionality | 4 | Done | Developer | 15 |
+| 17 | 5 | Setup touchscreen hardware and wiring | 8 | Done | Developer | 3 |
+| 18 | 5 | Research and install Linux touchscreen drivers | 12 | Not applicable | Developer | 17 |
+| 19 | 5 | Configure touchscreen calibration | 4 | Done | Developer | 18 |
+| 20 | 5 | Implement touchscreen input handling | 8 | Done | Developer | 19 |
+| 21 | 5 | Setup signature database | 8 | Done | Developer | 52 |
+| 22 | 5 | Implement signature storage | 8 | Done | Developer | 21 |
+| 19 | 6 | Connect to existing website database | 12 | Done | Developer | 18 |
+| 20 | 6 | Implement points assignment logic | 8 | Done | Developer | 19 |
+| 21 | 6 | Create live data display for website | 10 | Done | Developer | 20 |
+| 22 | 7 | Setup attendance database | 6 | Done | Developer | 18 |
+| 23 | 7 | Implement morning/afternoon split | 8 | Different approach done | Developer | 22 |
+| 24 | 7 | Link signatures to dayparts | 6 | Done | Developer | 23 |
+| 25 | 7 | Implement daypart calculation logic | 10 | Done | Developer | 24 |
+| 26 | 8 | Create PDF generation system | 16 | Done | Developer | 22 |
+| 27 | 8 | Design attendance report template | 8 | Done | Designer | - |
+| 28 | 8 | Implement signature embedding in PDF | 8 | Done | Developer | 26 |
+| 29 | 9 | Implement LED indicator system | 4 | Done | Developer | 3 |
+| 30 | 9 | Add buzzer success feedback | 3 | Done | Developer | 3 |
+| 31 | 10 | Install and wire reset button | 2 | Done | Developer | 3 |
+| 32 | 10 | Implement reset functionality | 4 | Done | Developer | 31 |
+| 33 | 11 | Research standalone microcontroller requirements | 16 | Done | Developer | - |
+| 34 | 11 | Create PCB schematic | 20 | Not started | Developer | 33 |
+| 35 | 11 | Design PCB layout | 16 | Not started | Developer | 34 |
+| 36 | 11 | Order and test PCB | 12 | Not started | Developer | 35 |
+| 37 | 12 | Implement WiFi connectivity | 12 | Done | Developer | 3 |
+| 38 | 12 | Create HTTP/HTTPS communication | 10 | Done | Developer | 37 |
+| 39 | 12 | Implement network error handling | 8 | Done | Developer | 38 |
+| 40 | 12 | Add SSL certificate handling | 6 | Not started | Developer | 38 |
+| 41 | 13 | Create local storage system | 12 | Not started | Developer | 3 |
+| 42 | 13 | Implement queue management | 8 | Not started | Developer | 41 |
+| 43 | 13 | Add automatic sync functionality | 10 | Done | Developer | 42 |
+| 44 | 13 | Create offline mode indicator | 4 | Not started | Developer | 41 |
+| 45 | 17 | Design API endpoints | 12 | Done | Backend Dev | 18 |
+| 46 | 17 | Implement user validation | 8 | Done | Backend Dev | 45 |
+| 47 | 17 | Create clock in/out logic | 12 | Done | Backend Dev | 46 |
+| 48 | 17 | Add signature processing | 6 | Done | Backend Dev | 47 |
+| 49 | 18 | Design database schema | 8 | Done | Backend Dev | - |
+| 50 | 18 | Create database tables | 4 | Done | Backend Dev | 49 |
+| 51 | 18 | Setup database indexes | 3 | Done | Backend Dev | 50 |
+| 52 | 18 | Implement data validation | 6 | Done | Backend Dev | 50 |
 
 ## Table 4: Acceptance Criteria
 | criteria_id | story_id | criteria_description | test_method |

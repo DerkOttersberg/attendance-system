@@ -87,7 +87,7 @@ Everything on your **laptop/server** (not on the STM32).
 
 ### High-Level Data Flow
 
-![Clock-In Flow Diagram](diagrams/03-clock-in-signature/clock%20in%20flow.png)
+![Clock-In Flow Diagram](diagrams/03-clock-in-signature/clockin.png)
 
 ### Component Responsibilities
 

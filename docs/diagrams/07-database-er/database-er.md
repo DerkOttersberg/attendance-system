@@ -1,10 +1,7 @@
-# Database ER Diagram (MySQL)
-
-```mermaid
 erDiagram
   USERS {
     INT id PK
-    VARCHAR rfid_uid
+    VARCHAR rfid_uid UK
     VARCHAR name
     VARCHAR email
     VARCHAR department
@@ -36,14 +33,12 @@ erDiagram
 
   DEPARTMENTS {
     INT id PK
-    VARCHAR name
+    VARCHAR name UK
   }
 
   PRODUCTS {
     INT id PK
-    VARCHAR name
+    VARCHAR name UK
   }
 
-  USERS ||--o{ ATTENDANCE : has
-  USERS ||--o{ SCAN_LOG : scans
-```
+  USERS ||--o{ ATTENDANCE : "has"
