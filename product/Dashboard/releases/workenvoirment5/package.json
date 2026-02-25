@@ -1,0 +1,16 @@
+{
+  "name": "workenvoirment5",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently -k -n api,web -c cyan,magenta \"npm:dev --workspace backend\" \"npm:dev --workspace frontend\"",
+    "dev:api": "npm run dev --workspace backend",
+    "dev:web": "npm run dev --workspace frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  }
+}
