@@ -7,3 +7,11 @@ Features real-time dashboard, MySQL database, and Dockerized deployment.
 Supports RFID card scanning, user management, and reporting.
 
 For full documentation, see [docs/README.md](docs/README.md).
+
+## License
+
+**All Rights Reserved** for new original material owned by Derk Ottersberg.
+See [LICENSE](LICENSE) and [licensing history](LICENSES/README.md) for prior-license and third-party exceptions.
+
+Public source may be viewed and forked on GitHub. Issues and pull requests are welcome;
+write access to this repository is reserved for the owner.
